@@ -6,13 +6,11 @@
   <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
   <title>SalineGuard Pro | Enterprise</title>
 
-  <!-- React (dev UMD), Babel (in-browser JSX) and Tailwind CDN (dev) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Firebase compat libraries (you used compat APIs) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -20,14 +18,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-    /* ============
-       Base layout
-       ============ */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
     :root, html, body, #root {
       width: 100% !important;
-      height: 100% !important;
+      min-height: 100% !important;
       margin: 0 !important;
       padding: 0 !important;
       box-sizing: border-box !important;
@@ -35,7 +29,6 @@
       -moz-osx-font-smoothing: grayscale;
       font-family: 'Inter', sans-serif;
     }
-
     :root, html, body {
       --bg-color: #f1f5f9;
       background-color: var(--bg-color) !important;
@@ -46,19 +39,6 @@
       overflow-x: hidden !important;
       -webkit-overflow-scrolling: touch;
     }
-
-    /* full-bleed layer */
-    #full-bleed-bg {
-      position: fixed;
-      top: -50px; left: -50px; right: -50px; bottom: -50px;
-      z-index: -99999;
-      pointer-events: none;
-      background-color: var(--bg-color) !important;
-      background-image: radial-gradient(#e2e8f0 1px, transparent 1px) !important;
-      background-size: 20px 20px !important;
-      background-attachment: fixed !important;
-    }
-
     html, body, #root {
       border: none !important;
       box-shadow: none !important;
@@ -66,58 +46,51 @@
       background-clip: padding-box !important;
       -webkit-tap-highlight-color: transparent;
     }
-
     *, *::before, *::after { box-sizing: border-box; }
-
-    /* Allow text selection (helpful for copying credentials / debugging) */
-    body { -webkit-user-select: text; user-select: text; -webkit-touch-callout: text; overflow-y: auto !important; }
-
+    body {
+      overflow-y: auto !important;
+      user-select: text;
+      -webkit-user-select: text;
+      -webkit-touch-callout: text;
+    }
+    input, textarea, select, button { font-family: inherit; }
     input, textarea, select {
-      -webkit-user-select: text !important;
-      user-select: text !important;
-      -webkit-appearance: none !important;
-      -moz-appearance: none !important;
-      appearance: none !important;
       border: none !important;
       outline: none !important;
       box-shadow: none !important;
       background-clip: padding-box !important;
-      font-family: inherit;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
     }
     input:focus, textarea:focus { outline: none !important; border: none !important; box-shadow: none !important; }
-
     ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; }
-
-    /* Loader & Animations */
-    .saline-loader { position: relative; width: 60px; height: 100px; margin: 0 auto; }
-    .bottle { width: 40px; height: 60px; border: 3px solid #3b82f6; border-radius: 0 0 20px 20px; margin: 0 auto; position: relative; overflow: hidden; background: rgba(255,255,255,0.8); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2); }
-    .bottle::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #60a5fa; animation: drain 2s infinite linear; }
-    .drip { width: 8px; height: 12px; background: #3b82f6; border-radius: 50%; margin: 5px auto 0; animation: drop 1s infinite cubic-bezier(0.5, 0, 1, 0.5); }
-    @keyframes drain { 0% { top: 0; } 100% { top: 100%; } }
-    @keyframes drop { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(40px) scaleY(0); opacity: 0; } }
-
-    .fade-in { animation: fadeIn 0.3s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .glass-panel { background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5); }
+    .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+    .hide-scroll::-webkit-scrollbar { display: none; }
+    .pt-safe { padding-top: env(safe-area-inset-top, 12px); }
+    .modal-open { overflow: hidden !important; }
+    .fade-in { animation: fadeIn 0.22s cubic-bezier(0.16,1,0.3,1) forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
     .critical-alert { animation: pulse-border 2s infinite; }
     @keyframes pulse-border {
       0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); border-color: #ef4444; }
       70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); border-color: #ef4444; }
       100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); border-color: #ef4444; }
     }
-
-    .glass-panel { background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5); }
-    .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-    .hide-scroll::-webkit-scrollbar { display: none; }
-    .pt-safe { padding-top: env(safe-area-inset-top, 12px); }
+    .saline-loader { position: relative; width: 60px; height: 100px; margin: 0 auto; }
+    .bottle { width: 40px; height: 60px; border: 3px solid #3b82f6; border-radius: 0 0 20px 20px; margin: 0 auto; position: relative; overflow: hidden; background: rgba(255,255,255,0.8); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2); }
+    .bottle::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #60a5fa; animation: drain 2s infinite linear; }
+    .drip { width: 8px; height: 12px; background: #3b82f6; border-radius: 50%; margin: 5px auto 0; animation: drop 1s infinite cubic-bezier(0.5, 0, 1, 0.5); }
+    @keyframes drain { 0% { top: 0; } 100% { top: 100%; } }
+    @keyframes drop { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(40px) scaleY(0); opacity: 0; } }
   </style>
 
   <script>
-    // Show runtime errors in a dismissible banner — handy for WebView debugging
-    window.onerror = function(message, source, lineno, colno, error) {
+    window.onerror = function(message, source, lineno) {
       try {
-        const existing = document.getElementById('__sg_error_banner');
-        if (existing) existing.remove();
+        const old = document.getElementById('__sg_error_banner');
+        if (old) old.remove();
         const errDiv = document.createElement('div');
         errDiv.id = '__sg_error_banner';
         errDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#ef4444;color:white;z-index:999999;padding:14px 18px;font-family:monospace;font-size:13px;word-wrap:break-word;box-shadow:0 6px 18px rgba(0,0,0,0.2)';
@@ -130,17 +103,15 @@
 </head>
 
 <body>
-  <div id="full-bleed-bg" aria-hidden="true"></div>
   <div id="root"></div>
 
-  <!-- Your app code (Babel in-browser transform) -->
   <script type="text/babel" data-presets="react">
-    /*************************************************************************
-     * SalineGuard Pro - single-file updated build
-     * I kept your original logic and Firebase config intact.
-     *************************************************************************/
-
-    const MAINTENANCE_FEE_PER_DEVICE = 200;
+    const AMC_PER_DEVICE = 1500;
+    const AMC_CYCLE_MS = 365 * 24 * 60 * 60 * 1000;
+    const INFUSION_DURATION_MS = 6 * 60 * 60 * 1000;
+    const ALERT_LEVELS = [75, 50, 25, 10, 5, 2];
+    const DEFAULT_PERCENT_ALERTS = ALERT_LEVELS.reduce((acc, n) => { acc[n] = true; return acc; }, {});
+    const DEVICE_STALE_MS = 8500;
 
     const firebaseConfig = {
       apiKey: "AIzaSyCYkB2xXeZDT7OA8UyCwDt0ipc3oLXDzkw",
@@ -152,12 +123,11 @@
       appId: "1:973031594138:web:b8b98226c33ef744bfa723"
     };
 
-    // Initialize Firebase (compat)
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
-
     const { useState, useEffect, useMemo, useRef } = React;
+    const { createPortal } = ReactDOM;
     let secondaryAuthInstance = null;
 
     const getSecondaryAuth = () => {
@@ -169,10 +139,7 @@
     };
 
     const copyText = async (text) => {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(text);
-        return true;
-      }
+      if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).then(() => true);
       const temp = document.createElement('textarea');
       temp.value = text;
       temp.setAttribute('readonly', '');
@@ -185,9 +152,11 @@
       return copied;
     };
 
-    const formatMoney = (amt) => "₹" + (amt || 0).toLocaleString('en-IN');
+    const formatMoney = (amt) => "₹" + Number(amt || 0).toLocaleString('en-IN');
+    const slugify = (value = '') => String(value).toLowerCase().trim().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+    const humanize = (value = '') => String(value).toLowerCase().split(/[_\s.-]+/).filter(Boolean).map(v => v.charAt(0).toUpperCase() + v.slice(1)).join(' ');
+    const normalizeName = (value = '') => String(value).trim().toLowerCase().replace(/\s+/g, ' ');
 
-    // Parse email like "name@hospital.branch" -> hospital id/name/loc/domain
     const getHospitalInfo = (email) => {
       if (!email) return { id: 'unknown', name: 'Unknown', loc: '', domain: '' };
       if (email === 'admin@gmail.com') return { id: 'super_admin', name: 'Super Admin', loc: 'Global', domain: '' };
@@ -198,37 +167,87 @@
       if (domainParts.length >= 2) {
         const hName = domainParts[0];
         const hLoc = domainParts[1];
-        return {
-          id: `${hName}_${hLoc}`.toLowerCase(),
-          name: hName.charAt(0).toUpperCase() + hName.slice(1) + " Hospital",
-          loc: hLoc.charAt(0).toUpperCase() + hLoc.slice(1),
-          domain: `${hName}.${hLoc}`
-        };
+        return { id: `${hName}_${hLoc}`.toLowerCase(), name: humanize(hName) + ' Hospital', loc: humanize(hLoc), domain: `${hName}.${hLoc}` };
       }
       return { id: 'unknown', name: 'Unknown', loc: '', domain: '' };
     };
 
-    // Utility: filter history by time period
+    const sortHistoryDesc = (histList = []) => [...histList].sort((a, b) => (b?.completedAt || b?.startTime || 0) - (a?.completedAt || a?.startTime || 0));
+
     const filterHistoryByTime = (histList, period) => {
-      if (period === 'max') return histList;
-      const now = new Date();
-      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-      return histList.filter(h => {
+      const sorted = sortHistoryDesc(histList);
+      if (period === 'max') return sorted;
+      const now = Date.now();
+      const todayStart = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime();
+      return sorted.filter(h => {
         const itemTime = h.completedAt || h.startTime || 0;
-        if (period === 'day') {
-          return itemTime >= todayStart;
-        } else if (period === 'week') {
-          return (now.getTime() - itemTime) <= (7 * 86400000);
-        } else if (period === 'month') {
-          return (now.getTime() - itemTime) <= (30 * 86400000);
-        }
+        if (period === 'day') return itemTime >= todayStart;
+        if (period === 'week') return (now - itemTime) <= (7 * 86400000);
+        if (period === 'month') return (now - itemTime) <= (30 * 86400000);
         return true;
       });
     };
 
-    // -------------------------
-    // Small presentational components (kept your original classes)
-    // -------------------------
+    const getRemainingMs = (device) => {
+      if (!device?.startTime) return INFUSION_DURATION_MS;
+      return Math.max(0, INFUSION_DURATION_MS - (Date.now() - device.startTime));
+    };
+
+    const formatDuration = (ms) => {
+      const totalSec = Math.max(0, Math.floor(ms / 1000));
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      if (h > 0) return `${h}h ${m}m`;
+      if (m > 0) return `${m}m ${s}s`;
+      return `${s}s`;
+    };
+
+    const getDeviceLastSeenAt = (device) => Number(device?.clientReceivedAt || device?.lastUpdate || device?.updatedAt || device?.startTime || 0);
+    const isDeviceOnlineNow = (device, nowTs = Date.now()) => {
+      const seenAt = getDeviceLastSeenAt(device);
+      if (device?.deviceOnline === false) return false;
+      if (!seenAt) return false;
+      return (nowTs - seenAt) <= DEVICE_STALE_MS;
+    };
+    const stampReceivedAt = (data = {}) => {
+      const now = Date.now();
+      const stamped = {};
+      Object.entries(data || {}).forEach(([key, value]) => {
+        stamped[key] = { ...(value || {}), clientReceivedAt: now };
+      });
+      return stamped;
+    };
+
+    const OFFLINE_ALERT_MS = DEVICE_STALE_MS;
+    const NO_FLOW_ALERT_MS = 75 * 1000;
+    const RAPID_DROP_PERCENT = 20;
+
+    const triggerPatientAlert = ({ title, body }) => {
+      const icon = "https://cdn-icons-png.flaticon.com/512/3004/3004451.png";
+      try {
+        if ("Notification" in window && window.Notification && Notification.permission === 'granted') {
+          new Notification(title, { body, icon });
+        }
+      } catch (e) {}
+    };
+
+    const sortActiveDevices = (devices = []) => {
+      const isEmergency = (d) => !!(d?.emergency || d?.emergencyCase || d?.priority === 'emergency' || d?.priority === 'critical');
+      return [...devices].sort((a, b) => {
+        const pa = { emergencyScore: isEmergency(a) ? 1 : 0, perc: a?.perc !== undefined ? a.perc : 100, remaining: getRemainingMs(a), startTime: a?.startTime || 0, lastUpdate: getDeviceLastSeenAt(a) || 0 };
+        const pb = { emergencyScore: isEmergency(b) ? 1 : 0, perc: b?.perc !== undefined ? b.perc : 100, remaining: getRemainingMs(b), startTime: b?.startTime || 0, lastUpdate: getDeviceLastSeenAt(b) || 0 };
+        if (pa.emergencyScore !== pb.emergencyScore) return pb.emergencyScore - pa.emergencyScore;
+        const aCrit = pa.perc <= 10, bCrit = pb.perc <= 10;
+        if (aCrit !== bCrit) return aCrit ? -1 : 1;
+        if (pa.remaining !== pb.remaining) return pa.remaining - pb.remaining;
+        if (pa.lastUpdate !== pb.lastUpdate) return pb.lastUpdate - pa.lastUpdate;
+        return pb.startTime - pa.startTime;
+      });
+    };
+
+    const isNurseDisabled = (nurse) => !!(nurse?.disabled || nurse?.status === 'disabled');
+
     const LoadingScreen = () => (
       <div className="fixed inset-0 bg-slate-50 z-[9999] flex flex-col items-center justify-center">
         <div className="saline-loader">
@@ -265,35 +284,51 @@
       );
     };
 
-    // Keep your components (AppHeader, StatusCard, AddDeviceModal, PatientFormModal, AddNurseModal etc.)
-    // I kept them functionally identical to your provided code but placed them here in one file.
-    // For brevity in this response I will include the full components exactly as in your original source,
-    // with only tiny safeguards (no functional behavioral changes).
+    const PortalModal = ({ open, children }) => open ? createPortal(children, document.body) : null;
 
-    /* ----------------------------
-       Small components (copied & kept)
-       ---------------------------- */
+    const AppHeader = ({ title, subtitle, onLogout }) => {
+      const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+      return (
+        <>
+          <header className="bg-slate-900 px-4 py-3 md:px-6 flex justify-between items-center shadow-lg sticky top-0 z-40 border-b border-slate-800 backdrop-blur-md bg-slate-900/90 pt-safe">
+            <div className="flex items-center gap-3 md:gap-4 min-w-0">
+              <div className="w-10 h-10 md:w-11 md:h-11 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-xl flex items-center justify-center shadow-lg shadow-blue-900/40 shrink-0">
+                <i className="fas fa-heartbeat text-lg md:text-xl"></i>
+              </div>
+              <div className="min-w-0 pr-2">
+                <h2 className="font-extrabold text-white text-sm md:text-lg leading-tight truncate">{title}</h2>
+                <p className="text-[9px] md:text-xs text-blue-400 font-bold uppercase tracking-widest mt-0.5 truncate">{subtitle}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 md:gap-6 shrink-0">
+              <Clock />
+              <div className="hidden md:block w-px h-8 bg-slate-700/50"></div>
+              <button onClick={() => setShowLogoutConfirm(true)} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 text-slate-400 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0" aria-label="Logout">
+                <i className="fas fa-power-off text-sm"></i>
+              </button>
+            </div>
+          </header>
 
-    const AppHeader = ({ title, subtitle, onLogout }) => (
-      <header className="bg-slate-900 px-4 py-3 md:px-6 flex justify-between items-center shadow-lg sticky top-0 z-40 border-b border-slate-800 backdrop-blur-md bg-slate-900/90 pt-safe">
-        <div className="flex items-center gap-3 md:gap-4">
-          <div className="w-10 h-10 md:w-11 md:h-11 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-xl flex items-center justify-center shadow-lg shadow-blue-900/40 shrink-0">
-            <i className="fas fa-heartbeat text-lg md:text-xl"></i>
-          </div>
-          <div className="min-w-0 pr-2">
-            <h2 className="font-extrabold text-white text-sm md:text-lg leading-tight truncate">{title}</h2>
-            <p className="text-[9px] md:text-xs text-blue-400 font-bold uppercase tracking-widest mt-0.5 truncate">{subtitle}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 md:gap-6 shrink-0">
-          <Clock />
-          <div className="hidden md:block w-px h-8 bg-slate-700/50"></div>
-          <button onClick={onLogout} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 text-slate-400 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0">
-            <i className="fas fa-power-off text-sm"></i>
-          </button>
-        </div>
-      </header>
-    );
+          <PortalModal open={showLogoutConfirm}>
+            <div className="fixed inset-0 z-[999999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 fade-in">
+              <div className="w-full max-w-sm rounded-3xl bg-white shadow-2xl overflow-hidden">
+                <div className="p-6 md:p-7 border-b border-slate-100">
+                  <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mb-4">
+                    <i className="fas fa-right-from-bracket text-2xl"></i>
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-extrabold text-slate-800">Do you want to log out?</h3>
+                  <p className="text-sm text-slate-500 mt-2 leading-6">You will be signed out of SalineGuard and taken back to the login screen.</p>
+                </div>
+                <div className="p-4 md:p-5 flex gap-3">
+                  <button onClick={() => setShowLogoutConfirm(false)} className="flex-1 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm active:bg-slate-200 transition-colors">Cancel</button>
+                  <button onClick={() => { setShowLogoutConfirm(false); onLogout && onLogout(); }} className="flex-1 py-3 rounded-xl bg-red-600 text-white font-bold text-sm active:bg-red-700 transition-colors">Log out</button>
+                </div>
+              </div>
+            </div>
+          </PortalModal>
+        </>
+      );
+    };
 
     const FilterTabs = ({ current, onChange, resultCount }) => (
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
@@ -304,74 +339,103 @@
             </button>
           ))}
         </div>
-        {resultCount !== undefined && (
-          <div className="text-xs font-bold text-slate-400 shrink-0">
-            <i className="fas fa-poll-h mr-1"></i> {resultCount} records
-          </div>
-        )}
+        {resultCount !== undefined && <div className="text-xs font-bold text-slate-400 shrink-0"><i className="fas fa-poll-h mr-1"></i> {resultCount} records</div>}
       </div>
     );
 
     const StatusCard = ({ data, onComplete, isHistory = false }) => {
-      const perc = data.perc !== undefined ? data.perc : 100;
-      const isCrit = perc <= 10 && !isHistory;
-      const displayName = data.patientName || `Room ${data.room} - Bed ${data.bed}`;
+      const [nowTick, setNowTick] = useState(Date.now());
+      useEffect(() => {
+        const id = setInterval(() => setNowTick(Date.now()), 1000);
+        return () => clearInterval(id);
+      }, []);
 
-      let timeString = 'Done';
-      if (!isHistory) {
-        if (data.minsLeft !== undefined) {
-          timeString = data.secsLeft !== undefined ? `${data.minsLeft}m ${data.secsLeft}s left` : `${data.minsLeft}m left`;
-        } else {
-          timeString = `${Math.max(0, Math.round((perc / 100) * 60))}m left`;
-        }
+      const perc = Number.isFinite(Number(data?.perc)) ? Number(data.perc) : 100;
+      
+      const liveMins = data?.minsLeft !== undefined ? Number(data.minsLeft) : null;
+      const liveSecs = data?.secsLeft !== undefined ? Number(data.secsLeft) : null;
+      
+      // Fix Expected Completion Time using exact epoch calculated directly by ESP
+      const expectedMs = Number(data?.estimatedCompletionAt);
+      let finishTime = null;
+      if (expectedMs && expectedMs > 0) {
+        finishTime = new Date(expectedMs);
+      } else if (liveMins !== null && liveMins < 999) {
+        finishTime = new Date(Date.now() + (liveMins * 60000) + (liveSecs * 1000));
       }
+      const finishLabel = finishTime ? finishTime.toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' }) : '--';
+      
+      const isCrit = perc <= 10 && !isHistory;
+      const isOnline = !isHistory && isDeviceOnlineNow(data, nowTick);
+      const isOffline = !isHistory && !isOnline;
+      const displayName = data?.patientName || `Room ${data?.room || '-'} - Bed ${data?.bed || '-'}`;
+      
+      const remainingMs = isHistory ? 0 : getRemainingMs(data);
+      const timeString = isHistory ? 'Done' : (liveMins !== null && liveMins < 999 ? `${liveMins}m ${String(liveSecs ?? 0).padStart(2, '0')}s left` : `${formatDuration(remainingMs)} left`);
 
       return (
-        <div className={`relative bg-white rounded-2xl p-4 md:p-5 border transition-all duration-300 shadow-sm flex flex-col justify-between ${isCrit ? 'border-red-400 critical-alert' : 'border-slate-200'}`}>
+        <div className={`relative bg-white rounded-2xl p-4 md:p-5 border transition-all duration-300 shadow-sm flex flex-col justify-between ${isCrit || data?.salineRemoved ? 'border-red-400 critical-alert' : (isOffline ? 'border-amber-400' : 'border-slate-200')}`}>
           <div>
-            <div className="flex justify-between items-start mb-4">
+            <div className="flex justify-between items-start mb-4 gap-2">
               <div className="pr-2 min-w-0 flex-1">
                 <h3 className="font-bold text-slate-800 text-base md:text-lg truncate" title={displayName}>{displayName}</h3>
-                <div className="flex items-center gap-2 mt-1.5 text-xs font-bold text-slate-600">
-                  <span className="bg-blue-50 px-2 py-1 rounded-md border border-blue-100 shrink-0"><i className="fas fa-door-open mr-1 text-blue-500"></i> R: {data.room}</span>
-                  <span className="bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100 shrink-0"><i className="fas fa-bed mr-1 text-indigo-500"></i> B: {data.bed}</span>
+                <div className="flex items-center gap-2 mt-1.5 text-xs font-bold text-slate-600 flex-wrap">
+                  <span className="bg-blue-50 px-2 py-1 rounded-md border border-blue-100 shrink-0"><i className="fas fa-door-open mr-1 text-blue-500"></i> R: {data?.room}</span>
+                  <span className="bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100 shrink-0"><i className="fas fa-bed mr-1 text-indigo-500"></i> B: {data?.bed}</span>
+                  {!isHistory && (
+                    <span className={`px-2 py-1 rounded-md border shrink-0 ${isOnline ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
+                      <i className={`fas ${isOnline ? 'fa-wifi' : 'fa-wifi-slash'} mr-1 ${isOnline ? 'text-emerald-500' : 'text-amber-500'}`}></i>
+                      {isOnline ? 'Online' : 'Offline'}
+                    </span>
+                  )}
                 </div>
               </div>
-              <div className="bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-2.5 py-1.5 text-center shadow-sm shrink-0 ml-2">
+              <div className="bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-2.5 py-1.5 text-center shadow-sm shrink-0">
                 <div className="text-[8px] uppercase font-bold text-slate-400 mb-0.5 tracking-wider">Device ID</div>
-                <div className="font-mono font-bold text-xs md:text-sm leading-none text-slate-700">{data.deviceId}</div>
+                <div className="font-mono font-bold text-xs md:text-sm leading-none text-slate-700">{data?.deviceId}</div>
               </div>
             </div>
 
             <div className="mb-4">
-              <div className="flex justify-between text-xs font-bold mb-1.5">
+              <div className="flex justify-between text-xs font-bold mb-1.5 gap-2">
                 <span className={perc <= 10 && !isHistory ? 'text-red-600 animate-pulse' : 'text-blue-600'}>{perc}% Infused</span>
-                <span className="text-slate-400 font-mono tracking-tight">{timeString}</span>
+                <span className="text-slate-400 font-mono tracking-tight truncate">{isHistory ? (data?.autoDischarged ? 'Auto Discharged' : 'Completed') : timeString}</span>
               </div>
-
               <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                <div className={`h-full rounded-full transition-all duration-1000 ${isHistory ? 'bg-emerald-500' : (perc<=10 ? 'bg-red-500' : 'bg-gradient-to-r from-blue-500 to-indigo-500')}`} style={{width: `${perc}%`}}></div>
+                <div className={`h-full rounded-full transition-all duration-1000 ${isHistory ? 'bg-emerald-500' : (perc<=10 || data?.salineRemoved ? 'bg-red-500' : 'bg-gradient-to-r from-blue-500 to-indigo-500')}`} style={{ width: `${Math.max(0, Math.min(100, perc))}%` }}></div>
               </div>
+              {!isHistory && (
+                <div className="mt-3 space-y-1.5">
+                  {data?.salineRemoved && (
+                    <div className="bg-red-100 border border-red-200 text-red-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
+                      <i className="fas fa-exclamation-triangle mr-1.5"></i> Saline Removed!
+                    </div>
+                  )}
+                  {data?.blockageSuspected && !data?.salineRemoved && (
+                    <div className="bg-amber-100 border border-amber-200 text-amber-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
+                      <i className="fas fa-ban mr-1.5"></i> Flow Blockage Detected!
+                    </div>
+                  )}
+                  <div className="text-[10px] text-slate-500 font-medium">Expected completion at <span className="font-bold text-slate-700">{finishLabel}</span></div>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="flex justify-between items-center pt-3 border-t border-slate-100 mt-auto">
-            <div className="text-[9px] md:text-[10px] text-slate-500 font-medium">
-              <div className="mb-1 text-slate-700 font-bold flex items-center truncate max-w-[120px]">
-                <i className="fas fa-user-nurse mr-1.5 text-slate-400"></i>
-                <span className="truncate">{data.nurseName || 'Unknown Staff'}</span>
-              </div>
-              {isHistory ?
-                <span className={`px-2 py-0.5 rounded-md inline-block ${data.autoDischarged ? 'text-amber-600 bg-amber-50' : 'text-emerald-600 bg-emerald-50'}`}>
-                  <i className={`fas ${data.autoDischarged ? 'fa-clock' : 'fa-check-circle'} mr-1`}></i>
-                  {data.autoDischarged ? 'Auto Discharged' : new Date(data.completedAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
-                </span> :
-                <span className="text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md inline-block">Start: {new Date(data.startTime).toLocaleString('en-IN', { timeStyle: 'short' })}</span>
-              }
+          <div className="flex justify-between items-center pt-3 border-t border-slate-100 mt-auto gap-3">
+            <div className="text-[9px] md:text-[10px] text-slate-500 font-medium min-w-0">
+              <div className="mb-1 text-slate-700 font-bold flex items-center truncate max-w-[150px]"><i className="fas fa-user-nurse mr-1.5 text-slate-400"></i><span className="truncate">{data?.nurseName || 'Unknown Staff'}</span></div>
+              {isHistory ? (
+                <span className={`px-2 py-0.5 rounded-md inline-block ${data?.autoDischarged ? 'text-amber-600 bg-amber-50' : 'text-emerald-600 bg-emerald-50'}`}>
+                  <i className={`fas ${data?.autoDischarged ? 'fa-clock' : 'fa-check-circle'} mr-1`}></i>
+                  {data?.autoDischarged ? 'Auto Discharged' : new Date(data?.completedAt || Date.now()).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
+                </span>
+              ) : (
+                <span className="text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md inline-block">Start: {new Date(data?.startTime || Date.now()).toLocaleString('en-IN', { timeStyle: 'short' })}</span>
+              )}
             </div>
-
             {!isHistory && (
-              <button onClick={() => { if(onComplete) onComplete(data.deviceId); }} className="bg-slate-900 active:bg-emerald-600 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5 shrink-0">
+              <button onClick={() => { if (onComplete) onComplete(data.deviceId); }} className="bg-slate-900 active:bg-emerald-600 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5 shrink-0">
                 <span>Discharge</span> <i className="fas fa-check text-slate-400"></i>
               </button>
             )}
@@ -380,25 +444,15 @@
       );
     };
 
-    /* ----------------------------
-       Modals and dashboards
-       (kept behaviour identical to your original)
-       ---------------------------- */
-
     const AddDeviceModal = ({ isOpen, onClose, hospitalId, onSuccess }) => {
       const [deviceId, setDeviceId] = useState('');
       const [loading, setLoading] = useState(false);
-
-      useEffect(() => {
-        if (isOpen) document.body.classList.add('modal-open');
-        else document.body.classList.remove('modal-open');
-        return () => document.body.classList.remove('modal-open');
-      }, [isOpen]);
+      useEffect(() => { document.body.classList.toggle('modal-open', isOpen); return () => document.body.classList.remove('modal-open'); }, [isOpen]);
 
       const handleSubmit = async () => {
-        if (!deviceId.trim()) { alert("Please enter a valid Device ID."); return; }
-        setLoading(true);
         const did = deviceId.trim().toUpperCase();
+        if (!did) { alert('Please enter a valid Device ID.'); return; }
+        setLoading(true);
         try {
           const snap = await db.ref(`hospitals/${hospitalId}/registered_devices/${did}`).once('value');
           if (snap.exists()) {
@@ -413,29 +467,29 @@
         setLoading(false);
       };
 
-      if (!isOpen) return null;
       return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999999] flex items-center justify-center fade-in" style={{margin:0,padding:0}}>
-          <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none">
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h3 className="font-extrabold text-slate-800 text-xl">Register Device</h3>
-                <p className="text-xs font-medium text-slate-400 mt-1">Add ESP ID to hospital inventory</p>
+        <PortalModal open={isOpen}>
+          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
+            <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none mx-auto">
+              <div className="flex justify-between items-center mb-6 gap-3">
+                <div className="min-w-0">
+                  <h3 className="font-extrabold text-slate-800 text-xl">Register Device</h3>
+                  <p className="text-xs font-medium text-slate-400 mt-1">Add ESP ID to hospital inventory</p>
+                </div>
+                <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 active:bg-slate-200 transition-colors flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
               </div>
-              <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 active:bg-slate-200 transition-colors flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
-            </div>
-
-            <div className="space-y-4">
-              <div className="relative">
-                <input value={deviceId} onChange={e => setDeviceId(e.target.value)} placeholder="e.g. ESP-1001" className="w-full p-4 bg-slate-100 focus:bg-slate-200 rounded-xl font-mono text-center text-xl font-bold tracking-widest uppercase transition-colors" style={{ WebkitAppearance: 'none', border: 'none', outline: 'none', boxShadow: 'none' }} autoFocus />
-                <div className="text-[10px] uppercase tracking-wider font-bold text-center text-slate-400 mt-2">Unique Device ID <span className="text-red-500">*</span></div>
+              <div className="space-y-4">
+                <div className="relative">
+                  <input value={deviceId} onChange={e => setDeviceId(e.target.value)} placeholder="e.g. ESP-1001" className="w-full p-4 bg-slate-100 focus:bg-slate-200 rounded-xl font-mono text-center text-xl font-bold tracking-widest uppercase transition-colors" autoFocus />
+                  <div className="text-[10px] uppercase tracking-wider font-bold text-center text-slate-400 mt-2">Unique Device ID <span className="text-red-500">*</span></div>
+                </div>
+                <button onClick={handleSubmit} disabled={loading} className="w-full bg-indigo-600 active:bg-indigo-700 text-white mt-1 py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/30 active:scale-[0.98] transition-all flex justify-center items-center gap-2 border-none outline-none">
+                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Add to Inventory</span>}
+                </button>
               </div>
-              <button onClick={handleSubmit} disabled={loading} className="w-full bg-indigo-600 active:bg-indigo-700 text-white mt-1 py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/30 active:scale-[0.98] transition-all flex justify-center items-center gap-2 border-none outline-none">
-                {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Add to Inventory</span>}
-              </button>
             </div>
           </div>
-        </div>
+        </PortalModal>
       );
     };
 
@@ -443,10 +497,16 @@
       const [form, setForm] = useState({ id: '', name: '', room: '', bed: '' });
       const [loading, setLoading] = useState(false);
       const [deviceStatus, setDeviceStatus] = useState('idle');
+      const [alertPrefs, setAlertPrefs] = useState(DEFAULT_PERCENT_ALERTS);
 
       useEffect(() => {
-        if (isOpen) document.body.classList.add('modal-open');
-        else document.body.classList.remove('modal-open');
+        document.body.classList.toggle('modal-open', isOpen);
+        if (isOpen) {
+          setForm({ id: '', name: '', room: '', bed: '' });
+          setLoading(false);
+          setDeviceStatus('idle');
+          setAlertPrefs(DEFAULT_PERCENT_ALERTS);
+        }
         return () => document.body.classList.remove('modal-open');
       }, [isOpen]);
 
@@ -454,24 +514,31 @@
         const did = form.id.trim().toUpperCase();
         if (did.length < 3) { setDeviceStatus('idle'); return; }
         setDeviceStatus('checking');
+        let cancelled = false;
         const verifyDevice = async () => {
           try {
             const hRef = db.ref(`hospitals/${hospitalId}`);
             const regSnap = await hRef.child(`registered_devices/${did}`).once('value');
+            if (cancelled) return;
             if (!regSnap.exists() || regSnap.val() === null) { setDeviceStatus('invalid'); return; }
             const activeSnap = await hRef.child(`active_devices/${did}`).once('value');
+            if (cancelled) return;
             if (activeSnap.exists() && activeSnap.val() !== null) { setDeviceStatus('in_use'); return; }
             setDeviceStatus('valid');
-          } catch (e) { console.error("Verification Error:", e); setDeviceStatus('idle'); }
+          } catch (e) {
+            if (!cancelled) setDeviceStatus('idle');
+          }
         };
-        const timeoutId = setTimeout(verifyDevice, 600);
-        return () => clearTimeout(timeoutId);
+        const timeoutId = setTimeout(verifyDevice, 450);
+        return () => { cancelled = true; clearTimeout(timeoutId); };
       }, [form.id, hospitalId]);
+
+      const toggleAlert = (level) => setAlertPrefs(prev => ({ ...prev, [level]: !prev[level] }));
 
       const handleSubmit = async () => {
         const did = form.id.trim().toUpperCase();
-        if (!did || !form.room || !form.bed) { alert("Device ID, Room Number, and Bed Number are mandatory."); return; }
-        if (deviceStatus !== 'valid') { alert("Action blocked. Ensure you are using a valid, registered device ID that is currently idle."); return; }
+        if (!did || !form.room || !form.bed) { alert('Device ID, Room Number, and Bed Number are mandatory.'); return; }
+        if (deviceStatus !== 'valid') { alert('Action blocked. Ensure you are using a valid, registered device ID that is currently idle.'); return; }
         setLoading(true);
         try {
           const hRef = db.ref(`hospitals/${hospitalId}`);
@@ -488,13 +555,25 @@
             nurseId: user.uid,
             nurseName: user.name || 'Staff',
             startTime: Date.now(),
-            perc: 100
+            lastUpdate: Date.now(),
+            perc: 100,
+            minsLeft: 60,
+            secsLeft: 0,
+            rawWeight: 0,
+            fluidWeight: 0,
+            flowRate: 0,
+            deviceOnline: true,
+            autoDischargeAt: Date.now() + INFUSION_DURATION_MS,
+            notificationSettings: { mode: 'percent', percentAlerts: alertPrefs }
           });
 
           setForm({ id: '', name: '', room: '', bed: '' });
           setDeviceStatus('idle');
-          onSuccess(); onClose();
-        } catch (e) { alert("Database Error: " + e.message); }
+          onSuccess();
+          onClose();
+        } catch (e) {
+          alert('Database Error: ' + e.message);
+        }
         setLoading(false);
       };
 
@@ -509,135 +588,249 @@
       else if (deviceStatus === 'in_use') { buttonContent = <span>Device In Use</span>; buttonClass = 'bg-amber-100 text-amber-500 shadow-none cursor-not-allowed pointer-events-none'; }
 
       return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999999] flex items-center justify-center fade-in" style={{margin:0,padding:0}}>
-          <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none">
-            <div className="flex justify-between items-center mb-6">
-              <div><h3 className="font-extrabold text-slate-800 text-xl">New Infusion</h3><p className="text-xs font-medium text-slate-400 mt-1">Connect device to patient bed</p></div>
-              <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 active:bg-slate-200 transition-colors flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
-            </div>
-
-            <div className="space-y-4">
-              <div className="relative">
-                <input value={form.id} onChange={e=>setForm({...form, id:e.target.value.toUpperCase()})} placeholder="e.g. KN0326001" className={`w-full p-4 bg-slate-100 focus:bg-slate-200 rounded-xl font-mono text-center text-xl font-bold tracking-widest uppercase transition-colors border-2 ${deviceStatus === 'valid' ? 'border-emerald-400 bg-emerald-50' : deviceStatus === 'invalid' || deviceStatus === 'in_use' ? 'border-red-400 bg-red-50' : 'border-transparent'}`} style={{ WebkitAppearance: 'none', outline: 'none', boxShadow: 'none' }} autoFocus />
-                {deviceStatus === 'checking' && <div className="absolute right-4 top-5 text-blue-500"><i className="fas fa-circle-notch fa-spin text-lg"></i></div>}
-                {deviceStatus === 'valid' && <div className="absolute right-4 top-5 text-emerald-500"><i className="fas fa-check-circle text-xl"></i></div>}
-                {deviceStatus === 'invalid' && <div className="absolute right-4 top-5 text-red-500"><i className="fas fa-times-circle text-xl"></i></div>}
-                {deviceStatus === 'in_use' && <div className="absolute right-4 top-5 text-amber-500"><i className="fas fa-exclamation-triangle text-xl"></i></div>}
-                <div className="text-[10px] uppercase tracking-wider text-center mt-2 h-4 flex justify-center items-center">
-                  {deviceStatus === 'idle' && <span className="text-slate-400 font-bold">Unique Device ID <span className="text-red-500">*</span></span>}
-                  {deviceStatus === 'checking' && <span className="text-blue-500 font-bold">Verifying Allocation...</span>}
-                  {deviceStatus === 'valid' && <span className="text-emerald-500 font-bold">Device Allocated & Available</span>}
-                  {deviceStatus === 'invalid' && <span className="text-red-600 font-black">WRONG ID! This ID is not in your inventory.</span>}
-                  {deviceStatus === 'in_use' && <span className="text-amber-500 font-bold">Device is already in use!</span>}
+        <PortalModal open={isOpen}>
+          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
+            <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none max-h-[92vh] overflow-y-auto hide-scroll mx-auto">
+              <div className="flex justify-between items-center mb-6 gap-3">
+                <div className="min-w-0">
+                  <h3 className="font-extrabold text-slate-800 text-xl">New Infusion</h3>
+                  <p className="text-xs font-medium text-slate-400 mt-1">Connect device to patient bed</p>
                 </div>
+                <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 active:bg-slate-200 transition-colors flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <input value={form.room} onChange={e=>setForm({...form, room:e.target.value})} placeholder="Room 101" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" />
-                  <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Room No <span className="text-red-500">*</span></div>
+              <div className="space-y-4">
+                <div className="relative">
+                  <input value={form.id} onChange={e=>setForm({...form, id:e.target.value.toUpperCase()})} placeholder="e.g. KN0326001" className={`w-full p-4 bg-slate-100 focus:bg-slate-200 rounded-xl font-mono text-center text-xl font-bold tracking-widest uppercase transition-colors border-2 ${deviceStatus === 'valid' ? 'border-emerald-400 bg-emerald-50' : deviceStatus === 'invalid' || deviceStatus === 'in_use' ? 'border-red-400 bg-red-50' : 'border-transparent'}`} autoFocus />
+                  {deviceStatus === 'checking' && <div className="absolute right-4 top-5 text-blue-500"><i className="fas fa-circle-notch fa-spin text-lg"></i></div>}
+                  {deviceStatus === 'valid' && <div className="absolute right-4 top-5 text-emerald-500"><i className="fas fa-check-circle text-xl"></i></div>}
+                  {deviceStatus === 'invalid' && <div className="absolute right-4 top-5 text-red-500"><i className="fas fa-times-circle text-xl"></i></div>}
+                  {deviceStatus === 'in_use' && <div className="absolute right-4 top-5 text-amber-500"><i className="fas fa-exclamation-triangle text-xl"></i></div>}
+                  <div className="text-[10px] uppercase tracking-wider text-center mt-2 h-4 flex justify-center items-center">
+                    {deviceStatus === 'idle' && <span className="text-slate-400 font-bold">Unique Device ID <span className="text-red-500">*</span></span>}
+                    {deviceStatus === 'checking' && <span className="text-blue-500 font-bold">Verifying Allocation...</span>}
+                    {deviceStatus === 'valid' && <span className="text-emerald-500 font-bold">Device Allocated & Available</span>}
+                    {deviceStatus === 'invalid' && <span className="text-red-600 font-black">WRONG ID! This ID is not in your inventory.</span>}
+                    {deviceStatus === 'in_use' && <span className="text-amber-500 font-bold">Device is already in use!</span>}
+                  </div>
                 </div>
-                <div>
-                  <input value={form.bed} onChange={e=>setForm({...form, bed:e.target.value})} placeholder="Bed A" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" />
-                  <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Bed No <span className="text-red-500">*</span></div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <input value={form.room} onChange={e=>setForm({...form, room:e.target.value})} placeholder="Room 101" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" />
+                    <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Room No <span className="text-red-500">*</span></div>
+                  </div>
+                  <div>
+                    <input value={form.bed} onChange={e=>setForm({...form, bed:e.target.value})} placeholder="Bed A" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" />
+                    <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Bed No <span className="text-red-500">*</span></div>
+                  </div>
                 </div>
-              </div>
 
-              <div className="pt-1">
-                <input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} placeholder="Patient Name (Optional)" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 transition-colors" />
-              </div>
+                <div className="pt-1">
+                  <input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} placeholder="Patient Name (Optional)" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 transition-colors" />
+                </div>
 
-              <button onClick={handleSubmit} disabled={isButtonDisabled} className={`w-full mt-1 py-4 rounded-xl font-bold shadow-lg transition-all flex justify-center items-center gap-2 border-none outline-none ${buttonClass}`}>
-                {buttonContent}
-              </button>
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                  <div className="flex items-center justify-between mb-3 gap-3">
+                    <div>
+                      <div className="text-[10px] uppercase tracking-wider font-extrabold text-slate-500">Percentage alerts</div>
+                      <div className="text-xs text-slate-400 mt-1">Turn individual percentage notifications on or off</div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {ALERT_LEVELS.map(level => {
+                      const on = alertPrefs[level] !== false;
+                      return (
+                        <button key={level} type="button" onClick={() => toggleAlert(level)} className={`rounded-xl px-3 py-2 text-xs font-extrabold border transition-all ${on ? 'bg-emerald-50 border-emerald-300 text-emerald-700' : 'bg-slate-100 border-slate-200 text-slate-400'}`}>
+                          {level}% {on ? 'On' : 'Off'}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <button onClick={handleSubmit} disabled={isButtonDisabled} className={`w-full mt-1 py-4 rounded-xl font-bold shadow-lg transition-all flex justify-center items-center gap-2 border-none outline-none ${buttonClass}`}>
+                  {buttonContent}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </PortalModal>
       );
     };
 
     const EditNurseModal = ({ isOpen, onClose, hospitalId, currentNurse, onSuccess }) => {
-      const [form, setForm] = useState({ name: '', phone: '' });
+      const [name, setName] = useState('');
+      const [newPassword, setNewPassword] = useState('');
       const [loading, setLoading] = useState(false);
 
       useEffect(() => {
-        if (isOpen) document.body.classList.add('modal-open');
-        else document.body.classList.remove('modal-open');
+        document.body.classList.toggle('modal-open', isOpen);
         return () => document.body.classList.remove('modal-open');
       }, [isOpen]);
 
       useEffect(() => {
-        if (currentNurse) setForm({ name: currentNurse.name, phone: currentNurse.phone });
+        if (currentNurse) {
+          setName(currentNurse.name || '');
+          setNewPassword('');
+        }
       }, [currentNurse]);
 
-      const handleSubmit = async () => {
-        if (!form.name || !form.phone) return alert("Fields cannot be empty.");
+      const handleSave = async () => {
+        if (!name.trim()) return alert('Name cannot be empty.');
         setLoading(true);
         try {
-          await db.ref(`hospitals/${hospitalId}/nurses/${currentNurse.uid}`).update({ name: form.name, phone: form.phone });
-          onSuccess(); onClose();
-        } catch (e) { alert(e.message); }
+          const existingSnap = await db.ref(`hospitals/${hospitalId}/nurses`).once('value');
+          let duplicate = false;
+          existingSnap.forEach(child => {
+            const v = child.val() || {};
+            if (v.uid !== currentNurse.uid && normalizeName(v.name) === normalizeName(name)) duplicate = true;
+          });
+          if (duplicate) {
+            alert('Another staff member already has this name. Please use a unique name.');
+            setLoading(false);
+            return;
+          }
+
+          const updates = { name: name.trim() };
+
+          if (newPassword.trim()) {
+            updates.pendingPassword = newPassword.trim();
+            updates.passwordChangeRequestedAt = Date.now();
+            updates.passwordChangeStatus = 'pending';
+          }
+
+          await db.ref(`hospitals/${hospitalId}/nurses/${currentNurse.uid}`).update(updates);
+
+          onSuccess();
+          onClose();
+        } catch (e) {
+          alert(e.message);
+        }
         setLoading(false);
       };
 
       if (!isOpen || !currentNurse) return null;
+
       return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999999] flex items-center justify-center fade-in" style={{margin:0,padding:0}}>
-          <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-extrabold text-slate-800 text-xl">Edit Staff Details</h3>
-              <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 active:bg-slate-200 flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
-            </div>
-            <div className="space-y-4">
-              <input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} placeholder="Full Name" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium transition-colors" />
-              <input value={form.phone} onChange={e=>setForm({...form, phone:e.target.value})} placeholder="Contact Number" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium transition-colors" />
-              <div className="text-[11px] font-mono text-slate-500 bg-slate-50 p-3 rounded-xl border-none">ID: {currentNurse.email}</div>
-              <button onClick={handleSubmit} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all border-none outline-none">
-                {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Save Changes</span>}
-              </button>
+        <PortalModal open={isOpen}>
+          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
+            <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none mx-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-extrabold text-slate-800 text-xl">Edit Staff Details</h3>
+                <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 active:bg-slate-200 flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
+              </div>
+              <div className="space-y-4">
+                <input value={name} onChange={e=>setName(e.target.value)} placeholder="Full Name" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium transition-colors" />
+                <div className="text-[11px] font-mono text-slate-500 bg-slate-50 p-3 rounded-xl border-none break-all">ID: {currentNurse.email}</div>
+
+                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                  <div className="text-[10px] uppercase tracking-wider font-bold text-amber-700 mb-1">Change password request</div>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={e=>setNewPassword(e.target.value)}
+                    placeholder="New password"
+                    className="w-full p-3 bg-white rounded-xl text-sm font-bold text-slate-700"
+                  />
+                  <div className="text-[10px] text-amber-700/80 mt-2">
+                    This stores a pending password request in Firebase. A backend Cloud Function must apply it to Firebase Auth.
+                  </div>
+                </div>
+
+                <button onClick={handleSave} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all border-none outline-none">
+                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Save Changes</span>}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </PortalModal>
+      );
+    };
+
+    const SuccessCredentialsModal = ({ isOpen, creds, onClose }) => {
+      useEffect(() => { document.body.classList.toggle('modal-open', isOpen); return () => document.body.classList.remove('modal-open'); }, [isOpen]);
+      if (!isOpen || !creds) return null;
+      return (
+        <PortalModal open={isOpen}>
+          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
+            <div className="bg-white w-[95vw] max-w-sm rounded-2xl shadow-2xl relative overflow-hidden border-none outline-none mx-auto">
+              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-8 text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4"><i className="fas fa-check text-3xl"></i></div>
+                <h3 className="text-2xl font-extrabold tracking-tight">Account Created!</h3>
+              </div>
+              <div className="p-7 space-y-4">
+                <div className="bg-slate-50 p-4 rounded-xl border-none"><p className="text-[10px] font-bold tracking-widest text-slate-400 mb-1 uppercase">Email Address</p><p className="font-mono font-bold text-slate-800 break-all">{creds.email}</p></div>
+                <div className="bg-slate-50 p-4 rounded-xl border-none"><p className="text-[10px] font-bold tracking-widest text-slate-400 mb-1 uppercase">Initial Password</p><p className="font-mono font-bold text-slate-800 tracking-wider">{creds.password}</p></div>
+                <button onClick={async () => { try { await copyText(`Email: ${creds.email}\nPassword: ${creds.password}`); alert('Copied!'); } catch (error) { alert('Copy failed. Please copy the credentials manually.'); } }} className="w-full bg-slate-900 active:bg-slate-800 text-white py-4 rounded-xl font-bold transition-colors border-none outline-none">Copy Credentials</button>
+                <button onClick={onClose} className="w-full text-slate-500 active:text-slate-800 py-2 font-bold transition-colors border-none outline-none">Done</button>
+              </div>
+            </div>
+          </div>
+        </PortalModal>
       );
     };
 
     const AddNurseModal = ({ isOpen, onClose, hospitalId, hospitalDomain, onSuccess }) => {
-      const [form, setForm] = useState({ name: '', phone: '', password: '' });
+      const [form, setForm] = useState({ name: '', password: '' });
       const [loading, setLoading] = useState(false);
       const [generatedEmail, setGeneratedEmail] = useState('');
       const [showSuccess, setShowSuccess] = useState(false);
       const [creds, setCreds] = useState(null);
 
-      useEffect(() => {
-        if (isOpen) document.body.classList.add('modal-open');
-        else document.body.classList.remove('modal-open');
-        return () => document.body.classList.remove('modal-open');
-      }, [isOpen]);
-
-      useEffect(() => {
-        if (form.name) {
-          const nurseUsername = form.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-          setGeneratedEmail(`${nurseUsername}@${hospitalDomain}`);
-        } else setGeneratedEmail('');
-      }, [form.name, hospitalDomain]);
+      useEffect(() => { document.body.classList.toggle('modal-open', isOpen); return () => document.body.classList.remove('modal-open'); }, [isOpen]);
+      useEffect(() => { setGeneratedEmail(form.name ? `${slugify(form.name)}@${hospitalDomain}` : ''); }, [form.name, hospitalDomain]);
 
       const handleSubmit = async () => {
-        if (!form.name || !form.phone || !form.password || form.password.length < 6) { alert('Please fill all fields. Password must be at least 6 characters.'); return; }
+        const cleanName = form.name.trim();
+        if (!cleanName || !form.password || form.password.length < 6) { alert('Please fill all required fields. Password must be at least 6 characters.'); return; }
+        if (!generatedEmail) { alert('Enter a valid name to generate staff email.'); return; }
+
         setLoading(true);
         const secondaryAuth = getSecondaryAuth();
         try {
+          const nursesSnap = await db.ref(`hospitals/${hospitalId}/nurses`).once('value');
+          let duplicateName = false;
+          let duplicateEmail = false;
+          nursesSnap.forEach(child => {
+            const n = child.val() || {};
+            if (normalizeName(n.name) === normalizeName(cleanName)) duplicateName = true;
+            if (String(n.email || '').toLowerCase() === String(generatedEmail).toLowerCase()) duplicateEmail = true;
+          });
+
+          if (duplicateName) {
+            alert('A staff member with this name already exists. Please use a different name.');
+            setLoading(false);
+            return;
+          }
+          if (duplicateEmail) {
+            alert('This staff email already exists in the hospital database. Please use a different name.');
+            setLoading(false);
+            return;
+          }
+
           await secondaryAuth.setPersistence(firebase.auth.Auth.Persistence.NONE);
           const userCredential = await secondaryAuth.createUserWithEmailAndPassword(generatedEmail, form.password);
           const uid = userCredential.user.uid;
+
           await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).set({
-            name: form.name, email: generatedEmail, phone: form.phone, uid: uid, joined: Date.now()
+            name: cleanName,
+            email: generatedEmail,
+            uid,
+            joined: Date.now(),
+            role: 'nurse',
+            disabled: false,
+            disabledAt: null,
+            passwordChangeStatus: 'none'
           });
+
           setCreds({ email: generatedEmail, password: form.password });
           setShowSuccess(true);
-          setForm({ name: '', phone: '', password: '' });
+          setForm({ name: '', password: '' });
           onSuccess();
-        } catch (e) { alert(e.message); }
-        finally {
+        } catch (e) {
+          alert(e.message);
+        } finally {
           try { if (secondaryAuth.currentUser) await secondaryAuth.signOut(); } catch (e) {}
         }
         setLoading(false);
@@ -645,186 +838,198 @@
 
       if (!isOpen) return null;
       return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999999] flex items-center justify-center fade-in" style={{margin:0,padding:0}}>
-          <div className="bg-white w-[95vw] max-w-sm rounded-2xl p-6 shadow-2xl relative border-0 outline-none">
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h3 className="font-extrabold text-slate-800 text-xl">Register Staff</h3>
-                <p className="text-xs font-medium text-slate-400 mt-1">Add new staff credentials</p>
+        <>
+          <PortalModal open={isOpen}>
+            <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
+              <div className="bg-white w-[95vw] max-w-sm rounded-2xl p-6 shadow-2xl relative border-0 outline-none mx-auto">
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <h3 className="font-extrabold text-slate-800 text-xl">Register Staff</h3>
+                    <p className="text-xs font-medium text-slate-400 mt-1">Add new staff credentials</p>
+                  </div>
+                  <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 active:bg-slate-200 transition-colors flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="relative">
+                    <input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} placeholder="e.g. Jane Doe" className="w-full p-4 bg-slate-100 focus:bg-slate-200 rounded-xl font-medium text-center text-xl tracking-wide transition-colors" autoFocus />
+                    <div className="text-[10px] uppercase tracking-wider font-bold text-center text-slate-400 mt-2">Full Name <span className="text-red-500">*</span></div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-3">
+                    <div>
+                      <input type="password" value={form.password} onChange={e=>setForm({...form, password:e.target.value})} placeholder="••••••" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" />
+                      <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Pass (Min 6) <span className="text-red-500">*</span></div>
+                    </div>
+                  </div>
+
+                  <div className="pt-1">
+                    <div className="w-full p-3 bg-blue-50 rounded-xl text-center border-none">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase block mb-1">Generated Staff ID</span>
+                      <span className="text-sm font-mono text-blue-600 font-bold break-all">{generatedEmail || 'Enter name to generate'}</span>
+                    </div>
+                  </div>
+
+                  <button onClick={handleSubmit} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white mt-1 py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-all flex justify-center items-center gap-2 border-none outline-none">
+                    {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Create Account</span>}
+                  </button>
+                </div>
               </div>
-              <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 active:bg-slate-200 transition-colors flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
             </div>
-
-            <div className="space-y-4">
-              <div className="relative">
-                <input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} placeholder="e.g. Jane Doe" className="w-full p-4 bg-slate-100 focus:bg-slate-200 rounded-xl font-medium text-center text-xl tracking-wide transition-colors" autoFocus />
-                <div className="text-[10px] uppercase tracking-wider font-bold text-center text-slate-400 mt-2">Full Name <span className="text-red-500">*</span></div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <input value={form.phone} onChange={e=>setForm({...form, phone:e.target.value})} placeholder="1234567890" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" />
-                  <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Contact No <span className="text-red-500">*</span></div>
-                </div>
-                <div>
-                  <input type="password" value={form.password} onChange={e=>setForm({...form, password:e.target.value})} placeholder="••••••" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" />
-                  <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Pass (Min 6) <span className="text-red-500">*</span></div>
-                </div>
-              </div>
-
-              <div className="pt-1">
-                <div className="w-full p-3 bg-blue-50 rounded-xl text-center border-none">
-                  <span className="text-[10px] text-slate-400 font-bold uppercase block mb-1">Generated Staff ID</span>
-                  <span className="text-sm font-mono text-blue-600 font-bold break-all">{generatedEmail || 'Enter name to generate'}</span>
-                </div>
-              </div>
-
-              <button onClick={handleSubmit} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white mt-1 py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-all flex justify-center items-center gap-2 border-none outline-none">
-                {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Create Account</span>}
-              </button>
-            </div>
-          </div>
+          </PortalModal>
 
           <SuccessCredentialsModal isOpen={showSuccess} creds={creds} onClose={() => setShowSuccess(false)} />
-        </div>
+        </>
       );
     };
 
-    const SuccessCredentialsModal = ({ isOpen, creds, onClose }) => {
+    const AddHospitalModal = ({ isOpen, onClose, onSuccess }) => {
+      const [form, setForm] = useState({ hospitalName: '', location: '', password: '' });
+      const [loading, setLoading] = useState(false);
+      const [generatedEmail, setGeneratedEmail] = useState('');
+      const [generatedHospitalId, setGeneratedHospitalId] = useState('');
+      const [showSuccess, setShowSuccess] = useState(false);
+      const [creds, setCreds] = useState(null);
+
+      useEffect(() => { document.body.classList.toggle('modal-open', isOpen); return () => document.body.classList.remove('modal-open'); }, [isOpen]);
       useEffect(() => {
-        if (isOpen) document.body.classList.add('modal-open');
-        else document.body.classList.remove('modal-open');
-        return () => document.body.classList.remove('modal-open');
-      }, [isOpen]);
+        const n = slugify(form.hospitalName);
+        const l = slugify(form.location);
+        const hid = n && l ? `${n}_${l}` : '';
+        setGeneratedHospitalId(hid);
+        setGeneratedEmail(hid ? `admin@${n}.${l}` : '');
+      }, [form.hospitalName, form.location]);
 
-      if (!isOpen || !creds) return null;
+      const handleSubmit = async () => {
+        if (!form.hospitalName || !form.location || !form.password || form.password.length < 6) {
+          alert('Hospital name, location, and password are required. Password must be at least 6 characters.');
+          return;
+        }
+        if (!generatedHospitalId) {
+          alert('Please enter a valid hospital name and location.');
+          return;
+        }
+        setLoading(true);
+        const secondaryAuth = getSecondaryAuth();
+        try {
+          const hospitalRef = db.ref(`hospitals/${generatedHospitalId}`);
+          const snap = await hospitalRef.once('value');
+          if (snap.exists()) { alert('That hospital already exists in the network.'); setLoading(false); return; }
+
+          await hospitalRef.set({
+            name: humanize(form.hospitalName) + ' Hospital',
+            location: humanize(form.location),
+            createdAt: Date.now(),
+            amcStartDate: Date.now(),
+            active_devices: {},
+            history: {},
+            nurses: {},
+            registered_devices: {}
+          });
+
+          await secondaryAuth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+          const userCredential = await secondaryAuth.createUserWithEmailAndPassword(generatedEmail, form.password);
+          const uid = userCredential.user.uid;
+          await db.ref(`hospitals/${generatedHospitalId}/nurses/${uid}`).set({
+            name: 'Admin',
+            email: generatedEmail,
+            uid,
+            joined: Date.now(),
+            role: 'admin',
+            disabled: false,
+            disabledAt: null,
+            passwordChangeStatus: 'none'
+          });
+
+          setCreds({ email: generatedEmail, password: form.password });
+          setShowSuccess(true);
+          onSuccess();
+          setForm({ hospitalName: '', location: '', password: '' });
+        } catch (e) {
+          alert(e.message);
+        } finally {
+          try { if (secondaryAuth.currentUser) await secondaryAuth.signOut(); } catch (e) {}
+        }
+        setLoading(false);
+      };
+
+      if (!isOpen) return null;
       return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999999] flex items-center justify-center fade-in" style={{margin:0,padding:0}}>
-          <div className="bg-white w-[95vw] max-w-sm rounded-2xl shadow-2xl relative overflow-hidden border-none outline-none">
-            <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-8 text-center">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4"><i className="fas fa-check text-3xl"></i></div>
-              <h3 className="text-2xl font-extrabold tracking-tight">Account Created!</h3>
-            </div>
+        <>
+          <PortalModal open={isOpen}>
+            <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
+              <div className="bg-white w-[95vw] max-w-md rounded-2xl p-6 shadow-2xl relative border-0 outline-none max-h-[92vh] overflow-y-auto hide-scroll mx-auto">
+                <div className="flex justify-between items-center mb-6 gap-3">
+                  <div>
+                    <h3 className="font-extrabold text-slate-800 text-xl">Add Hospital</h3>
+                    <p className="text-xs font-medium text-slate-400 mt-1">Create a new facility and admin account</p>
+                  </div>
+                  <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 active:bg-slate-200 transition-colors flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
+                </div>
 
-            <div className="p-7 space-y-4">
-              <div className="bg-slate-50 p-4 rounded-xl border-none">
-                <p className="text-[10px] font-bold tracking-widest text-slate-400 mb-1 uppercase">Email Address</p>
-                <p className="font-mono font-bold text-slate-800 break-all">{creds.email}</p>
+                <div className="space-y-4">
+                  <div>
+                    <input value={form.hospitalName} onChange={e=>setForm({...form, hospitalName:e.target.value})} placeholder="Hospital Name" className="w-full p-4 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" autoFocus />
+                    <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Hospital name</div>
+                  </div>
+                  <div>
+                    <input value={form.location} onChange={e=>setForm({...form, location:e.target.value})} placeholder="Location / City" className="w-full p-4 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" />
+                    <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Location</div>
+                  </div>
+                  <div>
+                    <input type="password" value={form.password} onChange={e=>setForm({...form, password:e.target.value})} placeholder="Admin Password" className="w-full p-4 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-bold text-slate-700 transition-colors" />
+                    <div className="text-[10px] text-slate-400 font-bold uppercase mt-1 ml-1">Admin password (min 6)</div>
+                  </div>
+
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
+                    <div><div className="text-[10px] uppercase tracking-wider font-bold text-slate-400">Hospital ID</div><div className="font-mono text-sm font-bold text-slate-700 break-all">{generatedHospitalId || 'Enter name and location'}</div></div>
+                    <div><div className="text-[10px] uppercase tracking-wider font-bold text-slate-400">Admin Email</div><div className="font-mono text-sm font-bold text-blue-600 break-all">{generatedEmail || 'Will be generated automatically'}</div></div>
+                  </div>
+
+                  <button onClick={handleSubmit} disabled={loading} className="w-full bg-indigo-600 active:bg-indigo-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/30 active:scale-[0.98] transition-all flex justify-center items-center gap-2 border-none outline-none">
+                    {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Create Hospital</span>}
+                  </button>
+                </div>
               </div>
-
-              <div className="bg-slate-50 p-4 rounded-xl border-none">
-                <p className="text-[10px] font-bold tracking-widest text-slate-400 mb-1 uppercase">Initial Password</p>
-                <p className="font-mono font-bold text-slate-800 tracking-wider">{creds.password}</p>
-              </div>
-
-              <button onClick={async () => {
-                try { await copyText(`Email: ${creds.email}\nPassword: ${creds.password}`); alert("Copied!"); }
-                catch (error) { alert("Copy failed. Please copy the credentials manually."); }
-              }} className="w-full bg-slate-900 active:bg-slate-800 text-white py-4 rounded-xl font-bold transition-colors border-none outline-none">Copy Credentials</button>
-
-              <button onClick={onClose} className="w-full text-slate-500 active:text-slate-800 py-2 font-bold transition-colors border-none outline-none">Done</button>
             </div>
-          </div>
-        </div>
+          </PortalModal>
+
+          <SuccessCredentialsModal isOpen={showSuccess} creds={creds} onClose={() => setShowSuccess(false)} />
+        </>
       );
     };
 
-    // UsageChart, HospitalDashboard, NurseApp, SuperDashboard, LoginScreen, and App are kept functionally
-    // identical to your original code. For brevity I will attach them here (they are unchanged in logic),
-    // but they are present below so the full app works as before.
-
-    const UsageChart = ({ historyData }) => {
-      const [range, setRange] = useState('monthly');
-      const chartData = useMemo(() => {
-        const dataMap = {};
-        const labels = [];
-        const now = new Date();
-        if (range === 'weekly') {
-          for (let i = 6; i >= 0; i--) {
-            const d = new Date(now); d.setDate(d.getDate() - i);
-            const label = d.toLocaleDateString('en-US', { weekday: 'short' });
-            const key = d.toDateString();
-            dataMap[key] = { label, count: 0 };
-            labels.push(key);
-          }
-          historyData.forEach(h => {
-            const d = new Date(h.completedAt || h.startTime).toDateString();
-            if (dataMap[d]) dataMap[d].count++;
-          });
-        } else if (range === 'monthly') {
-          for (let i = 5; i >= 0; i--) {
-            const d = new Date(now); d.setMonth(d.getMonth() - i);
-            const label = d.toLocaleString('default', { month: 'short' });
-            const key = `${d.getFullYear()}-${d.getMonth()}`;
-            dataMap[key] = { label, count: 0 };
-            labels.push(key);
-          }
-          historyData.forEach(h => {
-            const d = new Date(h.completedAt || h.startTime);
-            const key = `${d.getFullYear()}-${d.getMonth()}`;
-            if (dataMap[key]) dataMap[key].count++;
-          });
-        } else if (range === 'yearly') {
-          for (let i = 4; i >= 0; i--) {
-            const y = now.getFullYear() - i;
-            dataMap[y] = { label: y.toString(), count: 0 };
-            labels.push(y);
-          }
-          historyData.forEach(h => {
-            const y = new Date(h.completedAt || h.startTime).getFullYear();
-            if (dataMap[y]) dataMap[y].count++;
-          });
-        } else {
-          const years = new Set(historyData.map(h => new Date(h.completedAt || h.startTime).getFullYear()));
-          const minYear = years.size ? Math.min(...years) : now.getFullYear();
-          for (let y = minYear; y <= now.getFullYear(); y++) {
-            dataMap[y] = { label: y.toString(), count: 0 };
-            labels.push(y);
-          }
-          historyData.forEach(h => {
-            const y = new Date(h.completedAt || h.startTime).getFullYear();
-            if (dataMap[y]) dataMap[y].count++;
-          });
-        }
-        return labels.map(k => dataMap[k]);
-      }, [historyData, range]);
-
-      const maxCount = Math.max(...chartData.map(d => d.count), 5);
-      return (
-        <div className="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 mb-6 fade-in">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-            <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-              <i className="fas fa-chart-line text-blue-500"></i> Infusion Volume
-            </h3>
-            <div className="flex bg-slate-100 rounded-lg p-1 w-full sm:w-auto overflow-x-auto hide-scroll">
-              {['weekly', 'monthly', 'yearly', 'max'].map(r => (
-                <button key={r} onClick={()=>setRange(r)} className={`px-3 py-1.5 text-[10px] font-bold uppercase rounded-md transition-colors shrink-0 ${range === r ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400'}`}>{r}</button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-end justify-between h-40 gap-1.5 md:gap-4 mt-4 overflow-x-auto hide-scroll pb-2">
-            {chartData.map((d, i) => {
-              const heightPerc = Math.max((d.count / maxCount) * 100, 2);
-              return (
-                <div key={i} className="flex-1 min-w-[30px] flex flex-col items-center group relative">
-                  <div className="absolute -top-10 bg-slate-800 text-white text-[9px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
-                    {d.count} Patients
-                  </div>
-                  <div className="w-full bg-blue-100 rounded-t-md flex items-end justify-center relative overflow-hidden transition-all duration-500 ease-out" style={{height: '100%'}}>
-                    <div className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md transition-all duration-1000" style={{height: `${heightPerc}%`}}></div>
-                  </div>
-                  <span className="text-[8px] md:text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-widest truncate w-full text-center">{d.label}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
+    const claimAndArchiveDevice = async (hospitalId, deviceId, completionType = 'manual', extraFields = {}) => {
+      const activeRef = db.ref(`hospitals/${hospitalId}/active_devices/${deviceId}`);
+      const historyRef = db.ref(`hospitals/${hospitalId}/history`);
+      const tx = await activeRef.transaction((current) => {
+        if (!current) return;
+        if (current.completionLock || current.completedAt) return;
+        return { ...current, completionLock: { type: completionType, claimedAt: Date.now() } };
+      });
+      if (!tx.committed || !tx.snapshot.exists()) return false;
+      const data = tx.snapshot.val();
+      if (!data || !data.completionLock) return false;
+      const { completionLock, ...payloadBase } = data;
+      const historyPayload = { ...payloadBase, ...extraFields, completedAt: Date.now(), completedVia: completionType, autoDischarged: completionType === 'auto', historyCreatedAt: Date.now() };
+      try {
+        const newHistoryRef = historyRef.push();
+        historyPayload.historyId = newHistoryRef.key;
+        await newHistoryRef.set(historyPayload);
+        await activeRef.remove();
+        return true;
+      } catch (e) {
+        console.error('Archive move failed:', e);
+        return false;
+      }
     };
 
     const HospitalDashboard = ({ hospitalId, userRole, isSuperView = false }) => {
-      const [data, setData] = useState(null);
+      const [hospitalMeta, setHospitalMeta] = useState(null);
+      const [activeData, setActiveData] = useState({});
+      const [historyData, setHistoryData] = useState({});
+      const [nursesData, setNursesData] = useState({});
+      const [devicesData, setDevicesData] = useState({});
       const [tab, setTab] = useState('active');
       const [showAddNurse, setShowAddNurse] = useState(false);
       const [showEditNurse, setShowEditNurse] = useState(false);
@@ -833,49 +1038,130 @@
       const [toast, setToast] = useState(null);
       const [searchTerm, setSearchTerm] = useState('');
       const [filterPeriod, setFilterPeriod] = useState('day');
+      const [scanning, setScanning] = useState(false);
+      const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24, nurses: 24, devices: 24 });
 
       const userEmail = auth.currentUser ? auth.currentUser.email : '';
       const hospitalInfo = getHospitalInfo(userEmail);
 
       useEffect(() => {
-        const ref = db.ref(`hospitals/${hospitalId}`);
-        ref.on('value', snap => {
+        const metaRef = db.ref(`hospitals/${hospitalId}`);
+        const metaHandler = snap => {
           const val = snap.val() || {};
+          setHospitalMeta({
+            name: val.name || hospitalInfo.name,
+            location: val.location || hospitalInfo.loc,
+            createdAt: val.createdAt || Date.now(),
+            amcStartDate: val.amcStartDate || val.createdAt || Date.now()
+          });
+        };
+        metaRef.on('value', metaHandler);
 
-          if (val && val.active_devices) {
-            const now = Date.now();
-            const sixHours = 6 * 60 * 60 * 1000;
-            Object.values(val.active_devices).forEach(dev => {
-              if (now - (dev.startTime || 0) >= sixHours) {
-                db.ref(`hospitals/${hospitalId}/history`).push({ ...dev, completedAt: now, autoDischarged: true });
-                db.ref(`hospitals/${hospitalId}/active_devices/${dev.deviceId}`).remove();
-              }
-            });
-          }
-
+        metaRef.once('value').then(async snap => {
           if (!snap.exists() && userRole === 'admin') {
-            ref.set({ name: hospitalInfo.name, location: hospitalInfo.loc });
+            await metaRef.set({ name: hospitalInfo.name, location: hospitalInfo.loc, createdAt: Date.now(), amcStartDate: Date.now(), active_devices: {}, history: {}, nurses: {}, registered_devices: {} });
+          } else if (snap.exists()) {
+            const val = snap.val() || {};
+            const updates = {};
+            if (!val.createdAt) updates.createdAt = Date.now();
+            if (!val.amcStartDate) updates.amcStartDate = val.createdAt || Date.now();
+            if (Object.keys(updates).length) metaRef.update(updates);
           }
-          setData(val);
         });
-        return () => ref.off();
+
+        const activeRef = metaRef.child('active_devices');
+        const historyRef = metaRef.child('history');
+        const nursesRef = metaRef.child('nurses');
+        const devicesRef = metaRef.child('registered_devices');
+        const activeHandler = snap => setActiveData(stampReceivedAt(snap.val() || {}));
+        const historyHandler = snap => setHistoryData(snap.val() || {});
+        const nursesHandler = snap => setNursesData(snap.val() || {});
+        const devicesHandler = snap => setDevicesData(snap.val() || {});
+        activeRef.on('value', activeHandler);
+        historyRef.on('value', historyHandler);
+        nursesRef.on('value', nursesHandler);
+        devicesRef.on('value', devicesHandler);
+
+        return () => {
+          metaRef.off('value', metaHandler);
+          activeRef.off('value', activeHandler);
+          historyRef.off('value', historyHandler);
+          nursesRef.off('value', nursesHandler);
+          devicesRef.off('value', devicesHandler);
+        };
       }, [hospitalId, hospitalInfo.name, hospitalInfo.loc, userRole]);
 
-      const handleDischarge = (did) => {
-        if (!confirm("Discharge patient and end monitoring?")) return;
-        const dev = data.active_devices[did];
-        db.ref(`hospitals/${hospitalId}/history`).push({ ...dev, completedAt: Date.now() }, (error) => {
-          if (!error) db.ref(`hospitals/${hospitalId}/active_devices/${did}`).remove();
-        });
+      const activeDevs = useMemo(() => sortActiveDevices(Object.values(activeData || {})), [activeData]);
+      const historyDevs = useMemo(() => sortHistoryDesc(Object.values(historyData || {})), [historyData]);
+      const nurses = useMemo(() => Object.values(nursesData || {}), [nursesData]);
+      const registeredDevices = useMemo(() => Object.values(devicesData || {}), [devicesData]);
+      const totalRegisteredDevices = registeredDevices.length;
+      const amcDueDate = new Date((hospitalMeta?.amcStartDate || hospitalMeta?.createdAt || Date.now()) + AMC_CYCLE_MS);
+
+      const scanForAutoDischarge = async () => {
+        if (scanning) return;
+        setScanning(true);
+        try {
+          const now = Date.now();
+          for (const dev of activeDevs) {
+            if (!dev?.deviceId || dev.completionLock) continue;
+            const dueAt = dev.autoDischargeAt || ((dev.startTime || now) + INFUSION_DURATION_MS);
+            if (now >= dueAt) await claimAndArchiveDevice(hospitalId, dev.deviceId, 'auto');
+          }
+        } finally {
+          setScanning(false);
+        }
       };
 
-      const handleDeleteNurse = async (uid) => {
-        if (!confirm("Delete this staff member completely? This action cannot be undone.")) return;
-        try {
-          await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).remove();
-          setToast({ type: 'success', msg: 'Staff removed' });
-          setTimeout(()=>setToast(null), 2000);
-        } catch (e) { alert(e.message); }
+      useEffect(() => {
+        scanForAutoDischarge();
+        const id = setInterval(scanForAutoDischarge, 30000);
+        return () => clearInterval(id);
+      }, [hospitalId, activeDevs.length]);
+
+      const handleDischarge = async (did) => {
+        if (!confirm('Discharge patient and end monitoring?')) return;
+        const ok = await claimAndArchiveDevice(hospitalId, did, 'manual', { autoDischarged: false });
+        if (!ok) alert('Discharge could not be completed. Please try again.');
+      };
+
+      const handleToggleNurseStatus = async (nurse) => {
+        const uid = nurse.uid;
+        const currentlyDisabled = isNurseDisabled(nurse);
+        if (!uid) return;
+
+        if (!currentlyDisabled) {
+          const activeCount = Object.values(activeData || {}).filter(dev => dev?.nurseId === uid).length;
+          const message = activeCount > 0
+            ? `This staff member is handling ${activeCount} active patient(s). Disabling will stop login immediately. Continue?`
+            : `Disable this staff member now?`;
+          if (!confirm(message)) return;
+
+          try {
+            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({
+              disabled: true,
+              disabledAt: Date.now(),
+              disabledBy: userEmail || 'admin'
+            });
+            setToast({ type: 'success', msg: 'Staff disabled' });
+            setTimeout(() => setToast(null), 2000);
+          } catch (e) {
+            alert(e.message);
+          }
+        } else {
+          if (!confirm('Re-enable this staff member now?')) return;
+          try {
+            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({
+              disabled: false,
+              disabledAt: null,
+              disabledBy: null
+            });
+            setToast({ type: 'success', msg: 'Staff enabled' });
+            setTimeout(() => setToast(null), 2000);
+          } catch (e) {
+            alert(e.message);
+          }
+        }
       };
 
       const handleDeleteDevice = async (did) => {
@@ -887,13 +1173,8 @@
         } catch (e) { alert(e.message); }
       };
 
-      if (!data) return <div className="p-12 text-center text-slate-400 font-medium animate-pulse">Syncing Hospital Data...</div>;
+      if (!hospitalMeta) return <div className="p-12 text-center text-slate-400 font-medium animate-pulse">Syncing Hospital Data...</div>;
 
-      const activeDevs = data.active_devices ? Object.values(data.active_devices) : [];
-      const historyDevs = data.history ? Object.values(data.history).sort((a,b)=>b.completedAt - a.completedAt) : [];
-      const nurses = data.nurses ? Object.values(data.nurses) : [];
-      const registeredDevices = data.registered_devices ? Object.values(data.registered_devices) : [];
-      const totalRegisteredDevices = registeredDevices.length;
       const now = new Date();
       const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
       const todayDischarges = historyDevs.filter(h => (h.completedAt || 0) >= startOfDay);
@@ -919,16 +1200,15 @@
       const filteredDevices = filterData(registeredDevices);
 
       return (
-        <div className="space-y-5 md:space-y-6 fade-in">
+        <div className="space-y-5 md:space-y-6 fade-in w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {toast && <Toast {...toast} />}
-          {isSuperView && <UsageChart historyData={historyDevs} />}
 
           <div className="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200 flex items-center mb-5 md:mb-6">
             <i className="fas fa-search text-slate-400 ml-3"></i>
             <input type="text" placeholder="Search Patients, Devices, Staff..." className="w-full p-2 outline-none text-sm text-slate-700 ml-2 font-medium bg-transparent" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-5">
             <div className="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
               <div className="flex items-center gap-2 md:gap-3 mb-2">
                 <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center shrink-0"><i className="fas fa-procedures text-xs md:text-base"></i></div>
@@ -936,7 +1216,6 @@
               </div>
               <div className="text-2xl md:text-4xl font-black text-slate-800 tracking-tight">{activeDevs.length}</div>
             </div>
-
             <div className="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
               <div className="flex items-center gap-2 md:gap-3 mb-2">
                 <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0"><i className="fas fa-clipboard-check text-xs md:text-base"></i></div>
@@ -944,19 +1223,12 @@
               </div>
               <div className="text-2xl md:text-4xl font-black text-slate-800 tracking-tight">{todayDischarges.length}</div>
             </div>
-
-            <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-slate-900 to-slate-800 p-4 md:p-6 rounded-2xl shadow-xl text-white relative overflow-hidden">
-              <div className="absolute -right-4 -top-4 opacity-10"><i className="fas fa-satellite-dish text-7xl md:text-9xl"></i></div>
-              <div className="relative z-10">
-                <div className="flex items-center gap-2 md:gap-3 mb-2">
-                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 text-blue-300 flex items-center justify-center backdrop-blur-sm shrink-0"><i className="fas fa-microchip text-xs md:text-base"></i></div>
-                  <div className="text-[9px] md:text-[11px] font-extrabold text-blue-200 uppercase tracking-widest truncate">Total Inventory</div>
-                </div>
-                <div className="text-2xl md:text-4xl font-black text-white tracking-tight">{totalRegisteredDevices}</div>
-                <div className="mt-2 md:mt-3 inline-block bg-white/10 px-2 md:px-3 py-1 rounded-full text-[9px] md:text-[10px] font-bold tracking-wider text-blue-200 backdrop-blur-sm border border-white/10">
-                  Mo. Bill: {formatMoney(totalRegisteredDevices * MAINTENANCE_FEE_PER_DEVICE)}
-                </div>
+            <div className="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
+              <div className="flex items-center gap-2 md:gap-3 mb-2">
+                <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-indigo-50 text-indigo-500 flex items-center justify-center shrink-0"><i className="fas fa-microchip text-xs md:text-base"></i></div>
+                <div className="text-[9px] md:text-[11px] font-extrabold text-slate-400 uppercase tracking-widest truncate">Registered Devices</div>
               </div>
+              <div className="text-2xl md:text-4xl font-black text-slate-800 tracking-tight">{totalRegisteredDevices}</div>
             </div>
           </div>
 
@@ -970,52 +1242,59 @@
 
           <div className="min-h-[300px] pt-4">
             {tab === 'active' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-                {filteredActive.map(d => <StatusCard key={d.deviceId} data={d} onComplete={handleDischarge} />)}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
+                {filteredActive.slice(0, visibleCounts.active).map((d, i) => <StatusCard key={d.deviceId || `${d.room || 'room'}-${d.bed || 'bed'}-${d.startTime || 'time'}-${i}`} data={d} onComplete={handleDischarge} />)}
                 {filteredActive.length === 0 && <div className="col-span-full py-16 text-center text-slate-400 font-medium bg-white rounded-2xl border border-dashed border-slate-200 text-sm">No active infusions right now.</div>}
+                {filteredActive.length > visibleCounts.active && <div className="col-span-full flex justify-center"><button onClick={() => setVisibleCounts(prev => ({ ...prev, active: prev.active + 24 }))} className="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-bold">Load more patients</button></div>}
               </div>
             )}
 
             {tab === 'history' && (
               <div>
                 <FilterTabs current={filterPeriod} onChange={setFilterPeriod} resultCount={filteredHistory.length} />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 opacity-90">
-                  {filteredHistory.slice(0, 50).map((d, i) => <StatusCard key={i} data={d} isHistory={true} />)}
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5 opacity-90">
+                  {filteredHistory.slice(0, visibleCounts.history).map((d, i) => <StatusCard key={d.historyId || `${d.deviceId || 'hist'}-${d.completedAt || d.startTime || i}-${i}`} data={d} isHistory={true} />)}
                   {filteredHistory.length === 0 && <div className="col-span-full py-16 text-center text-slate-400 font-medium bg-white rounded-2xl border border-dashed border-slate-200 text-sm">No history records found for this period.</div>}
+                  {filteredHistory.length > visibleCounts.history && <div className="col-span-full flex justify-center"><button onClick={() => setVisibleCounts(prev => ({ ...prev, history: prev.history + 24 }))} className="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-bold">Load more history</button></div>}
                 </div>
               </div>
             )}
 
             {tab === 'nurses' && (
               <div>
-                {!isSuperView && (
-                  <button onClick={() => setShowAddNurse(true)} className="mb-5 bg-slate-900 active:bg-slate-800 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 w-full md:w-auto border-none outline-none">
-                    <i className="fas fa-plus"></i> Add Staff Member
-                  </button>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-                  {filteredNurses.map((n, i) => (
-                    <div key={i} className="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                      <div className="flex items-center gap-3 md:gap-4">
-                        <div className="w-10 h-10 md:w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 flex items-center justify-center font-extrabold text-base md:text-lg shrink-0">
-                          {n.name.charAt(0).toUpperCase()}
+                {!isSuperView && <button onClick={() => setShowAddNurse(true)} className="mb-5 bg-slate-900 active:bg-slate-800 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 w-full md:w-auto border-none outline-none"><i className="fas fa-plus"></i> Add Staff Member</button>}
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
+                  {filteredNurses.map((n, i) => {
+                    const disabled = isNurseDisabled(n);
+                    const activeCount = Object.values(activeData || {}).filter(dev => dev?.nurseId === n.uid).length;
+                    return (
+                      <div key={n.uid || n.email || `${n.name || 'staff'}-${i}`} className={`bg-white p-4 md:p-5 rounded-2xl border shadow-sm flex flex-col justify-between ${disabled ? 'border-amber-300 bg-amber-50/30' : 'border-slate-200'}`}>
+                        <div className="flex items-center gap-3 md:gap-4">
+                          <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-extrabold text-base md:text-lg shrink-0 ${disabled ? 'bg-amber-100 text-amber-700' : 'bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700'}`}>{(n.name || '?').charAt(0).toUpperCase()}</div>
+                          <div className="min-w-0 flex-1">
+                            <div className="font-extrabold text-slate-800 text-sm md:text-base truncate">{n.name}</div>
+                            <div className="text-[10px] md:text-xs font-medium text-slate-500 mt-0.5 truncate">{n.email}</div>
+                            <div className="mt-1 flex flex-wrap gap-2 items-center">
+                              {disabled ? (
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-amber-100 text-amber-700 border border-amber-200">Disabled</span>
+                              ) : (
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 border border-emerald-200">Active</span>
+                              )}
+                              {activeCount > 0 && <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-100">{activeCount} patient(s)</span>}
+                            </div>
+                          </div>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="font-extrabold text-slate-800 text-sm md:text-base truncate">{n.name}</div>
-                          <div className="text-[10px] md:text-xs font-medium text-slate-500 mt-0.5 truncate">{n.email}</div>
-                          <div className="text-[10px] md:text-xs font-medium text-slate-400 mt-0.5 truncate">{n.phone}</div>
-                        </div>
+                        {!isSuperView && (
+                          <div className="flex gap-2 mt-4 pt-3 border-t border-slate-100">
+                            <button onClick={() => { setSelectedNurse(n); setShowEditNurse(true); }} className="flex-1 bg-slate-50 active:bg-slate-100 text-slate-600 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none">Edit</button>
+                            <button onClick={() => handleToggleNurseStatus(n)} className={`flex-1 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none ${disabled ? 'bg-emerald-50 active:bg-emerald-100 text-emerald-700' : 'bg-red-50 active:bg-red-100 text-red-600'}`}>
+                              {disabled ? 'Enable' : 'Disable'}
+                            </button>
+                          </div>
+                        )}
                       </div>
-
-                      {!isSuperView && (
-                        <div className="flex gap-2 mt-4 pt-3 border-t border-slate-100">
-                          <button onClick={() => { setSelectedNurse(n); setShowEditNurse(true); }} className="flex-1 bg-slate-50 active:bg-slate-100 text-slate-600 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none">Edit</button>
-                          <button onClick={() => handleDeleteNurse(n.uid)} className="flex-1 bg-red-50 active:bg-red-100 text-red-600 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none">Delete</button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                    );
+                  })}
                   {filteredNurses.length === 0 && <div className="text-slate-400 col-span-full py-12 text-center border-2 border-dashed border-slate-200 rounded-2xl text-sm">No staff registered.</div>}
                 </div>
               </div>
@@ -1023,38 +1302,49 @@
 
             {tab === 'devices' && (
               <div>
-                {isSuperView && (
-                  <button onClick={() => setShowAddDevice(true)} className="mb-5 bg-indigo-600 active:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 w-full md:w-auto border-none outline-none">
-                    <i className="fas fa-microchip"></i> Register New Device to Hospital
-                  </button>
-                )}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
+                  <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">AMC Due Date</div>
+                    <div className="mt-2 font-bold text-slate-800 text-sm">{amcDueDate.toLocaleDateString('en-IN')}</div>
+                  </div>
+                  <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Devices</div>
+                    <div className="mt-2 font-black text-slate-800 text-xl">{totalRegisteredDevices}</div>
+                  </div>
+                  <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Per Amount</div>
+                    <div className="mt-2 font-black text-slate-800 text-xl">{formatMoney(AMC_PER_DEVICE)}</div>
+                  </div>
+                  <div className="bg-slate-900 rounded-2xl border border-slate-800 p-4 shadow-sm text-white">
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-blue-300">Total Amount</div>
+                    <div className="mt-2 font-black text-2xl">{formatMoney(totalRegisteredDevices * AMC_PER_DEVICE)}</div>
+                  </div>
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                {isSuperView && <button onClick={() => setShowAddDevice(true)} className="mb-5 bg-indigo-600 active:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 w-full md:w-auto border-none outline-none"><i className="fas fa-microchip"></i> Register New Device to Hospital</button>}
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
                   {filteredDevices.map((dev, i) => {
-                    const isActive = data.active_devices && data.active_devices[dev.deviceId];
+                    const isActive = activeData && activeData[dev.deviceId];
+                    // Verify if device sent a heartbeat within the last 30 seconds
+                    const isDeviceOn = dev.lastSeen && (Date.now() - dev.lastSeen < 30000);
+                    
                     return (
-                      <div key={i} className="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                        <div className="flex justify-between items-start mb-2">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                      <div key={dev.deviceId || `${dev.addedAt || 'added'}-${i}`} className="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div className="flex justify-between items-start mb-2 gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            {/* Antenna radar turns green if device is physically ON, grey if not */}
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isDeviceOn ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
                               <i className="fas fa-satellite-dish text-lg"></i>
                             </div>
-                            <div>
-                              <div className="font-mono font-bold text-slate-800 text-sm md:text-base">{dev.deviceId}</div>
-                              <div className="text-[10px] text-slate-400 mt-0.5">Added: {new Date(dev.addedAt).toLocaleDateString('en-IN')}</div>
+                            <div className="min-w-0">
+                              <div className="font-mono font-bold text-slate-800 text-sm md:text-base truncate">{dev.deviceId}</div>
+                              <div className="text-[10px] text-slate-400 mt-0.5">Added: {new Date(dev.addedAt || Date.now()).toLocaleDateString('en-IN')}</div>
                             </div>
                           </div>
-
-                          <div className={`px-2 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase border ${isActive ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
-                            {isActive ? 'In Use' : 'Idle'}
-                          </div>
+                          {/* Indicates "In Use" only if the nurse actually assigned it on the web app */}
+                          <div className={`px-2 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase border shrink-0 ${isActive ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>{isActive ? 'In Use' : 'Idle'}</div>
                         </div>
-
-                        {isSuperView && (
-                          <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end">
-                            <button onClick={() => handleDeleteDevice(dev.deviceId)} className="bg-red-50 active:bg-red-100 text-red-600 text-[11px] font-bold px-4 py-2 rounded-lg transition-colors border-none outline-none">Remove Device</button>
-                          </div>
-                        )}
+                        {isSuperView && <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end"><button onClick={() => handleDeleteDevice(dev.deviceId)} className="bg-red-50 active:bg-red-100 text-red-600 text-[11px] font-bold px-4 py-2 rounded-lg transition-colors border-none outline-none">Remove Device</button></div>}
                       </div>
                     );
                   })}
@@ -1073,127 +1363,168 @@
 
     const NurseApp = ({ user, onLogout }) => {
       const { id: hid, name: hName } = getHospitalInfo(user.email);
-      const [devices, setDevices] = useState([]);
-      const [history, setHistory] = useState([]);
+      const [activeData, setActiveData] = useState({});
+      const [historyData, setHistoryData] = useState({});
       const [showAdd, setShowAdd] = useState(false);
       const [toast, setToast] = useState(null);
       const [tab, setTab] = useState('active');
       const [filterPeriod, setFilterPeriod] = useState('day');
+      const [historySearch, setHistorySearch] = useState('');
       const [nurseName, setNurseName] = useState('');
-
-      const prevPercs = useRef({});
+      const prevStateRef = useRef({});
+      const prevAlertRef = useRef({});
+      const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24 });
 
       useEffect(() => {
         try {
           if ("Notification" in window && window.Notification && Notification.permission !== "granted" && Notification.permission !== "denied") {
             const req = Notification.requestPermission();
-            if (req && req.catch) { req.catch(()=>{}); }
+            if (req && req.catch) req.catch(()=>{});
           }
         } catch(e) {}
       }, []);
 
       useEffect(() => {
         const hRef = db.ref(`hospitals/${hid}`);
+        const activeRef = hRef.child('active_devices');
+        const historyRef = hRef.child('history');
         const nurseProfileRef = hRef.child(`nurses/${user.uid}`);
-        const nurseListener = nurseProfileRef.on('value', snap => {
+
+        const nurseHandler = snap => {
           if (!snap.exists()) {
-            alert("Your access has been revoked by the Hospital Admin.");
+            alert('Your account has been removed by admin.');
             auth.signOut();
-          } else {
-            setNurseName(snap.val().name);
+            return;
           }
-        });
+          const nurseVal = snap.val() || {};
+          if (isNurseDisabled(nurseVal)) {
+            alert('Your account has been disabled by admin.');
+            auth.signOut();
+            return;
+          }
+          setNurseName(nurseVal.name || '');
+        };
+        const activeHandler = snap => { setActiveData(stampReceivedAt(snap.val() || {})); };
+        const historyHandler = snap => {
+          const h = [];
+          snap.forEach(c => { if (c.val().nurseId === user.uid) h.push(c.val()); });
+          setHistoryData(sortHistoryDesc(h));
+        };
 
-        hRef.child('active_devices').on('value', snap => {
-          const d = [];
-          const now = Date.now();
-          const sixHours = 6 * 60 * 60 * 1000;
-
-          snap.forEach(c => {
-            const val = c.val();
-            const did = val.deviceId;
-            if (!val) return;
-            if (now - (val.startTime || 0) >= sixHours) {
-              hRef.child('history').push({...val, completedAt: now, autoDischarged: true});
-              c.ref.remove();
-              return;
-            }
-            if (val.nurseId === user.uid) {
-              d.push(val);
-              const currentPerc = val.perc !== undefined ? val.perc : 100;
-              if (prevPercs.current[did] !== undefined) {
-                const prev = prevPercs.current[did];
-                const thresholds = [75,50,25,15,10,5,0];
-                for (let t of thresholds) {
-                  if (prev > t && currentPerc <= t) {
-                    try {
-                      if ("Notification" in window && window.Notification && Notification.permission === "granted") {
-                        const roomName = val.patientName || `Room ${val.room}`;
-                        const mins = val.minsLeft || 0;
-                        const secs = val.secsLeft || 0;
-                        new Notification(`Saline Alert: ${roomName}`, { body: `Fluid dropped to ${currentPerc}%. Estimated time left: ${mins}m ${secs}s.`, icon: "https://cdn-icons-png.flaticon.com/512/3004/3004451.png" });
-                      }
-                    } catch(e) {}
-                    break;
-                  }
-                }
-              }
-              prevPercs.current[did] = currentPerc;
-            }
-          });
-          setDevices(d);
-        });
-
-        hRef.child('history').on('value', snap => {
-          const h = []; snap.forEach(c => { if (c.val().nurseId === user.uid) h.push(c.val()); });
-          setHistory(h.sort((a,b) => b.completedAt - a.completedAt));
-        });
+        nurseProfileRef.on('value', nurseHandler);
+        activeRef.on('value', activeHandler);
+        historyRef.on('value', historyHandler);
 
         return () => {
-          nurseProfileRef.off('value', nurseListener);
-          hRef.child('active_devices').off();
-          hRef.child('history').off();
+          nurseProfileRef.off('value', nurseHandler);
+          activeRef.off('value', activeHandler);
+          historyRef.off('value', historyHandler);
         };
       }, [hid, user.uid]);
 
-      const handleComplete = (did) => {
-        const activeRef = db.ref(`hospitals/${hid}/active_devices/${did}`);
-        activeRef.once('value', snap => {
-          if (snap.exists()) { db.ref(`hospitals/${hid}/history`).push({ ...snap.val(), completedAt: Date.now() }, (err) => { if (!err) activeRef.remove(); }); }
+      const userDevices = useMemo(() => sortActiveDevices(Object.values(activeData || {}).filter(dev => dev && dev.nurseId === user.uid)), [activeData, user.uid]);
+
+      useEffect(() => {
+        const now = Date.now();
+        Object.values(activeData || {}).forEach((dev) => {
+          const did = dev?.deviceId;
+          if (!did || dev.nurseId !== user.uid) return;
+          const currentPerc = dev.perc !== undefined ? Number(dev.perc) : Math.max(0, Math.round((getRemainingMs(dev) / INFUSION_DURATION_MS) * 100));
+          const currentRemainingMs = getRemainingMs(dev);
+          const lastSeenAt = getDeviceLastSeenAt(dev) || now;
+          const prev = prevStateRef.current[did] || {};
+          const prevAlert = prevAlertRef.current[did] || { perc: prev.perc !== undefined ? prev.perc : 100, remainingMs: prev.remainingMs !== undefined ? prev.remainingMs : INFUSION_DURATION_MS, lastUpdate: lastSeenAt };
+          const settings = dev.notificationSettings || {};
+          const notifyByPercent = settings.mode === 'percent' || !settings.mode;
+          const percentPrefs = settings.percentAlerts || DEFAULT_PERCENT_ALERTS;
+          const lastChangeAt = prev.lastChangeAt || lastSeenAt;
+          const alertState = { ...(prev.alertState || {}) };
+
+          if (currentPerc !== prev.perc) alertState.noFlow = false;
+          if (currentPerc <= 1 && !alertState.empty) { triggerPatientAlert({ title: `Bottle empty: ${dev.patientName || `Room ${dev.room}`}`, body: 'The infusion is empty but not yet discharged.' }); alertState.empty = true; }
+          if (now - lastSeenAt > OFFLINE_ALERT_MS && !alertState.offline) { triggerPatientAlert({ title: `Device Offline: ${dev.patientName || `Room ${dev.room}`}`, body: `No update received for more than ${Math.round(OFFLINE_ALERT_MS / 1000)} seconds.` }); alertState.offline = true; }
+          if (currentPerc === prev.perc && (now - lastChangeAt) > NO_FLOW_ALERT_MS && !alertState.noFlow) { triggerPatientAlert({ title: `No flow detected: ${dev.patientName || `Room ${dev.room}`}`, body: 'Sensor looks stuck or infusion has stopped updating.' }); alertState.noFlow = true; }
+          if (prev.perc !== undefined && (prev.perc - currentPerc) >= RAPID_DROP_PERCENT && (now - (prev.lastUpdate || lastSeenAt)) <= 120000 && !alertState.rapidDrop) { triggerPatientAlert({ title: `Rapid drop detected: ${dev.patientName || `Room ${dev.room}`}`, body: 'Possible leak or disconnection detected.' }); alertState.rapidDrop = true; }
+
+          if (notifyByPercent) {
+            for (let t of ALERT_LEVELS) {
+              const enabled = percentPrefs[t] !== false && percentPrefs[String(t)] !== false;
+              if (enabled && (prevAlert.perc > t) && currentPerc <= t) {
+                // Determine finish time using reliable epoch from the ESP
+                const exTime = Number(dev.estimatedCompletionAt);
+                let textFinish = 'scheduled time';
+                if (exTime > 0) { textFinish = new Date(exTime).toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' }); }
+                
+                triggerPatientAlert({ title: `Saline Alert: ${dev.patientName || `Room ${dev.room}`}`, body: `Fluid reached ${currentPerc}%. Expected completion at ${textFinish}.` });
+                break;
+              }
+            }
+          }
+          prevStateRef.current[did] = { perc: currentPerc, remainingMs: currentRemainingMs, lastUpdate: lastSeenAt, lastChangeAt: currentPerc === prev.perc ? lastChangeAt : now, alertState };
+          prevAlertRef.current[did] = { perc: currentPerc, remainingMs: currentRemainingMs };
         });
+      }, [activeData, user.uid]);
+
+      useEffect(() => {
+        const scanForAutoDischarge = async () => {
+          const now = Date.now();
+          for (const dev of userDevices) {
+            if (!dev?.deviceId || dev.completionLock) continue;
+            const dueAt = dev.autoDischargeAt || ((dev.startTime || now) + INFUSION_DURATION_MS);
+            if (now >= dueAt) await claimAndArchiveDevice(hid, dev.deviceId, 'auto');
+          }
+        };
+        scanForAutoDischarge();
+        const id = setInterval(scanForAutoDischarge, 30000);
+        return () => clearInterval(id);
+      }, [hid, userDevices]);
+
+      const handleComplete = async (did) => {
+        const ok = await claimAndArchiveDevice(hid, did, 'manual', { autoDischarged: false });
+        if (!ok) alert('Discharge could not be completed. Please try again.');
       };
 
-      const filteredHistory = filterHistoryByTime(history, filterPeriod);
+      const filteredHistory = filterHistoryByTime(Object.values(historyData || {}).filter(item => {
+        if (!historySearch.trim()) return true;
+        const q = historySearch.toLowerCase().trim();
+        return [item.patientName, item.room, item.bed, item.deviceId, item.nurseName].some(v => String(v || '').toLowerCase().includes(q));
+      }), filterPeriod);
 
       return (
         <div className="min-h-screen pb-24 fade-in">
           {toast && <Toast {...toast} />}
           <AppHeader title={hName} subtitle={`Staff: ${nurseName || user.email.split('@')[0]}`} onLogout={onLogout} />
-          <div className="p-4 md:p-6 w-full max-w-5xl mx-auto space-y-5 md:space-y-6 mt-2">
-            <div className="flex gap-4 md:gap-6 border-b border-slate-200">
-              <button onClick={()=>setTab('active')} className={`pb-3 text-xs md:text-sm font-extrabold uppercase tracking-wider transition-all border-b-2 whitespace-nowrap ${tab==='active' ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-400'}`}>My Patients ({devices.length})</button>
+          <div className="p-4 md:p-6 w-full max-w-7xl mx-auto space-y-5 md:space-y-6 mt-2">
+            <div className="flex gap-4 md:gap-6 border-b border-slate-200 overflow-x-auto hide-scroll">
+              <button onClick={()=>setTab('active')} className={`pb-3 text-xs md:text-sm font-extrabold uppercase tracking-wider transition-all border-b-2 whitespace-nowrap ${tab==='active' ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-400'}`}>My Patients ({userDevices.length})</button>
               <button onClick={()=>setTab('history')} className={`pb-3 text-xs md:text-sm font-extrabold uppercase tracking-wider transition-all border-b-2 whitespace-nowrap ${tab==='history' ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-400'}`}>History</button>
             </div>
 
             {tab === 'active' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-                {devices.map(d => <StatusCard key={d.deviceId} data={d} onComplete={handleComplete} />)}
-                {devices.length === 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
+                {userDevices.slice(0, visibleCounts.active).map((d, i) => <StatusCard key={d.deviceId || `${d.room || 'room'}-${d.bed || 'bed'}-${d.startTime || 'time'}-${i}`} data={d} onComplete={handleComplete} />)}
+                {userDevices.length === 0 && (
                   <div className="col-span-full py-20 text-center border-2 border-dashed border-slate-300 rounded-[2rem] bg-white/50 text-slate-400">
                     <div className="w-14 h-14 md:w-16 md:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4"><i className="fas fa-bed text-xl md:text-2xl text-slate-300"></i></div>
                     <p className="font-bold text-base md:text-lg text-slate-500">No active infusions</p>
                     <p className="text-xs md:text-sm mt-1">Tap the + button to assign a device.</p>
                   </div>
                 )}
+                {userDevices.length > visibleCounts.active && <div className="col-span-full flex justify-center"><button onClick={() => setVisibleCounts(prev => ({ ...prev, active: prev.active + 24 }))} className="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-bold">Load more patients</button></div>}
               </div>
             )}
 
             {tab === 'history' && (
               <div>
+                <div className="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200 flex items-center mb-4">
+                  <i className="fas fa-search text-slate-400 ml-3"></i>
+                  <input type="text" placeholder="Search history by patient, room, bed, device or staff..." className="w-full p-2 outline-none text-sm text-slate-700 ml-2 font-medium bg-transparent" value={historySearch} onChange={(e) => setHistorySearch(e.target.value)} />
+                </div>
                 <FilterTabs current={filterPeriod} onChange={setFilterPeriod} resultCount={filteredHistory.length} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 opacity-80">
-                  {filteredHistory.slice(0, 50).map((d,i) => <StatusCard key={i} data={d} isHistory={true} />)}
+                  {filteredHistory.slice(0, visibleCounts.history).map((d,i) => <StatusCard key={d.historyId || `${d.deviceId || 'hist'}-${d.completedAt || d.startTime || i}-${i}`} data={d} isHistory={true} />)}
                   {filteredHistory.length === 0 && <p className="col-span-full text-center text-slate-400 py-10 text-sm">No records found for this period.</p>}
+                  {filteredHistory.length > visibleCounts.history && <div className="col-span-full flex justify-center"><button onClick={() => setVisibleCounts(prev => ({ ...prev, history: prev.history + 24 }))} className="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-bold">Load more history</button></div>}
                 </div>
               </div>
             )}
@@ -1211,8 +1542,14 @@
     const SuperDashboard = ({ onLogout }) => {
       const [hospitals, setHospitals] = useState({});
       const [viewId, setViewId] = useState(null);
+      const [showAddHospital, setShowAddHospital] = useState(false);
 
-      useEffect(() => { db.ref('hospitals').on('value', snap => setHospitals(snap.val() || {})); }, []);
+      useEffect(() => {
+        const ref = db.ref('hospitals');
+        const handler = snap => setHospitals(snap.val() || {});
+        ref.on('value', handler);
+        return () => ref.off('value', handler);
+      }, []);
 
       const stats = useMemo(() => {
         let active = 0, nurses = 0, totalInventory = 0;
@@ -1224,19 +1561,30 @@
         return { active, nurses, devices: totalInventory };
       }, [hospitals]);
 
+      const handleDeleteHospital = async (hid) => {
+        const hospitalName = hospitals[hid]?.name || 'this hospital';
+        if (!confirm(`Delete ${hospitalName} completely? This will remove all staff, devices, active records, and history.`)) return;
+        try {
+          await db.ref(`hospitals/${hid}`).remove();
+          if (viewId === hid) setViewId(null);
+        } catch (e) {
+          alert(e.message);
+        }
+      };
+
       if (viewId) {
         return (
           <div className="min-h-screen pb-10">
-            <header className="bg-slate-900 text-white px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shadow-lg sticky top-0 z-50 backdrop-blur-md bg-slate-900/90 pt-safe">
+            <header className="bg-slate-900 text-white px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shadow-lg sticky top-0 z-50 backdrop-blur-md bg-slate-900/90 pt-safe gap-3">
               <button onClick={()=>setViewId(null)} className="flex items-center gap-2 md:gap-3 active:text-blue-400 transition-colors bg-slate-800 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none">
                 <i className="fas fa-arrow-left"></i> <span>Network</span>
               </button>
-              <div className="font-extrabold tracking-tight text-sm md:text-base truncate pl-4">{hospitals[viewId] ? hospitals[viewId].name : ''}</div>
+              <div className="font-extrabold tracking-tight text-sm md:text-base truncate pl-2 flex-1">{hospitals[viewId] ? hospitals[viewId].name : ''}</div>
+              <button onClick={() => handleDeleteHospital(viewId)} className="bg-red-600 active:bg-red-700 text-white px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none shrink-0">
+                Delete Hospital
+              </button>
             </header>
-
-            <div className="p-4 md:p-8 w-full mx-auto">
-              <HospitalDashboard hospitalId={viewId} userRole="admin" isSuperView={true} />
-            </div>
+            <div className="py-4 md:py-8"><HospitalDashboard hospitalId={viewId} userRole="admin" isSuperView={true} /></div>
           </div>
         );
       }
@@ -1244,71 +1592,58 @@
       return (
         <div className="min-h-screen pb-10 fade-in">
           <AppHeader title="Super Admin" subtitle="Global Network Control" onLogout={onLogout} />
-
-          <div className="p-4 md:p-8 w-full mx-auto space-y-6 md:space-y-8">
+          <div className="p-4 md:p-8 w-full mx-auto max-w-7xl space-y-6 md:space-y-8">
             <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-10 text-white shadow-2xl relative overflow-hidden border border-slate-700">
               <div className="absolute right-0 top-0 w-48 h-48 md:w-64 md:h-64 bg-blue-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
               <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8">
-                <div>
-                  <div className="text-[9px] md:text-[10px] font-extrabold text-blue-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-microchip"></i> Reg. Devices</div>
-                  <div className="text-3xl md:text-5xl font-black text-white">{stats.devices}</div>
-                </div>
-                <div>
-                  <div className="text-[9px] md:text-[10px] font-extrabold text-emerald-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-file-invoice-dollar"></i> Mo. Revenue</div>
-                  <div className="text-3xl md:text-5xl font-black text-emerald-400">{formatMoney(stats.devices * MAINTENANCE_FEE_PER_DEVICE)}</div>
-                </div>
-                <div>
-                  <div className="text-[9px] md:text-[10px] font-extrabold text-purple-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-hospital"></i> Facilities</div>
-                  <div className="text-3xl md:text-5xl font-black text-white">{Object.keys(hospitals).length}</div>
-                </div>
-                <div>
-                  <div className="text-[9px] md:text-[10px] font-extrabold text-rose-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-procedures"></i> Live</div>
-                  <div className="text-3xl md:text-5xl font-black text-white">{stats.active}</div>
-                </div>
+                <div><div className="text-[9px] md:text-[10px] font-extrabold text-blue-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-microchip"></i> Reg. Devices</div><div className="text-3xl md:text-5xl font-black text-white">{stats.devices}</div></div>
+                <div><div className="text-[9px] md:text-[10px] font-extrabold text-emerald-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-file-invoice-dollar"></i> AMC Total</div><div className="text-3xl md:text-5xl font-black text-emerald-400">{formatMoney(stats.devices * AMC_PER_DEVICE)}</div></div>
+                <div><div className="text-[9px] md:text-[10px] font-extrabold text-purple-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-hospital"></i> Facilities</div><div className="text-3xl md:text-5xl font-black text-white">{Object.keys(hospitals).length}</div></div>
+                <div><div className="text-[9px] md:text-[10px] font-extrabold text-rose-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-procedures"></i> Live</div><div className="text-3xl md:text-5xl font-black text-white">{stats.active}</div></div>
               </div>
             </div>
 
-            <div>
-              <h3 className="font-extrabold text-slate-800 text-lg md:text-xl mb-4 md:mb-6 tracking-tight">Partner Hospitals</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {Object.entries(hospitals).map(([hid, h]) => {
-                  const inventoryCount = h.registered_devices ? Object.keys(h.registered_devices).length : 0;
-                  const activeCount = h.active_devices ? Object.keys(h.active_devices).length : 0;
-                  const staffCount = h.nurses ? Object.keys(h.nurses).length : 0;
+            <div className="flex justify-between items-center gap-3 flex-wrap">
+              <h3 className="font-extrabold text-slate-800 text-lg md:text-xl tracking-tight">Partner Hospitals</h3>
+              <button onClick={() => setShowAddHospital(true)} className="bg-indigo-600 active:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border-none outline-none">
+                <i className="fas fa-hospital-user"></i> Add Hospital
+              </button>
+            </div>
 
-                  return (
-                    <div key={hid} onClick={()=>setViewId(hid)} className="bg-white p-5 md:p-6 rounded-[1.5rem] shadow-sm border border-slate-200 cursor-pointer active:shadow-md active:bg-slate-50 transition-all group relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-blue-50 rounded-bl-full -z-0"></div>
-                      <div className="relative z-10">
-                        <div className="w-12 h-12 md:w-14 md:h-14 bg-white shadow-md border border-slate-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4">
-                          <i className="fas fa-hospital"></i>
-                        </div>
-                        <h4 className="font-extrabold text-lg md:text-xl text-slate-800 mb-1 tracking-tight truncate">{h.name}</h4>
-                        <div className="text-[10px] md:text-xs font-bold text-slate-400 mb-4 md:mb-5 flex items-center gap-1.5"><i className="fas fa-map-marker-alt"></i> {h.location}</div>
-
-                        <div className="flex justify-between items-center pt-4 border-t border-slate-100">
-                          <div className="text-center">
-                            <div className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">Inventory</div>
-                            <div className="font-black text-sm md:text-base text-slate-700">{inventoryCount}</div>
-                          </div>
-                          <div className="w-px h-5 md:h-6 bg-slate-200"></div>
-                          <div className="text-center">
-                            <div className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">Active</div>
-                            <div className="font-black text-sm md:text-base text-blue-600">{activeCount}</div>
-                          </div>
-                          <div className="w-px h-5 md:h-6 bg-slate-200"></div>
-                          <div className="text-center">
-                            <div className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">Staff</div>
-                            <div className="font-black text-sm md:text-base text-slate-700">{staffCount}</div>
-                          </div>
-                        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+              {Object.entries(hospitals).map(([hid, h]) => {
+                const inventoryCount = h.registered_devices ? Object.keys(h.registered_devices).length : 0;
+                const activeCount = h.active_devices ? Object.keys(h.active_devices).length : 0;
+                const staffCount = h.nurses ? Object.keys(h.nurses).length : 0;
+                const amcDate = h.amcStartDate || h.createdAt || h.addedAt || null;
+                return (
+                  <div key={hid} onClick={()=>setViewId(hid)} className="bg-white p-5 md:p-6 rounded-[1.5rem] shadow-sm border border-slate-200 cursor-pointer active:shadow-md active:bg-slate-50 transition-all group relative overflow-hidden">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleDeleteHospital(hid); }}
+                      className="absolute top-4 right-4 z-20 bg-red-600 text-white px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border-none outline-none"
+                    >
+                      Delete
+                    </button>
+                    <div className="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-blue-50 rounded-bl-full -z-0"></div>
+                    <div className="relative z-10">
+                      <div className="w-12 h-12 md:w-14 md:h-14 bg-white shadow-md border border-slate-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4"><i className="fas fa-hospital"></i></div>
+                      <h4 className="font-extrabold text-lg md:text-xl text-slate-800 mb-1 tracking-tight truncate">{h.name}</h4>
+                      <div className="text-[10px] md:text-xs font-bold text-slate-400 mb-2 flex items-center gap-1.5"><i className="fas fa-map-marker-alt"></i> {h.location}</div>
+                      <div className="text-[10px] md:text-xs font-bold text-slate-500 mb-4 flex items-center gap-1.5"><i className="fas fa-calendar-alt"></i> AMC From: {amcDate ? new Date(amcDate).toLocaleDateString('en-IN') : 'Not set'}</div>
+                      <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+                        <div className="text-center"><div className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">Inventory</div><div className="font-black text-sm md:text-base text-slate-700">{inventoryCount}</div></div>
+                        <div className="w-px h-5 md:h-6 bg-slate-200"></div>
+                        <div className="text-center"><div className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">Active</div><div className="font-black text-sm md:text-base text-blue-600">{activeCount}</div></div>
+                        <div className="w-px h-5 md:h-6 bg-slate-200"></div>
+                        <div className="text-center"><div className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">Staff</div><div className="font-black text-sm md:text-base text-slate-700">{staffCount}</div></div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
+          <AddHospitalModal isOpen={showAddHospital} onClose={() => setShowAddHospital(false)} onSuccess={() => { setShowAddHospital(false); }} />
         </div>
       );
     };
@@ -1317,41 +1652,26 @@
       const [email, setEmail] = useState('');
       const [pass, setPass] = useState('');
       const [loading, setLoading] = useState(false);
-
       const handleSubmit = async (e) => {
-        e.preventDefault(); setLoading(true);
+        e.preventDefault();
+        setLoading(true);
         try { await auth.signInWithEmailAndPassword(email, pass); }
         catch (err) { alert(err.message); setLoading(false); }
       };
-
       return (
         <div className="min-h-screen flex items-center justify-center p-4 md:p-6 relative overflow-hidden fade-in">
           <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-blue-400/20 rounded-full blur-[80px] md:blur-[100px] pointer-events-none"></div>
           <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-indigo-400/20 rounded-full blur-[80px] md:blur-[100px] pointer-events-none"></div>
-
           <div className="glass-panel w-full max-w-sm md:max-w-md p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl relative z-10 mx-auto border-none outline-none">
             <div className="text-center mb-8 md:mb-10">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl md:rounded-3xl mx-auto flex items-center justify-center shadow-xl shadow-blue-500/30 mb-5 md:mb-6 transform -rotate-3 transition-all">
-                <i className="fas fa-heartbeat text-3xl md:text-4xl text-white"></i>
-              </div>
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl md:rounded-3xl mx-auto flex items-center justify-center shadow-xl shadow-blue-500/30 mb-5 md:mb-6 transform -rotate-3 transition-all"><i className="fas fa-heartbeat text-3xl md:text-4xl text-white"></i></div>
               <h1 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">SalineGuard</h1>
               <p className="text-[10px] md:text-xs font-bold tracking-widest text-blue-600 uppercase mt-1.5 md:mt-2">Enterprise Access</p>
             </div>
-
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
-              <div className="space-y-1.5">
-                <label className="text-[9px] md:text-[10px] uppercase tracking-widest font-extrabold text-slate-500 ml-1.5 md:ml-2">Secure ID</label>
-                <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="username@hospital.branch" className="w-full p-3.5 md:p-4 bg-slate-100 rounded-xl md:rounded-2xl border-0 focus:bg-slate-200 outline-none transition-all font-medium text-sm md:text-base text-slate-800" required />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[9px] md:text-[10px] uppercase tracking-widest font-extrabold text-slate-500 ml-1.5 md:ml-2">Password</label>
-                <input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" className="w-full p-3.5 md:p-4 bg-slate-100 rounded-xl md:rounded-2xl border-0 focus:bg-slate-200 outline-none transition-all font-medium text-sm md:text-base text-slate-800" required />
-              </div>
-
-              <button disabled={loading} className="w-full bg-slate-900 active:bg-black text-white py-3.5 md:py-4 mt-2 rounded-xl md:rounded-2xl font-extrabold shadow-xl shadow-slate-900/20 active:scale-[0.98] transition-all flex justify-center items-center text-sm md:text-base border-none outline-none">
-                {loading ? <i className="fas fa-circle-notch fa-spin"></i> : 'Authenticate'}
-              </button>
+              <div className="space-y-1.5"><label className="text-[9px] md:text-[10px] uppercase tracking-widest font-extrabold text-slate-500 ml-1.5 md:ml-2">Secure ID</label><input value={email} onChange={e=>setEmail(e.target.value)} placeholder="username@hospital.branch" className="w-full p-3.5 md:p-4 bg-slate-100 rounded-xl md:rounded-2xl border-0 focus:bg-slate-200 outline-none transition-all font-medium text-sm md:text-base text-slate-800" required /></div>
+              <div className="space-y-1.5"><label className="text-[9px] md:text-[10px] uppercase tracking-widest font-extrabold text-slate-500 ml-1.5 md:ml-2">Password</label><input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" className="w-full p-3.5 md:p-4 bg-slate-100 rounded-xl md:rounded-2xl border-0 focus:bg-slate-200 outline-none transition-all font-medium text-sm md:text-base text-slate-800" required /></div>
+              <button disabled={loading} className="w-full bg-slate-900 active:bg-black text-white py-3.5 md:py-4 mt-2 rounded-xl md:rounded-2xl font-extrabold shadow-xl shadow-slate-900/20 active:scale-[0.98] transition-all flex justify-center items-center text-sm md:text-base border-none outline-none">{loading ? <i className="fas fa-circle-notch fa-spin"></i> : 'Authenticate'}</button>
             </form>
           </div>
         </div>
@@ -1367,32 +1687,42 @@
         return () => unsub();
       }, []);
 
+      useEffect(() => {
+        if (!user) return;
+        const info = getHospitalInfo(user.email || '');
+        if (!info.id || info.id === 'unknown') return;
+        if (info.id === 'super_admin') return;
+
+        const nurseRef = db.ref(`hospitals/${info.id}/nurses/${user.uid}`);
+        const handler = snap => {
+          if (!snap.exists()) {
+            auth.signOut();
+            return;
+          }
+          const val = snap.val() || {};
+          if (isNurseDisabled(val)) {
+            alert('Your account has been disabled by admin.');
+            auth.signOut();
+          }
+        };
+        nurseRef.on('value', handler);
+        return () => nurseRef.off('value', handler);
+      }, [user]);
+
       if (loading) return <LoadingScreen />;
       if (!user) return <LoginScreen />;
-
       const info = getHospitalInfo(user.email || '');
       if (info.id === 'super_admin') return <SuperDashboard onLogout={()=>auth.signOut()} />;
       if ((user.email || '').startsWith('admin@')) {
-        return (
-          <div className="min-h-screen pb-10">
-            <AppHeader title={info.name} subtitle="Hospital Administration" onLogout={()=>auth.signOut()} />
-            <div className="p-4 md:p-8 w-full mx-auto">
-              <HospitalDashboard hospitalId={info.id} userRole="admin" />
-            </div>
-          </div>
-        );
+        return <div className="min-h-screen pb-10"><AppHeader title={info.name} subtitle="Hospital Administration" onLogout={()=>auth.signOut()} /><div className="py-4 md:py-8"><HospitalDashboard hospitalId={info.id} userRole="admin" /></div></div>;
       }
       return <NurseApp user={user} onLogout={()=>auth.signOut()} />;
     };
 
     const mountApp = () => {
       const rootElement = document.getElementById('root');
-      if (rootElement) {
-        const root = ReactDOM.createRoot(rootElement);
-        root.render(<App />);
-      } else {
-        console.error("Root element not found");
-      }
+      if (rootElement) ReactDOM.createRoot(rootElement).render(<App />);
+      else console.error('Root element not found');
     };
 
     if (document.readyState === 'complete') mountApp();
