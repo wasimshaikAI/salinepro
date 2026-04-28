@@ -365,7 +365,7 @@
       </div>
     );
 
-    const StatusCard = ({ data, onComplete, isHistory = false }) => {
+const StatusCard = ({ data, onComplete, isHistory = false }) => {
       const [nowTick, setNowTick] = useState(Date.now());
       useEffect(() => {
         const id = setInterval(() => setNowTick(Date.now()), 1000);
@@ -387,10 +387,15 @@
       const finishLabel = finishTime ? finishTime.toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' }) : '--';
       
       const isCrit = perc <= 10 && !isHistory;
-      const isOnline = !isHistory && isDeviceOnlineNow(data, nowTick);
-      const isOffline = !isHistory && !isOnline;
-      const displayName = data?.patientName || `Room ${data?.room || '-'} - Bed ${data?.bed || '-'}`;
       
+      // --- UPDATED ONLINE STATUS LOGIC ---
+      // Force it to look strictly at this specific device's lastUpdate timestamp
+      const deviceLastSeen = Number(data?.lastUpdate || data?.updatedAt || data?.startTime || 0);
+      const isOnline = !isHistory && (deviceLastSeen > 0) && ((nowTick - deviceLastSeen) <= DEVICE_STALE_MS);
+      const isOffline = !isHistory && !isOnline;
+      // -----------------------------------
+
+      const displayName = data?.patientName || `Room ${data?.room || '-'} - Bed ${data?.bed || '-'}`;
       const remainingMs = isHistory ? 0 : getRemainingMs(data);
       const timeString = isHistory ? 'Done' : (liveMins !== null && liveMins < 999 ? `${liveMins}m ${String(liveSecs ?? 0).padStart(2, '0')}s left` : `${formatDuration(remainingMs)} left`);
 
