@@ -227,43 +227,46 @@
 
     // --- UPDATED TIMING LOGIC ---
     // Prioritize the moment the browser received the packet to avoid clock-sync issues
-    const getDeviceLastSeenAt = (device) => Number(device?.clientReceivedAt || device?.lastUpdate || device?.startTime || 0);
-    
-    const isDeviceOnlineNow = (device, nowTs = Date.now()) => {
-      if (device?.deviceOnline === false) return false;
-      
-      // If we have a fresh clientReceived timestamp, trust that first.
-      const seenAt = Number(device?.clientReceivedAt || 0);
-      
-      if (seenAt > 0) {
-        return (nowTs - seenAt) <= DEVICE_STALE_MS;
-      }
-      
-      // Fallback for brand new, just-added devices that haven't pinged yet
-      const fallbackSeen = Number(device?.lastUpdate || device?.startTime || 0);
-      if (fallbackSeen > 0) {
-          // Add a generous buffer to the fallback to account for server/local clock mismatch
-          return (nowTs - fallbackSeen) <= (DEVICE_STALE_MS + 10000); 
-      }
-      
-      return false;
+   // --- BULLETPROOF TIMING LOGIC ---
+    // Get the most recent timestamp available.
+    const getDeviceLastSeenAt = (device) => {
+        if (!device) return 0;
+        // Prioritize the local browser timestamp to defeat server/local clock drift
+        if (device.clientReceivedAt > 0) return Number(device.clientReceivedAt);
+        // Fallback to server timestamps if client time isn't set yet
+        return Number(device.lastUpdate || device.updatedAt || device.startTime || 0);
     };
 
+    const isDeviceOnlineNow = (device, nowTs = Date.now()) => {
+      if (!device) return false;
+      if (device.deviceOnline === false) return false;
+      
+      const lastSeen = getDeviceLastSeenAt(device);
+      if (lastSeen <= 0) return false;
+
+      // The device is online if the time since we last saw it is less than our threshold.
+      // We add a 20-second (20000ms) buffer to the stale threshold to completely 
+      // eliminate any remaining clock-sync flashes during slow network spikes.
+      return (nowTs - lastSeen) <= (DEVICE_STALE_MS + 20000); 
+    };
+
+    // Deeply injects the current local browser time into the Firebase payload
     const stampReceivedAt = (data = {}) => {
+      if (!data) return {};
       const now = Date.now();
       const stamped = {};
-      Object.entries(data || {}).forEach(([key, value]) => {
-        // Only stamp it if it has an actual device ID
-        if (value && value.deviceId) {
-           stamped[key] = { ...value, clientReceivedAt: now };
+      Object.keys(data).forEach(key => {
+        const deviceNode = data[key];
+        // If this node looks like a device object, stamp it with the exact current millisecond
+        if (deviceNode && typeof deviceNode === 'object') {
+           stamped[key] = { ...deviceNode, clientReceivedAt: now };
         } else {
-           stamped[key] = value;
+           stamped[key] = deviceNode;
         }
       });
       return stamped;
     };
-    // ----------------------------
-
+    // --------------------------------
     const OFFLINE_ALERT_MS = DEVICE_STALE_MS;
     const NO_FLOW_ALERT_MS = 75 * 1000;
     const RAPID_DROP_PERCENT = 20;
