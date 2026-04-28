@@ -1512,10 +1512,18 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
             for (let t of ALERT_LEVELS) {
               const enabled = percentPrefs[t] !== false && percentPrefs[String(t)] !== false;
               if (enabled && (prevAlert.perc > t) && currentPerc <= t) {
-                const exTime = Number(dev.estimatedCompletionAt);
-                let textFinish = 'scheduled time';
-                if (exTime > 0) { textFinish = new Date(exTime).toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' }); }
                 
+                // --- TIMING FIX: Use Live ESP32 Data for the Message ---
+                const liveMins = dev.minsLeft !== undefined ? Number(dev.minsLeft) : null;
+                const liveSecs = dev.secsLeft !== undefined ? Number(dev.secsLeft) : 0;
+                let textFinish = 'scheduled time';
+                
+                // Add the live ESP32 minutes directly to the current local browser time
+                if (liveMins !== null && liveMins < 999) {
+                  textFinish = new Date(Date.now() + (liveMins * 60000) + (liveSecs * 1000)).toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' });
+                }
+                // --------------------------------------------------------
+
                 triggerPatientAlert({ title: `Saline Alert: ${dev.patientName || `Room ${dev.room}`}`, body: `Fluid reached ${currentPerc}%. Expected completion at ${textFinish}.` });
                 break;
               }
