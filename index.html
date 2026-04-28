@@ -393,10 +393,30 @@
 
 const StatusCard = ({ data, onComplete, isHistory = false }) => {
       const [nowTick, setNowTick] = useState(Date.now());
+      
+      // --- BULLETPROOF LOCAL TIMING FIX ---
+      // Determine if the device is already deeply offline when the page loads (60s buffer for clock skew)
+      const naiveStaleness = Date.now() - Number(data?.lastUpdate || data?.startTime || 0);
+      const [localLastSeen, setLocalLastSeen] = useState(naiveStaleness > 60000 ? 0 : Date.now());
+      const prevServerTime = useRef(data?.lastUpdate);
+
       useEffect(() => {
         const id = setInterval(() => setNowTick(Date.now()), 1000);
         return () => clearInterval(id);
       }, []);
+
+      // Every time THIS SPECIFIC device's server timestamp changes, reset our local timer
+      useEffect(() => {
+        if (data?.lastUpdate && data.lastUpdate !== prevServerTime.current) {
+           setLocalLastSeen(Date.now());
+           prevServerTime.current = data.lastUpdate;
+        }
+      }, [data?.lastUpdate]);
+
+      // Online if the local timer was reset within the last 35 seconds
+      const isOnline = !isHistory && (localLastSeen > 0) && ((nowTick - localLastSeen) <= 35000);
+      const isOffline = !isHistory && !isOnline;
+      // ------------------------------------
 
       const perc = Number.isFinite(Number(data?.perc)) ? Number(data.perc) : 100;
       
@@ -408,19 +428,12 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
       if (expectedMs && expectedMs > 0) {
         finishTime = new Date(expectedMs);
       } else if (liveMins !== null && liveMins < 999) {
-        finishTime = new Date(Date.now() + (liveMins * 60000) + (liveSecs * 1000));
+        finishTime = new Date(nowTick + (liveMins * 60000) + (liveSecs * 1000));
       }
       const finishLabel = finishTime ? finishTime.toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' }) : '--';
       
       const isCrit = perc <= 10 && !isHistory;
       
-      // --- UPDATED ONLINE STATUS LOGIC ---
-      // Force it to look strictly at this specific device's lastUpdate timestamp
-      const deviceLastSeen = Number(data?.lastUpdate || data?.updatedAt || data?.startTime || 0);
-      const isOnline = !isHistory && (deviceLastSeen > 0) && ((nowTick - deviceLastSeen) <= DEVICE_STALE_MS);
-      const isOffline = !isHistory && !isOnline;
-      // -----------------------------------
-
       const displayName = data?.patientName || `Room ${data?.room || '-'} - Bed ${data?.bed || '-'}`;
       const remainingMs = isHistory ? 0 : getRemainingMs(data);
       const timeString = isHistory ? 'Done' : (liveMins !== null && liveMins < 999 ? `${liveMins}m ${String(liveSecs ?? 0).padStart(2, '0')}s left` : `${formatDuration(remainingMs)} left`);
