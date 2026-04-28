@@ -225,21 +225,44 @@
       return `${s}s`;
     };
 
-    const getDeviceLastSeenAt = (device) => Number(device?.clientReceivedAt || device?.lastUpdate || device?.updatedAt || device?.startTime || 0);
+    // --- UPDATED TIMING LOGIC ---
+    // Prioritize the moment the browser received the packet to avoid clock-sync issues
+    const getDeviceLastSeenAt = (device) => Number(device?.clientReceivedAt || device?.lastUpdate || device?.startTime || 0);
+    
     const isDeviceOnlineNow = (device, nowTs = Date.now()) => {
-      const seenAt = getDeviceLastSeenAt(device);
       if (device?.deviceOnline === false) return false;
-      if (!seenAt) return false;
-      return (nowTs - seenAt) <= DEVICE_STALE_MS;
+      
+      // If we have a fresh clientReceived timestamp, trust that first.
+      const seenAt = Number(device?.clientReceivedAt || 0);
+      
+      if (seenAt > 0) {
+        return (nowTs - seenAt) <= DEVICE_STALE_MS;
+      }
+      
+      // Fallback for brand new, just-added devices that haven't pinged yet
+      const fallbackSeen = Number(device?.lastUpdate || device?.startTime || 0);
+      if (fallbackSeen > 0) {
+          // Add a generous buffer to the fallback to account for server/local clock mismatch
+          return (nowTs - fallbackSeen) <= (DEVICE_STALE_MS + 10000); 
+      }
+      
+      return false;
     };
+
     const stampReceivedAt = (data = {}) => {
       const now = Date.now();
       const stamped = {};
       Object.entries(data || {}).forEach(([key, value]) => {
-        stamped[key] = { ...(value || {}), clientReceivedAt: now };
+        // Only stamp it if it has an actual device ID
+        if (value && value.deviceId) {
+           stamped[key] = { ...value, clientReceivedAt: now };
+        } else {
+           stamped[key] = value;
+        }
       });
       return stamped;
     };
+    // ----------------------------
 
     const OFFLINE_ALERT_MS = DEVICE_STALE_MS;
     const NO_FLOW_ALERT_MS = 75 * 1000;
