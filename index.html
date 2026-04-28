@@ -225,37 +225,19 @@
       return `${s}s`;
     };
 
-    const getDeviceLastSeenAt = (device) => {
-        // Always trust the ESP32's server timestamp first, fallback to the client stamp
-        return Number(device?.lastUpdate || device?.clientReceivedAt || device?.updatedAt || device?.startTime || 0);
-    };
+    const getDeviceLastSeenAt = (device) => Number(device?.clientReceivedAt || device?.lastUpdate || device?.updatedAt || device?.startTime || 0);
     const isDeviceOnlineNow = (device, nowTs = Date.now()) => {
       const seenAt = getDeviceLastSeenAt(device);
       if (device?.deviceOnline === false) return false;
       if (!seenAt) return false;
       return (nowTs - seenAt) <= DEVICE_STALE_MS;
     };
-    const prevDeviceDataRef = { current: {} }; // Keep track of old data to spot real changes
-
     const stampReceivedAt = (data = {}) => {
       const now = Date.now();
       const stamped = {};
-      
       Object.entries(data || {}).forEach(([key, value]) => {
-        const prevValue = prevDeviceDataRef.current[key];
-        
-        // Only update the clientReceivedAt timestamp if the perc or minsLeft actually changed,
-        // OR if it has a fresh server timestamp from Firebase
-        let lastSeen = value.lastUpdate || prevValue?.clientReceivedAt || now;
-        
-        if (!prevValue || prevValue.perc !== value.perc || prevValue.minsLeft !== value.minsLeft) {
-             lastSeen = value.lastUpdate || now; 
-        }
-
-        stamped[key] = { ...(value || {}), clientReceivedAt: lastSeen };
+        stamped[key] = { ...(value || {}), clientReceivedAt: now };
       });
-      
-      prevDeviceDataRef.current = stamped;
       return stamped;
     };
 
