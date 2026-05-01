@@ -19,53 +19,13 @@
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-    :root, html, body, #root {
-      width: 100% !important;
-      min-height: 100dvh !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      box-sizing: border-box !important;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-family: 'Inter', sans-serif;
-    }
-    :root, html, body {
-      --bg-color: #f1f5f9;
-      background-color: var(--bg-color) !important;
-      background-image: radial-gradient(#e2e8f0 1px, transparent 1px) !important;
-      background-size: 20px 20px !important;
-      background-attachment: fixed !important;
-      background-position: 0 0 !important;
-      overflow-x: hidden !important;
-      overflow-y: auto !important;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: env(safe-area-inset-bottom);
-      height: 100%;
-    }
-    html, body, #root {
-      border: none !important;
-      box-shadow: none !important;
-      outline: none !important;
-      background-clip: padding-box !important;
-      -webkit-tap-highlight-color: transparent;
-    }
+    :root, html, body, #root { width: 100% !important; min-height: 100dvh !important; margin: 0 !important; padding: 0 !important; box-sizing: border-box !important; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: 'Inter', sans-serif; }
+    :root, html, body { --bg-color: #f1f5f9; background-color: var(--bg-color) !important; background-image: radial-gradient(#e2e8f0 1px, transparent 1px) !important; background-size: 20px 20px !important; background-attachment: fixed !important; background-position: 0 0 !important; overflow-x: hidden !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch; padding-bottom: env(safe-area-inset-bottom); height: 100%; }
+    html, body, #root { border: none !important; box-shadow: none !important; outline: none !important; background-clip: padding-box !important; -webkit-tap-highlight-color: transparent; }
     *, *::before, *::after { box-sizing: border-box; }
-    body {
-      overflow-y: auto !important;
-      user-select: text;
-      -webkit-user-select: text;
-      -webkit-touch-callout: text;
-    }
+    body { overflow-y: auto !important; user-select: text; -webkit-user-select: text; -webkit-touch-callout: text; }
     input, textarea, select, button { font-family: inherit; }
-    input, textarea, select {
-      border: none !important;
-      outline: none !important;
-      box-shadow: none !important;
-      background-clip: padding-box !important;
-      appearance: none !important;
-      -webkit-appearance: none !important;
-      -moz-appearance: none !important;
-    }
+    input, textarea, select { border: none !important; outline: none !important; box-shadow: none !important; background-clip: padding-box !important; appearance: none !important; -webkit-appearance: none !important; -moz-appearance: none !important; }
     input:focus, textarea:focus { outline: none !important; border: none !important; box-shadow: none !important; }
     ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; }
     .glass-panel { background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5); }
@@ -76,36 +36,16 @@
     .fade-in { animation: fadeIn 0.22s cubic-bezier(0.16,1,0.3,1) forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .critical-alert { animation: pulse-border 2s infinite; }
-    @keyframes pulse-border {
-      0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); border-color: #ef4444; }
-      70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); border-color: #ef4444; }
-      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); border-color: #ef4444; }
-    }
+    @keyframes pulse-border { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); border-color: #ef4444; } 70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); border-color: #ef4444; } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); border-color: #ef4444; } }
     .saline-loader { position: relative; width: 60px; height: 100px; margin: 0 auto; }
     .bottle { width: 40px; height: 60px; border: 3px solid #3b82f6; border-radius: 0 0 20px 20px; margin: 0 auto; position: relative; overflow: hidden; background: rgba(255,255,255,0.8); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2); }
     .bottle::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #60a5fa; animation: drain 2s infinite linear; }
     .drip { width: 8px; height: 12px; background: #3b82f6; border-radius: 50%; margin: 5px auto 0; animation: drop 1s infinite cubic-bezier(0.5, 0, 1, 0.5); }
     @keyframes drain { 0% { top: 0; } 100% { top: 100%; } }
     @keyframes drop { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(40px) scaleY(0); opacity: 0; } }
-
-    .min-h-screen {
-      min-height: 100dvh !important;
-    }
-
-    .fixed.bottom-6.right-6,
-    .fixed.bottom-8.right-8,
-    .fixed.bottom-6.right-4,
-    .fixed.bottom-8.right-4 {
-      bottom: calc(1.5rem + env(safe-area-inset-bottom)) !important;
-      right: calc(1.5rem + env(safe-area-inset-right, 0px)) !important;
-    }
-
-    @media (min-width: 768px) {
-      .fixed.bottom-8.right-8 {
-        bottom: calc(2rem + env(safe-area-inset-bottom)) !important;
-        right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
-      }
-    }
+    .min-h-screen { min-height: 100dvh !important; }
+    .fixed.bottom-6.right-6, .fixed.bottom-8.right-8, .fixed.bottom-6.right-4, .fixed.bottom-8.right-4 { bottom: calc(1.5rem + env(safe-area-inset-bottom)) !important; right: calc(1.5rem + env(safe-area-inset-right, 0px)) !important; }
+    @media (min-width: 768px) { .fixed.bottom-8.right-8 { bottom: calc(2rem + env(safe-area-inset-bottom)) !important; right: calc(2rem + env(safe-area-inset-right, 0px)) !important; } }
   </style>
 
   <script>
@@ -131,9 +71,12 @@
     const AMC_PER_DEVICE = 1500;
     const AMC_CYCLE_MS = 365 * 24 * 60 * 60 * 1000;
     const INFUSION_DURATION_MS = 6 * 60 * 60 * 1000;
+    const DEFAULT_TOTAL_ML = 1000;
+    const ML_STEP = 100;
     const ALERT_LEVELS = [75, 50, 25, 10, 5, 2];
     const DEFAULT_PERCENT_ALERTS = ALERT_LEVELS.reduce((acc, n) => { acc[n] = true; return acc; }, {});
     const DEVICE_STALE_MS = 15000;
+    const ENABLE_ADMIN_NOTIFICATIONS = false;
 
     const firebaseConfig = {
       apiKey: "AIzaSyCYkB2xXeZDT7OA8UyCwDt0ipc3oLXDzkw",
@@ -175,9 +118,14 @@
     };
 
     const formatMoney = (amt) => "₹" + Number(amt || 0).toLocaleString('en-IN');
+    const formatMl = (ml) => `${Math.max(0, Math.round(Number(ml || 0)))}ml`;
     const slugify = (value = '') => String(value).toLowerCase().trim().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
     const humanize = (value = '') => String(value).toLowerCase().split(/[_\s.-]+/).filter(Boolean).map(v => v.charAt(0).toUpperCase() + v.slice(1)).join(' ');
     const normalizeName = (value = '') => String(value).trim().toLowerCase().replace(/\s+/g, ' ');
+    const safeNum = (v, fallback = 0) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : fallback;
+    };
 
     const getHospitalInfo = (email) => {
       if (!email) return { id: 'unknown', name: 'Unknown', loc: '', domain: '' };
@@ -195,6 +143,12 @@
     };
 
     const sortHistoryDesc = (histList = []) => [...histList].sort((a, b) => (b?.completedAt || b?.startTime || 0) - (a?.completedAt || a?.startTime || 0));
+    const sortActiveDevices = (devices = []) => [...devices].sort((a, b) => {
+      const ap = safeNum(a?.perc, 100), bp = safeNum(b?.perc, 100);
+      const am = getDeviceMlRemaining(a), bm = getDeviceMlRemaining(b);
+      const at = a?.startTime || 0, bt = b?.startTime || 0;
+      return ap - bp || am - bm || bt - at;
+    });
 
     const filterHistoryByTime = (histList, period) => {
       const sorted = sortHistoryDesc(histList);
@@ -225,48 +179,56 @@
       return `${s}s`;
     };
 
-    // --- UPDATED TIMING LOGIC ---
-    // Prioritize the moment the browser received the packet to avoid clock-sync issues
-   // --- BULLETPROOF TIMING LOGIC ---
-    // Get the most recent timestamp available.
+    const getDeviceMlRemaining = (device) => {
+      if (!device) return DEFAULT_TOTAL_ML;
+      if (device.mlLeft !== undefined && device.mlLeft !== null && device.mlLeft !== '') return Math.max(0, safeNum(device.mlLeft, DEFAULT_TOTAL_ML));
+      const totalMl = safeNum(device.totalMl, DEFAULT_TOTAL_ML);
+      const perc = safeNum(device.perc, 100);
+      return Math.max(0, Math.round((perc / 100) * totalMl));
+    };
+
+    const getDevicePercent = (device) => {
+      if (!device) return 100;
+      if (device.perc !== undefined && device.perc !== null && device.perc !== '') return Math.max(0, Math.min(100, safeNum(device.perc, 100)));
+      const totalMl = safeNum(device.totalMl, DEFAULT_TOTAL_ML);
+      const ml = getDeviceMlRemaining(device);
+      return totalMl > 0 ? Math.max(0, Math.min(100, Math.round((ml / totalMl) * 100))) : 0;
+    };
+
+    const generateMlThresholds = (totalMl = DEFAULT_TOTAL_ML) => {
+      const t = Math.max(100, Math.round(safeNum(totalMl, DEFAULT_TOTAL_ML)));
+      const thresholds = [];
+      for (let ml = t - ML_STEP; ml >= ML_STEP; ml -= ML_STEP) thresholds.push(ml);
+      thresholds.push(0);
+      return thresholds;
+    };
+
     const getDeviceLastSeenAt = (device) => {
-        if (!device) return 0;
-        // Prioritize the local browser timestamp to defeat server/local clock drift
-        if (device.clientReceivedAt > 0) return Number(device.clientReceivedAt);
-        // Fallback to server timestamps if client time isn't set yet
-        return Number(device.lastUpdate || device.updatedAt || device.startTime || 0);
+      if (!device) return 0;
+      if (device.clientReceivedAt > 0) return Number(device.clientReceivedAt);
+      return Number(device.lastUpdate || device.updatedAt || device.startTime || 0);
     };
 
     const isDeviceOnlineNow = (device, nowTs = Date.now()) => {
       if (!device) return false;
       if (device.deviceOnline === false) return false;
-      
       const lastSeen = getDeviceLastSeenAt(device);
       if (lastSeen <= 0) return false;
-
-      // The device is online if the time since we last saw it is less than our threshold.
-      // We add a 20-second (20000ms) buffer to the stale threshold to completely 
-      // eliminate any remaining clock-sync flashes during slow network spikes.
-      return (nowTs - lastSeen) <= (DEVICE_STALE_MS + 20000); 
+      return (nowTs - lastSeen) <= (DEVICE_STALE_MS + 20000);
     };
 
-    // Deeply injects the current local browser time into the Firebase payload
     const stampReceivedAt = (data = {}) => {
       if (!data) return {};
       const now = Date.now();
       const stamped = {};
       Object.keys(data).forEach(key => {
         const deviceNode = data[key];
-        // If this node looks like a device object, stamp it with the exact current millisecond
-        if (deviceNode && typeof deviceNode === 'object') {
-           stamped[key] = { ...deviceNode, clientReceivedAt: now };
-        } else {
-           stamped[key] = deviceNode;
-        }
+        if (deviceNode && typeof deviceNode === 'object') stamped[key] = { ...deviceNode, clientReceivedAt: now };
+        else stamped[key] = deviceNode;
       });
       return stamped;
     };
-    // --------------------------------
+
     const OFFLINE_ALERT_MS = DEVICE_STALE_MS;
     const NO_FLOW_ALERT_MS = 75 * 1000;
     const RAPID_DROP_PERCENT = 20;
@@ -280,18 +242,29 @@
       } catch (e) {}
     };
 
-    const sortActiveDevices = (devices = []) => {
-      const isEmergency = (d) => !!(d?.emergency || d?.emergencyCase || d?.priority === 'emergency' || d?.priority === 'critical');
-      return [...devices].sort((a, b) => {
-        const pa = { emergencyScore: isEmergency(a) ? 1 : 0, perc: a?.perc !== undefined ? a.perc : 100, remaining: getRemainingMs(a), startTime: a?.startTime || 0, lastUpdate: getDeviceLastSeenAt(a) || 0 };
-        const pb = { emergencyScore: isEmergency(b) ? 1 : 0, perc: b?.perc !== undefined ? b.perc : 100, remaining: getRemainingMs(b), startTime: b?.startTime || 0, lastUpdate: getDeviceLastSeenAt(b) || 0 };
-        if (pa.emergencyScore !== pb.emergencyScore) return pb.emergencyScore - pa.emergencyScore;
-        const aCrit = pa.perc <= 10, bCrit = pb.perc <= 10;
-        if (aCrit !== bCrit) return aCrit ? -1 : 1;
-        if (pa.remaining !== pb.remaining) return pa.remaining - pb.remaining;
-        if (pa.lastUpdate !== pb.lastUpdate) return pb.lastUpdate - pa.lastUpdate;
-        return pb.startTime - pa.startTime;
+    const claimAndArchiveDevice = async (hospitalId, deviceId, completionType = 'manual', extraFields = {}) => {
+      const activeRef = db.ref(`hospitals/${hospitalId}/active_devices/${deviceId}`);
+      const historyRef = db.ref(`hospitals/${hospitalId}/history`);
+      const tx = await activeRef.transaction((current) => {
+        if (!current) return;
+        if (current.completionLock || current.completedAt) return;
+        return { ...current, completionLock: { type: completionType, claimedAt: Date.now() } };
       });
+      if (!tx.committed || !tx.snapshot.exists()) return false;
+      const data = tx.snapshot.val();
+      if (!data || !data.completionLock) return false;
+      const { completionLock, ...payloadBase } = data;
+      const historyPayload = { ...payloadBase, ...extraFields, completedAt: Date.now(), completedVia: completionType, autoDischarged: completionType === 'auto', historyCreatedAt: Date.now() };
+      try {
+        const newHistoryRef = historyRef.push();
+        historyPayload.historyId = newHistoryRef.key;
+        await newHistoryRef.set(historyPayload);
+        await activeRef.remove();
+        return true;
+      } catch (e) {
+        console.error('Archive move failed:', e);
+        return false;
+      }
     };
 
     const isNurseDisabled = (nurse) => !!(nurse?.disabled || nurse?.status === 'disabled');
@@ -356,16 +329,13 @@
               </button>
             </div>
           </header>
-
           <PortalModal open={showLogoutConfirm}>
             <div className="fixed inset-0 z-[999999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 fade-in">
               <div className="w-full max-w-sm rounded-3xl bg-white shadow-2xl overflow-hidden">
                 <div className="p-6 md:p-7 border-b border-slate-100">
-                  <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mb-4">
-                    <i className="fas fa-right-from-bracket text-2xl"></i>
-                  </div>
+                  <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mb-4"><i className="fas fa-right-from-bracket text-2xl"></i></div>
                   <h3 className="text-xl md:text-2xl font-extrabold text-slate-800">Do you want to log out?</h3>
-                  <p className="text-sm text-slate-500 mt-2 leading-6">You will be signed out of SalineGuard and taken back to the login screen.</p>
+                  <p className="text-sm text-slate-500 mt-2 leading-6">You will be signed out and taken back to the login screen.</p>
                 </div>
                 <div className="p-4 md:p-5 flex gap-3">
                   <button onClick={() => setShowLogoutConfirm(false)} className="flex-1 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm active:bg-slate-200 transition-colors">Cancel</button>
@@ -391,55 +361,34 @@
       </div>
     );
 
-const StatusCard = ({ data, onComplete, isHistory = false }) => {
+    const StatusCard = ({ data, onComplete, onShare, isHistory = false, currentUserUid = null }) => {
       const [nowTick, setNowTick] = useState(Date.now());
-      
-      // --- BULLETPROOF LOCAL TIMING FIX ---
-      // Determine if the device is already deeply offline when the page loads (60s buffer for clock skew)
-      const naiveStaleness = Date.now() - Number(data?.lastUpdate || data?.startTime || 0);
-      const [localLastSeen, setLocalLastSeen] = useState(naiveStaleness > 60000 ? 0 : Date.now());
-      const prevServerTime = useRef(data?.lastUpdate);
-
       useEffect(() => {
         const id = setInterval(() => setNowTick(Date.now()), 1000);
         return () => clearInterval(id);
       }, []);
 
-      // Every time THIS SPECIFIC device's server timestamp changes, reset our local timer
-      useEffect(() => {
-        if (data?.lastUpdate && data.lastUpdate !== prevServerTime.current) {
-           setLocalLastSeen(Date.now());
-           prevServerTime.current = data.lastUpdate;
-        }
-      }, [data?.lastUpdate]);
-
-      // Online if the local timer was reset within the last 35 seconds
-      const isOnline = !isHistory && (localLastSeen > 0) && ((nowTick - localLastSeen) <= 35000);
-      const isOffline = !isHistory && !isOnline;
-      // ------------------------------------
-
-      const perc = Number.isFinite(Number(data?.perc)) ? Number(data.perc) : 100;
-      
-      const liveMins = data?.minsLeft !== undefined ? Number(data.minsLeft) : null;
-      const liveSecs = data?.secsLeft !== undefined ? Number(data.secsLeft) : null;
-      
-      const expectedMs = Number(data?.estimatedCompletionAt);
-      let finishTime = null;
-      if (expectedMs && expectedMs > 0) {
-        finishTime = new Date(expectedMs);
-      } else if (liveMins !== null && liveMins < 999) {
-        finishTime = new Date(nowTick + (liveMins * 60000) + (liveSecs * 1000));
-      }
-      const finishLabel = finishTime ? finishTime.toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' }) : '--';
-      
+      const perc = getDevicePercent(data);
+      const totalMl = safeNum(data?.totalMl, DEFAULT_TOTAL_ML);
+      const mlRemaining = getDeviceMlRemaining(data);
+      const mlInfused = Math.max(0, totalMl - mlRemaining);
+      const isOnline = !isHistory && isDeviceOnlineNow(data);
       const isCrit = perc <= 10 && !isHistory;
-      
+      const finishTime = (() => {
+        const expectedMs = Number(data?.estimatedCompletionAt);
+        if (expectedMs && expectedMs > 0) return new Date(expectedMs);
+        const mins = data?.minsLeft !== undefined ? Number(data.minsLeft) : null;
+        const secs = data?.secsLeft !== undefined ? Number(data.secsLeft) : null;
+        if (mins !== null && mins < 999) return new Date(nowTick + (mins * 60000) + ((secs || 0) * 1000));
+        return null;
+      })();
+      const finishLabel = finishTime ? finishTime.toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' }) : '--';
       const displayName = data?.patientName || `Room ${data?.room || '-'} - Bed ${data?.bed || '-'}`;
-      const remainingMs = isHistory ? 0 : getRemainingMs(data);
-      const timeString = isHistory ? 'Done' : (liveMins !== null && liveMins < 999 ? `${liveMins}m ${String(liveSecs ?? 0).padStart(2, '0')}s left` : `${formatDuration(remainingMs)} left`);
+      const timeString = isHistory ? 'Done' : `${formatDuration(getRemainingMs(data))} left`;
+      const canManage = !isHistory && (!currentUserUid || data?.nurseId === currentUserUid);
 
       return (
-        <div className={`relative bg-white rounded-2xl p-4 md:p-5 border transition-all duration-300 shadow-sm flex flex-col justify-between ${isCrit || data?.salineRemoved ? 'border-red-400 critical-alert' : (isOffline ? 'border-amber-400' : 'border-slate-200')}`}>
+        <div className={`relative bg-white rounded-2xl p-4 md:p-5 border transition-all duration-300 shadow-sm flex flex-col justify-between ${isCrit || data?.salineRemoved ? 'border-red-400 critical-alert' : (isOnline ? 'border-slate-200' : 'border-amber-400')}`}>
           <div>
             <div className="flex justify-between items-start mb-4 gap-2">
               <div className="pr-2 min-w-0 flex-1">
@@ -451,6 +400,11 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
                     <span className={`px-2 py-1 rounded-md border shrink-0 ${isOnline ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
                       <i className={`fas ${isOnline ? 'fa-wifi' : 'fa-wifi-slash'} mr-1 ${isOnline ? 'text-emerald-500' : 'text-amber-500'}`}></i>
                       {isOnline ? 'Online' : 'Offline'}
+                    </span>
+                  )}
+                  {data?.handoverPendingToName && !isHistory && (
+                    <span className="px-2 py-1 rounded-md border shrink-0 bg-purple-50 text-purple-700 border-purple-100">
+                      <i className="fas fa-share mr-1"></i> To {data.handoverPendingToName}
                     </span>
                   )}
                 </div>
@@ -469,40 +423,55 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
               <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
                 <div className={`h-full rounded-full transition-all duration-1000 ${isHistory ? 'bg-emerald-500' : (perc<=10 || data?.salineRemoved ? 'bg-red-500' : 'bg-gradient-to-r from-blue-500 to-indigo-500')}`} style={{ width: `${Math.max(0, Math.min(100, perc))}%` }}></div>
               </div>
-              {!isHistory && (
-                <div className="mt-3 space-y-1.5">
-                  {data?.salineRemoved && (
-                    <div className="bg-red-100 border border-red-200 text-red-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
-                      <i className="fas fa-exclamation-triangle mr-1.5"></i> Saline Removed!
-                    </div>
-                  )}
-                  {data?.blockageSuspected && !data?.salineRemoved && (
-                    <div className="bg-amber-100 border border-amber-200 text-amber-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
-                      <i className="fas fa-ban mr-1.5"></i> Flow Blockage Detected!
-                    </div>
-                  )}
-                  <div className="text-[10px] text-slate-500 font-medium">Expected completion at <span className="font-bold text-slate-700">{finishLabel}</span></div>
+              <div className="mt-3 space-y-1.5">
+                {!isHistory && data?.salineRemoved && (
+                  <div className="bg-red-100 border border-red-200 text-red-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
+                    <i className="fas fa-exclamation-triangle mr-1.5"></i> Saline Removed!
+                  </div>
+                )}
+                {!isHistory && data?.blockageSuspected && !data?.salineRemoved && (
+                  <div className="bg-amber-100 border border-amber-200 text-amber-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
+                    <i className="fas fa-ban mr-1.5"></i> Flow Blockage Detected!
+                  </div>
+                )}
+                <div className="text-[10px] text-slate-500 font-medium flex flex-wrap gap-2">
+                  <span className="font-bold text-slate-700">{formatMl(mlInfused)} / {formatMl(totalMl)} used</span>
+                  <span>•</span>
+                  <span className="font-bold text-slate-700">{formatMl(mlRemaining)} left</span>
+                  {!isHistory && <><span>•</span><span>Expected completion at <span className="font-bold text-slate-700">{finishLabel}</span></span></>}
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
           <div className="flex justify-between items-center pt-3 border-t border-slate-100 mt-auto gap-3">
             <div className="text-[9px] md:text-[10px] text-slate-500 font-medium min-w-0">
-              <div className="mb-1 text-slate-700 font-bold flex items-center truncate max-w-[150px]"><i className="fas fa-user-nurse mr-1.5 text-slate-400"></i><span className="truncate">{data?.nurseName || 'Unknown Staff'}</span></div>
+              <div className="mb-1 text-slate-700 font-bold flex items-center truncate max-w-[160px]"><i className="fas fa-user-nurse mr-1.5 text-slate-400"></i><span className="truncate">{data?.nurseName || 'Unknown Staff'}</span></div>
               {isHistory ? (
                 <span className={`px-2 py-0.5 rounded-md inline-block ${data?.autoDischarged ? 'text-amber-600 bg-amber-50' : 'text-emerald-600 bg-emerald-50'}`}>
                   <i className={`fas ${data?.autoDischarged ? 'fa-clock' : 'fa-check-circle'} mr-1`}></i>
                   {data?.autoDischarged ? 'Auto Discharged' : new Date(data?.completedAt || Date.now()).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
                 </span>
               ) : (
-                <span className="text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md inline-block">Start: {new Date(data?.startTime || Date.now()).toLocaleString('en-IN', { timeStyle: 'short' })}</span>
+                <div className="space-y-1">
+                  <span className="text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md inline-block">Start: {new Date(data?.startTime || Date.now()).toLocaleString('en-IN', { timeStyle: 'short' })}</span>
+                  {data?.handoverRequestedByName && data?.handoverPendingToName && <span className="text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md inline-block">Transfer: {data.handoverRequestedByName} → {data.handoverPendingToName}</span>}
+                </div>
               )}
             </div>
             {!isHistory && (
-              <button onClick={() => { if (onComplete) onComplete(data.deviceId); }} className="bg-slate-900 active:bg-emerald-600 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5 shrink-0">
-                <span>Discharge</span> <i className="fas fa-check text-slate-400"></i>
-              </button>
+              <div className="flex gap-2 shrink-0">
+                {canManage && onShare && (
+                  <button onClick={() => onShare(data)} className="bg-indigo-600 active:bg-indigo-700 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5">
+                    <i className="fas fa-share"></i> Share
+                  </button>
+                )}
+                {canManage && onComplete && (
+                  <button onClick={() => { if (onComplete) onComplete(data.deviceId); }} className="bg-slate-900 active:bg-emerald-600 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5">
+                    <span>Discharge</span> <i className="fas fa-check text-slate-400"></i>
+                  </button>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -563,6 +532,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
       const [loading, setLoading] = useState(false);
       const [deviceStatus, setDeviceStatus] = useState('idle');
       const [alertPrefs, setAlertPrefs] = useState(DEFAULT_PERCENT_ALERTS);
+      const [mlAlerts, setMlAlerts] = useState(true);
 
       useEffect(() => {
         document.body.classList.toggle('modal-open', isOpen);
@@ -571,6 +541,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
           setLoading(false);
           setDeviceStatus('idle');
           setAlertPrefs(DEFAULT_PERCENT_ALERTS);
+          setMlAlerts(true);
         }
         return () => document.body.classList.remove('modal-open');
       }, [isOpen]);
@@ -622,6 +593,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
             startTime: Date.now(),
             lastUpdate: Date.now(),
             perc: 100,
+            mlLeft: DEFAULT_TOTAL_ML,
             minsLeft: 60,
             secsLeft: 0,
             rawWeight: 0,
@@ -629,7 +601,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
             flowRate: 0,
             deviceOnline: true,
             autoDischargeAt: Date.now() + INFUSION_DURATION_MS,
-            notificationSettings: { mode: 'percent', percentAlerts: alertPrefs }
+            notificationSettings: { mode: 'both', percentAlerts: alertPrefs, mlAlerts }
           });
 
           setForm({ id: '', name: '', room: '', bed: '' });
@@ -695,11 +667,12 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
                   <input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} placeholder="Patient Name (Optional)" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 transition-colors" />
                 </div>
 
+
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
                   <div className="flex items-center justify-between mb-3 gap-3">
                     <div>
                       <div className="text-[10px] uppercase tracking-wider font-extrabold text-slate-500">Percentage alerts</div>
-                      <div className="text-xs text-slate-400 mt-1">Turn individual percentage notifications on or off</div>
+                      <div className="text-xs text-slate-400 mt-1">Turn percentage notifications on or off</div>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
@@ -712,99 +685,16 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
                       );
                     })}
                   </div>
+                  <div className="mt-3 flex items-center gap-2">
+                    <button type="button" onClick={() => setMlAlerts(v => !v)} className={`rounded-xl px-3 py-2 text-xs font-extrabold border transition-all ${mlAlerts ? 'bg-blue-50 border-blue-300 text-blue-700' : 'bg-slate-100 border-slate-200 text-slate-400'}`}>
+                      100ml alerts {mlAlerts ? 'On' : 'Off'}
+                    </button>
+                    <div className="text-[10px] text-slate-400 font-semibold">Notification format: <span className="font-bold text-slate-700">ml + % + ETA</span></div>
+                  </div>
                 </div>
 
                 <button onClick={handleSubmit} disabled={isButtonDisabled} className={`w-full mt-1 py-4 rounded-xl font-bold shadow-lg transition-all flex justify-center items-center gap-2 border-none outline-none ${buttonClass}`}>
                   {buttonContent}
-                </button>
-              </div>
-            </div>
-          </div>
-        </PortalModal>
-      );
-    };
-
-    const EditNurseModal = ({ isOpen, onClose, hospitalId, currentNurse, onSuccess }) => {
-      const [name, setName] = useState('');
-      const [newPassword, setNewPassword] = useState('');
-      const [loading, setLoading] = useState(false);
-
-      useEffect(() => {
-        document.body.classList.toggle('modal-open', isOpen);
-        return () => document.body.classList.remove('modal-open');
-      }, [isOpen]);
-
-      useEffect(() => {
-        if (currentNurse) {
-          setName(currentNurse.name || '');
-          setNewPassword('');
-        }
-      }, [currentNurse]);
-
-      const handleSave = async () => {
-        if (!name.trim()) return alert('Name cannot be empty.');
-        setLoading(true);
-        try {
-          const existingSnap = await db.ref(`hospitals/${hospitalId}/nurses`).once('value');
-          let duplicate = false;
-          existingSnap.forEach(child => {
-            const v = child.val() || {};
-            if (v.uid !== currentNurse.uid && normalizeName(v.name) === normalizeName(name)) duplicate = true;
-          });
-          if (duplicate) {
-            alert('Another staff member already has this name. Please use a unique name.');
-            setLoading(false);
-            return;
-          }
-
-          const updates = { name: name.trim() };
-
-          if (newPassword.trim()) {
-            updates.pendingPassword = newPassword.trim();
-            updates.passwordChangeRequestedAt = Date.now();
-            updates.passwordChangeStatus = 'pending';
-          }
-
-          await db.ref(`hospitals/${hospitalId}/nurses/${currentNurse.uid}`).update(updates);
-
-          onSuccess();
-          onClose();
-        } catch (e) {
-          alert(e.message);
-        }
-        setLoading(false);
-      };
-
-      if (!isOpen || !currentNurse) return null;
-
-      return (
-        <PortalModal open={isOpen}>
-          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
-            <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none mx-auto">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="font-extrabold text-slate-800 text-xl">Edit Staff Details</h3>
-                <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 active:bg-slate-200 flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
-              </div>
-              <div className="space-y-4">
-                <input value={name} onChange={e=>setName(e.target.value)} placeholder="Full Name" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium transition-colors" />
-                <div className="text-[11px] font-mono text-slate-500 bg-slate-50 p-3 rounded-xl border-none break-all">ID: {currentNurse.email}</div>
-
-                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
-                  <div className="text-[10px] uppercase tracking-wider font-bold text-amber-700 mb-1">Change password request</div>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={e=>setNewPassword(e.target.value)}
-                    placeholder="New password"
-                    className="w-full p-3 bg-white rounded-xl text-sm font-bold text-slate-700"
-                  />
-                  <div className="text-[10px] text-amber-700/80 mt-2">
-                    This stores a pending password request in Firebase. A backend Cloud Function must apply it to Firebase Auth.
-                  </div>
-                </div>
-
-                <button onClick={handleSave} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all border-none outline-none">
-                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Save Changes</span>}
                 </button>
               </div>
             </div>
@@ -863,16 +753,8 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
             if (String(n.email || '').toLowerCase() === String(generatedEmail).toLowerCase()) duplicateEmail = true;
           });
 
-          if (duplicateName) {
-            alert('A staff member with this name already exists. Please use a different name.');
-            setLoading(false);
-            return;
-          }
-          if (duplicateEmail) {
-            alert('This staff email already exists in the hospital database. Please use a different name.');
-            setLoading(false);
-            return;
-          }
+          if (duplicateName) { alert('A staff member with this name already exists. Please use a different name.'); setLoading(false); return; }
+          if (duplicateEmail) { alert('This staff email already exists in the hospital database. Please use a different name.'); setLoading(false); return; }
 
           await secondaryAuth.setPersistence(firebase.auth.Auth.Persistence.NONE);
           const userCredential = await secondaryAuth.createUserWithEmailAndPassword(generatedEmail, form.password);
@@ -970,10 +852,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
           alert('Hospital name, location, and password are required. Password must be at least 6 characters.');
           return;
         }
-        if (!generatedHospitalId) {
-          alert('Please enter a valid hospital name and location.');
-          return;
-        }
+        if (!generatedHospitalId) { alert('Please enter a valid hospital name and location.'); return; }
         setLoading(true);
         const secondaryAuth = getSecondaryAuth();
         try {
@@ -989,7 +868,8 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
             active_devices: {},
             history: {},
             nurses: {},
-            registered_devices: {}
+            registered_devices: {},
+            handover_requests: {}
           });
 
           await secondaryAuth.setPersistence(firebase.auth.Auth.Persistence.NONE);
@@ -1064,29 +944,228 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
       );
     };
 
-    const claimAndArchiveDevice = async (hospitalId, deviceId, completionType = 'manual', extraFields = {}) => {
-      const activeRef = db.ref(`hospitals/${hospitalId}/active_devices/${deviceId}`);
-      const historyRef = db.ref(`hospitals/${hospitalId}/history`);
-      const tx = await activeRef.transaction((current) => {
-        if (!current) return;
-        if (current.completionLock || current.completedAt) return;
-        return { ...current, completionLock: { type: completionType, claimedAt: Date.now() } };
+    const EditNurseModal = ({ isOpen, onClose, hospitalId, currentNurse, onSuccess }) => {
+      const [name, setName] = useState('');
+      const [newPassword, setNewPassword] = useState('');
+      const [loading, setLoading] = useState(false);
+
+      useEffect(() => {
+        document.body.classList.toggle('modal-open', isOpen);
+        return () => document.body.classList.remove('modal-open');
+      }, [isOpen]);
+
+      useEffect(() => {
+        if (currentNurse) {
+          setName(currentNurse.name || '');
+          setNewPassword('');
+        }
+      }, [currentNurse]);
+
+      const handleSave = async () => {
+        if (!name.trim()) return alert('Name cannot be empty.');
+        setLoading(true);
+        try {
+          const existingSnap = await db.ref(`hospitals/${hospitalId}/nurses`).once('value');
+          let duplicate = false;
+          existingSnap.forEach(child => {
+            const v = child.val() || {};
+            if (v.uid !== currentNurse.uid && normalizeName(v.name) === normalizeName(name)) duplicate = true;
+          });
+          if (duplicate) { alert('Another staff member already has this name. Please use a unique name.'); setLoading(false); return; }
+
+          const updates = { name: name.trim() };
+          if (newPassword.trim()) {
+            updates.pendingPassword = newPassword.trim();
+            updates.passwordChangeRequestedAt = Date.now();
+            updates.passwordChangeStatus = 'pending';
+          }
+          await db.ref(`hospitals/${hospitalId}/nurses/${currentNurse.uid}`).update(updates);
+          onSuccess();
+          onClose();
+        } catch (e) {
+          alert(e.message);
+        }
+        setLoading(false);
+      };
+
+      if (!isOpen || !currentNurse) return null;
+
+      return (
+        <PortalModal open={isOpen}>
+          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
+            <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none mx-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-extrabold text-slate-800 text-xl">Edit Staff Details</h3>
+                <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 active:bg-slate-200 flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
+              </div>
+              <div className="space-y-4">
+                <input value={name} onChange={e=>setName(e.target.value)} placeholder="Full Name" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium transition-colors" />
+                <div className="text-[11px] font-mono text-slate-500 bg-slate-50 p-3 rounded-xl border-none break-all">ID: {currentNurse.email}</div>
+                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                  <div className="text-[10px] uppercase tracking-wider font-bold text-amber-700 mb-1">Change password request</div>
+                  <input type="password" value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="New password" className="w-full p-3 bg-white rounded-xl text-sm font-bold text-slate-700" />
+                  <div className="text-[10px] text-amber-700/80 mt-2">This stores a pending password request in Firebase. A backend Cloud Function must apply it to Firebase Auth.</div>
+                </div>
+                <button onClick={handleSave} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all border-none outline-none">
+                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Save Changes</span>}
+                </button>
+              </div>
+            </div>
+          </div>
+        </PortalModal>
+      );
+    };
+
+    const ShareDeviceModal = ({ isOpen, onClose, hospitalId, device, nurses, currentUser, onSuccess }) => {
+      const [selectedUid, setSelectedUid] = useState('');
+      const [searchTerm, setSearchTerm] = useState('');
+      const [loading, setLoading] = useState(false);
+
+      useEffect(() => {
+        document.body.classList.toggle('modal-open', isOpen);
+        if (isOpen) {
+          setSelectedUid('');
+          setSearchTerm('');
+        }
+        return () => document.body.classList.remove('modal-open');
+      }, [isOpen]);
+
+      const targets = (nurses || []).filter(n => n && n.uid && n.uid !== currentUser?.uid && !isNurseDisabled(n));
+      const filteredTargets = targets.filter(n => {
+        const q = searchTerm.trim().toLowerCase();
+        if (!q) return true;
+        return [n.name, n.email, n.uid].some(v => String(v || '').toLowerCase().includes(q));
       });
-      if (!tx.committed || !tx.snapshot.exists()) return false;
-      const data = tx.snapshot.val();
-      if (!data || !data.completionLock) return false;
-      const { completionLock, ...payloadBase } = data;
-      const historyPayload = { ...payloadBase, ...extraFields, completedAt: Date.now(), completedVia: completionType, autoDischarged: completionType === 'auto', historyCreatedAt: Date.now() };
-      try {
-        const newHistoryRef = historyRef.push();
-        historyPayload.historyId = newHistoryRef.key;
-        await newHistoryRef.set(historyPayload);
-        await activeRef.remove();
-        return true;
-      } catch (e) {
-        console.error('Archive move failed:', e);
-        return false;
-      }
+
+      const sendRequest = async () => {
+        if (!device?.deviceId) return;
+        if (!selectedUid) { alert('Please select a nurse.'); return; }
+        const target = targets.find(t => t.uid === selectedUid);
+        if (!target) { alert('Selected nurse not found.'); return; }
+        setLoading(true);
+        try {
+          const requestRef = db.ref(`hospitals/${hospitalId}/handover_requests`).push();
+          await requestRef.set({
+            requestId: requestRef.key,
+            deviceId: device.deviceId,
+            fromUid: currentUser.uid,
+            fromName: currentUser.name || 'Staff',
+            fromEmail: currentUser.email || '',
+            toUid: target.uid,
+            toName: target.name || 'Staff',
+            toEmail: target.email || '',
+            status: 'pending',
+            createdAt: Date.now()
+          });
+          await db.ref(`hospitals/${hospitalId}/active_devices/${device.deviceId}`).update({
+            handoverRequestedBy: currentUser.uid,
+            handoverRequestedByName: currentUser.name || 'Staff',
+            handoverPendingTo: target.uid,
+            handoverPendingToName: target.name || 'Staff',
+            handoverRequestedAt: Date.now(),
+            handoverStatus: 'pending'
+          });
+          onSuccess && onSuccess();
+          onClose();
+        } catch (e) {
+          alert(e.message);
+        }
+        setLoading(false);
+      };
+
+      if (!isOpen) return null;
+
+      return (
+        <PortalModal open={isOpen}>
+          <div className="fixed inset-0 z-[999999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 fade-in">
+            <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden">
+              <div className="p-6 border-b border-slate-100 flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-extrabold text-slate-800">Share / Handover</h3>
+                  <p className="text-sm text-slate-500 mt-1">Send patient ownership to another nurse for approval.</p>
+                </div>
+                <button onClick={onClose} className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center"><i className="fas fa-times"></i></button>
+              </div>
+
+              <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto hide-scroll">
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm text-slate-700">
+                  <div className="font-bold">Patient</div>
+                  <div className="mt-1">{device?.patientName || `Room ${device?.room} - Bed ${device?.bed}`}</div>
+                  <div className="mt-1 text-slate-500">Device: {device?.deviceId}</div>
+                  <div className="mt-1 text-slate-500">Current nurse: {device?.nurseName || 'Unknown'}</div>
+                </div>
+
+                <div className="relative">
+                  <input
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    placeholder="Search nurse by name, email, or ID..."
+                    className="w-full p-3.5 pl-11 bg-slate-100 focus:bg-slate-200 rounded-2xl text-sm font-medium text-slate-700 transition-colors"
+                  />
+                  <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                </div>
+
+                <div className="flex items-center justify-between gap-3">
+                  <div className="font-bold text-slate-700 text-sm uppercase tracking-wider">Choose nurse</div>
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{filteredTargets.length} found</div>
+                </div>
+
+                <div className="space-y-2">
+                  {filteredTargets.map(n => (
+                    <label key={n.uid} className={`block p-4 rounded-2xl border cursor-pointer transition-all ${selectedUid === n.uid ? 'border-blue-500 bg-blue-50' : 'border-slate-200 bg-white'}`}>
+                      <div className="flex items-center gap-3">
+                        <input type="radio" checked={selectedUid === n.uid} onChange={() => setSelectedUid(n.uid)} className="w-4 h-4" />
+                        <div className="min-w-0">
+                          <div className="font-bold text-slate-800 truncate">{n.name}</div>
+                          <div className="text-xs text-slate-500 truncate">{n.email}</div>
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                  {filteredTargets.length === 0 && <div className="text-center text-slate-400 py-8 border-2 border-dashed border-slate-200 rounded-2xl">No matching nurse found.</div>}
+                </div>
+              </div>
+
+              <div className="p-4 border-t border-slate-100 flex gap-3">
+                <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
+                <button onClick={sendRequest} disabled={loading || !selectedUid} className="flex-1 py-3 rounded-xl bg-indigo-600 text-white font-bold disabled:opacity-50">
+                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : 'Send Request'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </PortalModal>
+      );
+    };
+
+    const HandoverRequestModal = ({ request, onAccept, onReject, nurseName }) => {
+      if (!request) return null;
+      return (
+        <PortalModal open={!!request}>
+          <div className="fixed inset-0 z-[999999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 fade-in">
+            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
+              <div className="bg-gradient-to-br from-indigo-600 to-blue-600 text-white p-6">
+                <div className="text-sm uppercase tracking-widest font-bold text-blue-100">Incoming handover</div>
+                <h3 className="text-2xl font-extrabold mt-2">Accept this patient?</h3>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm">
+                  <div className="font-bold text-slate-800">Patient</div>
+                  <div className="text-slate-600 mt-1">{request.patientName || `Room ${request.room} - Bed ${request.bed}`}</div>
+                  <div className="text-slate-600 mt-1">Device: {request.deviceId}</div>
+                  <div className="text-slate-600 mt-1">From: {request.fromName}</div>
+                  <div className="text-slate-600 mt-1">To: {nurseName}</div>
+                </div>
+                <p className="text-sm text-slate-500">After accepting, this nurse gets full control of the patient monitoring card.</p>
+              </div>
+              <div className="p-4 border-t border-slate-100 flex gap-3">
+                <button onClick={onReject} className="flex-1 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold">Reject</button>
+                <button onClick={onAccept} className="flex-1 py-3 rounded-xl bg-emerald-600 text-white font-bold">Accept</button>
+              </div>
+            </div>
+          </div>
+        </PortalModal>
+      );
     };
 
     const HospitalDashboard = ({ hospitalId, userRole, isSuperView = false }) => {
@@ -1103,7 +1182,6 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
       const [toast, setToast] = useState(null);
       const [searchTerm, setSearchTerm] = useState('');
       const [filterPeriod, setFilterPeriod] = useState('day');
-      const [scanning, setScanning] = useState(false);
       const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24, nurses: 24, devices: 24 });
 
       const userEmail = auth.currentUser ? auth.currentUser.email : '';
@@ -1124,12 +1202,13 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
 
         metaRef.once('value').then(async snap => {
           if (!snap.exists() && userRole === 'admin') {
-            await metaRef.set({ name: hospitalInfo.name, location: hospitalInfo.loc, createdAt: Date.now(), amcStartDate: Date.now(), active_devices: {}, history: {}, nurses: {}, registered_devices: {} });
+            await metaRef.set({ name: hospitalInfo.name, location: hospitalInfo.loc, createdAt: Date.now(), amcStartDate: Date.now(), active_devices: {}, history: {}, nurses: {}, registered_devices: {}, handover_requests: {} });
           } else if (snap.exists()) {
             const val = snap.val() || {};
             const updates = {};
             if (!val.createdAt) updates.createdAt = Date.now();
             if (!val.amcStartDate) updates.amcStartDate = val.createdAt || Date.now();
+            if (!val.handover_requests) updates.handover_requests = {};
             if (Object.keys(updates).length) metaRef.update(updates);
           }
         });
@@ -1163,27 +1242,6 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
       const totalRegisteredDevices = registeredDevices.length;
       const amcDueDate = new Date((hospitalMeta?.amcStartDate || hospitalMeta?.createdAt || Date.now()) + AMC_CYCLE_MS);
 
-      const scanForAutoDischarge = async () => {
-        if (scanning) return;
-        setScanning(true);
-        try {
-          const now = Date.now();
-          for (const dev of activeDevs) {
-            if (!dev?.deviceId || dev.completionLock) continue;
-            const dueAt = dev.autoDischargeAt || ((dev.startTime || now) + INFUSION_DURATION_MS);
-            if (now >= dueAt) await claimAndArchiveDevice(hospitalId, dev.deviceId, 'auto');
-          }
-        } finally {
-          setScanning(false);
-        }
-      };
-
-      useEffect(() => {
-        scanForAutoDischarge();
-        const id = setInterval(scanForAutoDischarge, 30000);
-        return () => clearInterval(id);
-      }, [hospitalId, activeDevs.length]);
-
       const handleDischarge = async (did) => {
         if (!confirm('Discharge patient and end monitoring?')) return;
         const ok = await claimAndArchiveDevice(hospitalId, did, 'manual', { autoDischarged: false });
@@ -1197,35 +1255,20 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
 
         if (!currentlyDisabled) {
           const activeCount = Object.values(activeData || {}).filter(dev => dev?.nurseId === uid).length;
-          const message = activeCount > 0
-            ? `This staff member is handling ${activeCount} active patient(s). Disabling will stop login immediately. Continue?`
-            : `Disable this staff member now?`;
+          const message = activeCount > 0 ? `This staff member is handling ${activeCount} active patient(s). Disabling will stop login immediately. Continue?` : `Disable this staff member now?`;
           if (!confirm(message)) return;
-
           try {
-            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({
-              disabled: true,
-              disabledAt: Date.now(),
-              disabledBy: userEmail || 'admin'
-            });
+            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({ disabled: true, disabledAt: Date.now(), disabledBy: userEmail || 'admin' });
             setToast({ type: 'success', msg: 'Staff disabled' });
             setTimeout(() => setToast(null), 2000);
-          } catch (e) {
-            alert(e.message);
-          }
+          } catch (e) { alert(e.message); }
         } else {
           if (!confirm('Re-enable this staff member now?')) return;
           try {
-            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({
-              disabled: false,
-              disabledAt: null,
-              disabledBy: null
-            });
+            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({ disabled: false, disabledAt: null, disabledBy: null });
             setToast({ type: 'success', msg: 'Staff enabled' });
             setTimeout(() => setToast(null), 2000);
-          } catch (e) {
-            alert(e.message);
-          }
+          } catch (e) { alert(e.message); }
         }
       };
 
@@ -1267,7 +1310,6 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
       return (
         <div className="space-y-5 md:space-y-6 fade-in w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {toast && <Toast {...toast} />}
-
           <div className="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200 flex items-center mb-5 md:mb-6">
             <i className="fas fa-search text-slate-400 ml-3"></i>
             <input type="text" placeholder="Search Patients, Devices, Staff..." className="w-full p-2 outline-none text-sm text-slate-700 ml-2 font-medium bg-transparent" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
@@ -1340,11 +1382,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
                             <div className="font-extrabold text-slate-800 text-sm md:text-base truncate">{n.name}</div>
                             <div className="text-[10px] md:text-xs font-medium text-slate-500 mt-0.5 truncate">{n.email}</div>
                             <div className="mt-1 flex flex-wrap gap-2 items-center">
-                              {disabled ? (
-                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-amber-100 text-amber-700 border border-amber-200">Disabled</span>
-                              ) : (
-                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 border border-emerald-200">Active</span>
-                              )}
+                              {disabled ? <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-amber-100 text-amber-700 border border-amber-200">Disabled</span> : <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 border border-emerald-200">Active</span>}
                               {activeCount > 0 && <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-100">{activeCount} patient(s)</span>}
                             </div>
                           </div>
@@ -1352,9 +1390,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
                         {!isSuperView && (
                           <div className="flex gap-2 mt-4 pt-3 border-t border-slate-100">
                             <button onClick={() => { setSelectedNurse(n); setShowEditNurse(true); }} className="flex-1 bg-slate-50 active:bg-slate-100 text-slate-600 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none">Edit</button>
-                            <button onClick={() => handleToggleNurseStatus(n)} className={`flex-1 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none ${disabled ? 'bg-emerald-50 active:bg-emerald-100 text-emerald-700' : 'bg-red-50 active:bg-red-100 text-red-600'}`}>
-                              {disabled ? 'Enable' : 'Disable'}
-                            </button>
+                            <button onClick={() => handleToggleNurseStatus(n)} className={`flex-1 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none ${disabled ? 'bg-emerald-50 active:bg-emerald-100 text-emerald-700' : 'bg-red-50 active:bg-red-100 text-red-600'}`}>{disabled ? 'Enable' : 'Disable'}</button>
                           </div>
                         )}
                       </div>
@@ -1389,9 +1425,8 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
                 {isSuperView && <button onClick={() => setShowAddDevice(true)} className="mb-5 bg-indigo-600 active:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 w-full md:w-auto border-none outline-none"><i className="fas fa-microchip"></i> Register New Device to Hospital</button>}
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
                   {filteredDevices.map((dev, i) => {
-                    const isActive = activeData && activeData[dev.deviceId];
+                    const isActive = !!activeData?.[dev.deviceId];
                     const isDeviceOn = dev.lastSeen && (Date.now() - dev.lastSeen < 30000);
-                    
                     return (
                       <div key={dev.deviceId || `${dev.addedAt || 'added'}-${i}`} className="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                         <div className="flex justify-between items-start mb-2 gap-3">
@@ -1427,15 +1462,19 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
       const { id: hid, name: hName } = getHospitalInfo(user.email);
       const [activeData, setActiveData] = useState({});
       const [historyData, setHistoryData] = useState({});
-      const [showAdd, setShowAdd] = useState(false);
-      const [toast, setToast] = useState(null);
+      const [nursesData, setNursesData] = useState({});
       const [tab, setTab] = useState('active');
       const [filterPeriod, setFilterPeriod] = useState('day');
       const [historySearch, setHistorySearch] = useState('');
       const [nurseName, setNurseName] = useState('');
+      const [showAdd, setShowAdd] = useState(false);
+      const [toast, setToast] = useState(null);
+      const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24 });
+      const [shareTarget, setShareTarget] = useState(null);
+      const [handoverRequest, setHandoverRequest] = useState(null);
       const prevStateRef = useRef({});
       const prevAlertRef = useRef({});
-      const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24 });
+      const listenedRequestIdsRef = useRef(new Set());
 
       useEffect(() => {
         try {
@@ -1451,6 +1490,8 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
         const activeRef = hRef.child('active_devices');
         const historyRef = hRef.child('history');
         const nurseProfileRef = hRef.child(`nurses/${user.uid}`);
+        const nursesRef = hRef.child('nurses');
+        const requestsRef = hRef.child('handover_requests');
 
         const nurseHandler = snap => {
           if (!snap.exists()) {
@@ -1472,65 +1513,90 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
           snap.forEach(c => { if (c.val().nurseId === user.uid) h.push(c.val()); });
           setHistoryData(sortHistoryDesc(h));
         };
+        const nursesHandler = snap => setNursesData(snap.val() || {});
+        const requestsHandler = snap => {
+          const all = snap.val() || {};
+          const pending = Object.values(all).filter(r => r && r.toUid === user.uid && r.status === 'pending');
+          if (pending.length) {
+            const latest = pending.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0))[0];
+            if (latest && latest.requestId && !listenedRequestIdsRef.current.has(latest.requestId)) {
+              listenedRequestIdsRef.current.add(latest.requestId);
+              setHandoverRequest(latest);
+            }
+          }
+        };
 
         nurseProfileRef.on('value', nurseHandler);
         activeRef.on('value', activeHandler);
         historyRef.on('value', historyHandler);
+        nursesRef.on('value', nursesHandler);
+        requestsRef.on('value', requestsHandler);
 
         return () => {
           nurseProfileRef.off('value', nurseHandler);
           activeRef.off('value', activeHandler);
           historyRef.off('value', historyHandler);
+          nursesRef.off('value', nursesHandler);
+          requestsRef.off('value', requestsHandler);
         };
       }, [hid, user.uid]);
 
       const userDevices = useMemo(() => sortActiveDevices(Object.values(activeData || {}).filter(dev => dev && dev.nurseId === user.uid)), [activeData, user.uid]);
+      const nurses = useMemo(() => Object.values(nursesData || {}), [nursesData]);
 
       useEffect(() => {
+        if (!ENABLE_ADMIN_NOTIFICATIONS) return;
         const now = Date.now();
         Object.values(activeData || {}).forEach((dev) => {
           const did = dev?.deviceId;
           if (!did || dev.nurseId !== user.uid) return;
-          const currentPerc = dev.perc !== undefined ? Number(dev.perc) : Math.max(0, Math.round((getRemainingMs(dev) / INFUSION_DURATION_MS) * 100));
+          const totalMl = Math.max(100, safeNum(dev.totalMl, DEFAULT_TOTAL_ML));
+          const currentPerc = getDevicePercent(dev);
+          const currentMl = getDeviceMlRemaining(dev);
           const currentRemainingMs = getRemainingMs(dev);
           const lastSeenAt = getDeviceLastSeenAt(dev) || now;
           const prev = prevStateRef.current[did] || {};
-          const prevAlert = prevAlertRef.current[did] || { perc: prev.perc !== undefined ? prev.perc : 100, remainingMs: prev.remainingMs !== undefined ? prev.remainingMs : INFUSION_DURATION_MS, lastUpdate: lastSeenAt };
+          const prevAlert = prevAlertRef.current[did] || { perc: prev.perc !== undefined ? prev.perc : 100, ml: prev.ml !== undefined ? prev.ml : totalMl, remainingMs: prev.remainingMs !== undefined ? prev.remainingMs : INFUSION_DURATION_MS, lastUpdate: lastSeenAt };
           const settings = dev.notificationSettings || {};
-          const notifyByPercent = settings.mode === 'percent' || !settings.mode;
+          const notifyByPercent = settings.mode === 'percent' || settings.mode === 'both' || !settings.mode;
+          const notifyByMl = settings.mlAlerts !== false;
           const percentPrefs = settings.percentAlerts || DEFAULT_PERCENT_ALERTS;
+          const mlThresholds = generateMlThresholds(totalMl);
           const lastChangeAt = prev.lastChangeAt || lastSeenAt;
           const alertState = { ...(prev.alertState || {}) };
 
-          if (currentPerc !== prev.perc) alertState.noFlow = false;
-          if (currentPerc <= 1 && !alertState.empty) { triggerPatientAlert({ title: `Bottle empty: ${dev.patientName || `Room ${dev.room}`}`, body: 'The infusion is empty but not yet discharged.' }); alertState.empty = true; }
+          if (currentPerc !== prev.perc || currentMl !== prev.ml) alertState.noFlow = false;
+          if (currentPerc <= 1 && !alertState.empty) { triggerPatientAlert({ title: `Bottle empty: ${dev.patientName || `Room ${dev.room}`}`, body: `Remaining ${formatMl(currentMl)} (${currentPerc}%). Please discharge now.` }); alertState.empty = true; }
           if (now - lastSeenAt > OFFLINE_ALERT_MS && !alertState.offline) { triggerPatientAlert({ title: `Device Offline: ${dev.patientName || `Room ${dev.room}`}`, body: `No update received for more than ${Math.round(OFFLINE_ALERT_MS / 1000)} seconds.` }); alertState.offline = true; }
           if (currentPerc === prev.perc && (now - lastChangeAt) > NO_FLOW_ALERT_MS && !alertState.noFlow) { triggerPatientAlert({ title: `No flow detected: ${dev.patientName || `Room ${dev.room}`}`, body: 'Sensor looks stuck or infusion has stopped updating.' }); alertState.noFlow = true; }
           if (prev.perc !== undefined && (prev.perc - currentPerc) >= RAPID_DROP_PERCENT && (now - (prev.lastUpdate || lastSeenAt)) <= 120000 && !alertState.rapidDrop) { triggerPatientAlert({ title: `Rapid drop detected: ${dev.patientName || `Room ${dev.room}`}`, body: 'Possible leak or disconnection detected.' }); alertState.rapidDrop = true; }
 
+          let triggered = null;
           if (notifyByPercent) {
             for (let t of ALERT_LEVELS) {
               const enabled = percentPrefs[t] !== false && percentPrefs[String(t)] !== false;
-              if (enabled && (prevAlert.perc > t) && currentPerc <= t) {
-                
-                // --- TIMING FIX: Use Live ESP32 Data for the Message ---
-                const liveMins = dev.minsLeft !== undefined ? Number(dev.minsLeft) : null;
-                const liveSecs = dev.secsLeft !== undefined ? Number(dev.secsLeft) : 0;
-                let textFinish = 'scheduled time';
-                
-                // Add the live ESP32 minutes directly to the current local browser time
-                if (liveMins !== null && liveMins < 999) {
-                  textFinish = new Date(Date.now() + (liveMins * 60000) + (liveSecs * 1000)).toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' });
-                }
-                // --------------------------------------------------------
-
-                triggerPatientAlert({ title: `Saline Alert: ${dev.patientName || `Room ${dev.room}`}`, body: `Fluid reached ${currentPerc}%. Expected completion at ${textFinish}.` });
-                break;
-              }
+              if (enabled && (prevAlert.perc > t) && currentPerc <= t) { triggered = { type: 'percent', value: t }; break; }
             }
           }
-          prevStateRef.current[did] = { perc: currentPerc, remainingMs: currentRemainingMs, lastUpdate: lastSeenAt, lastChangeAt: currentPerc === prev.perc ? lastChangeAt : now, alertState };
-          prevAlertRef.current[did] = { perc: currentPerc, remainingMs: currentRemainingMs };
+          if (!triggered && notifyByMl) {
+            for (let t of mlThresholds) {
+              if ((prevAlert.ml > t) && currentMl <= t) { triggered = { type: 'ml', value: t }; break; }
+            }
+          }
+          if (triggered) {
+            const liveMins = dev.minsLeft !== undefined ? Number(dev.minsLeft) : null;
+            const liveSecs = dev.secsLeft !== undefined ? Number(dev.secsLeft) : 0;
+            let etaText = 'scheduled time';
+            if (liveMins !== null && liveMins < 999) etaText = new Date(Date.now() + (liveMins * 60000) + (liveSecs * 1000)).toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' });
+            const label = triggered.type === 'ml' ? `${triggered.value}ml left` : `${triggered.value}% reached`;
+            triggerPatientAlert({
+              title: `Saline Alert: ${dev.patientName || `Room ${dev.room}`}`,
+              body: `${label}. Remaining ${formatMl(currentMl)} (${currentPerc}%). ETA ${etaText}.`
+            });
+          }
+
+          prevStateRef.current[did] = { perc: currentPerc, ml: currentMl, remainingMs: currentRemainingMs, lastUpdate: lastSeenAt, lastChangeAt: currentPerc === prev.perc && currentMl === prev.ml ? lastChangeAt : now, alertState };
+          prevAlertRef.current[did] = { perc: currentPerc, ml: currentMl, remainingMs: currentRemainingMs };
         });
       }, [activeData, user.uid]);
 
@@ -1549,8 +1615,51 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
       }, [hid, userDevices]);
 
       const handleComplete = async (did) => {
+        const dev = userDevices.find(x => x.deviceId === did);
+        if (!confirm(`Discharge ${dev?.patientName || `device ${did}`}?`)) return;
         const ok = await claimAndArchiveDevice(hid, did, 'manual', { autoDischarged: false });
         if (!ok) alert('Discharge could not be completed. Please try again.');
+      };
+
+      const openShare = (device) => setShareTarget(device);
+
+      const acceptHandover = async () => {
+        const req = handoverRequest;
+        if (!req) return;
+        try {
+          const nurseSnap = await db.ref(`hospitals/${hid}/nurses/${user.uid}`).once('value');
+          const nurseVal = nurseSnap.val() || {};
+          await db.ref(`hospitals/${hid}/active_devices/${req.deviceId}`).update({
+            nurseId: user.uid,
+            nurseName: nurseVal.name || nurseName || user.email.split('@')[0],
+            handoverAcceptedBy: user.uid,
+            handoverAcceptedByName: nurseVal.name || nurseName || user.email.split('@')[0],
+            handoverAcceptedAt: Date.now(),
+            handoverPendingTo: null,
+            handoverPendingToName: null,
+            handoverStatus: 'accepted'
+          });
+          await db.ref(`hospitals/${hid}/handover_requests/${req.requestId}`).update({ status: 'accepted', acceptedAt: Date.now(), acceptedBy: user.uid });
+          setToast({ type: 'success', msg: 'Handover accepted' });
+          setTimeout(()=>setToast(null), 2000);
+          setHandoverRequest(null);
+        } catch (e) {
+          alert(e.message);
+        }
+      };
+
+      const rejectHandover = async () => {
+        const req = handoverRequest;
+        if (!req) return;
+        try {
+          await db.ref(`hospitals/${hid}/handover_requests/${req.requestId}`).update({ status: 'rejected', rejectedAt: Date.now(), rejectedBy: user.uid });
+          await db.ref(`hospitals/${hid}/active_devices/${req.deviceId}`).update({
+            handoverPendingTo: null,
+            handoverPendingToName: null,
+            handoverStatus: 'rejected'
+          });
+        } catch (e) {}
+        setHandoverRequest(null);
       };
 
       const filteredHistory = filterHistoryByTime(Object.values(historyData || {}).filter(item => {
@@ -1571,7 +1680,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
 
             {tab === 'active' && (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
-                {userDevices.slice(0, visibleCounts.active).map((d, i) => <StatusCard key={d.deviceId || `${d.room || 'room'}-${d.bed || 'bed'}-${d.startTime || 'time'}-${i}`} data={d} onComplete={handleComplete} />)}
+                {userDevices.slice(0, visibleCounts.active).map((d, i) => <StatusCard key={d.deviceId || `${d.room || 'room'}-${d.bed || 'bed'}-${d.startTime || 'time'}-${i}`} data={d} onComplete={handleComplete} onShare={openShare} currentUserUid={user.uid} />)}
                 {userDevices.length === 0 && (
                   <div className="col-span-full py-20 text-center border-2 border-dashed border-slate-300 rounded-[2rem] bg-white/50 text-slate-400">
                     <div className="w-14 h-14 md:w-16 md:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4"><i className="fas fa-bed text-xl md:text-2xl text-slate-300"></i></div>
@@ -1604,6 +1713,9 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
           </button>
 
           <PatientFormModal isOpen={showAdd} onClose={()=>setShowAdd(false)} hospitalId={hid} user={{ uid: user.uid, role: 'nurse', name: nurseName || user.email.split('@')[0] }} onSuccess={() => { setToast({type: 'success', msg: 'Infusion Started'}); setTimeout(()=>setToast(null), 2000); }} />
+
+          <ShareDeviceModal isOpen={!!shareTarget} onClose={()=>setShareTarget(null)} hospitalId={hid} device={shareTarget} nurses={nurses} currentUser={{ uid: user.uid, name: nurseName || user.email.split('@')[0], email: user.email }} onSuccess={() => { setToast({type: 'success', msg: 'Handover request sent'}); setTimeout(()=>setToast(null), 2000); }} />
+          <HandoverRequestModal request={handoverRequest} nurseName={nurseName || user.email.split('@')[0]} onAccept={acceptHandover} onReject={rejectHandover} />
         </div>
       );
     };
@@ -1621,37 +1733,27 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
       }, []);
 
       const stats = useMemo(() => {
-        let active = 0, nurses = 0, totalInventory = 0;
+        let active = 0, totalInventory = 0;
         Object.values(hospitals).forEach(h => {
           if (h.active_devices) active += Object.keys(h.active_devices).length;
           if (h.registered_devices) totalInventory += Object.keys(h.registered_devices).length;
-          if (h.nurses) nurses += Object.keys(h.nurses).length;
         });
-        return { active, nurses, devices: totalInventory };
+        return { active, devices: totalInventory };
       }, [hospitals]);
 
       const handleDeleteHospital = async (hid) => {
         const hospitalName = hospitals[hid]?.name || 'this hospital';
         if (!confirm(`Delete ${hospitalName} completely? This will remove all staff, devices, active records, and history.`)) return;
-        try {
-          await db.ref(`hospitals/${hid}`).remove();
-          if (viewId === hid) setViewId(null);
-        } catch (e) {
-          alert(e.message);
-        }
+        try { await db.ref(`hospitals/${hid}`).remove(); if (viewId === hid) setViewId(null); } catch (e) { alert(e.message); }
       };
 
       if (viewId) {
         return (
           <div className="min-h-screen pb-10">
             <header className="bg-slate-900 text-white px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shadow-lg sticky top-0 z-50 backdrop-blur-md bg-slate-900/90 pt-safe gap-3">
-              <button onClick={()=>setViewId(null)} className="flex items-center gap-2 md:gap-3 active:text-blue-400 transition-colors bg-slate-800 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none">
-                <i className="fas fa-arrow-left"></i> <span>Network</span>
-              </button>
+              <button onClick={()=>setViewId(null)} className="flex items-center gap-2 md:gap-3 active:text-blue-400 transition-colors bg-slate-800 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none"><i className="fas fa-arrow-left"></i> <span>Network</span></button>
               <div className="font-extrabold tracking-tight text-sm md:text-base truncate pl-2 flex-1">{hospitals[viewId] ? hospitals[viewId].name : ''}</div>
-              <button onClick={() => handleDeleteHospital(viewId)} className="bg-red-600 active:bg-red-700 text-white px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none shrink-0">
-                Delete Hospital
-              </button>
+              <button onClick={() => handleDeleteHospital(viewId)} className="bg-red-600 active:bg-red-700 text-white px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none shrink-0">Delete Hospital</button>
             </header>
             <div className="py-4 md:py-8"><HospitalDashboard hospitalId={viewId} userRole="admin" isSuperView={true} /></div>
           </div>
@@ -1674,9 +1776,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
 
             <div className="flex justify-between items-center gap-3 flex-wrap">
               <h3 className="font-extrabold text-slate-800 text-lg md:text-xl tracking-tight">Partner Hospitals</h3>
-              <button onClick={() => setShowAddHospital(true)} className="bg-indigo-600 active:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border-none outline-none">
-                <i className="fas fa-hospital-user"></i> Add Hospital
-              </button>
+              <button onClick={() => setShowAddHospital(true)} className="bg-indigo-600 active:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border-none outline-none"><i className="fas fa-hospital-user"></i> Add Hospital</button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
@@ -1687,12 +1787,7 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
                 const amcDate = h.amcStartDate || h.createdAt || h.addedAt || null;
                 return (
                   <div key={hid} onClick={()=>setViewId(hid)} className="bg-white p-5 md:p-6 rounded-[1.5rem] shadow-sm border border-slate-200 cursor-pointer active:shadow-md active:bg-slate-50 transition-all group relative overflow-hidden">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleDeleteHospital(hid); }}
-                      className="absolute top-4 right-4 z-20 bg-red-600 text-white px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border-none outline-none"
-                    >
-                      Delete
-                    </button>
+                    <button onClick={(e) => { e.stopPropagation(); handleDeleteHospital(hid); }} className="absolute top-4 right-4 z-20 bg-red-600 text-white px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border-none outline-none">Delete</button>
                     <div className="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-blue-50 rounded-bl-full -z-0"></div>
                     <div className="relative z-10">
                       <div className="w-12 h-12 md:w-14 md:h-14 bg-white shadow-md border border-slate-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4"><i className="fas fa-hospital"></i></div>
@@ -1764,15 +1859,9 @@ const StatusCard = ({ data, onComplete, isHistory = false }) => {
 
         const nurseRef = db.ref(`hospitals/${info.id}/nurses/${user.uid}`);
         const handler = snap => {
-          if (!snap.exists()) {
-            auth.signOut();
-            return;
-          }
+          if (!snap.exists()) { auth.signOut(); return; }
           const val = snap.val() || {};
-          if (isNurseDisabled(val)) {
-            alert('Your account has been disabled by admin.');
-            auth.signOut();
-          }
+          if (isNurseDisabled(val)) { alert('Your account has been disabled by admin.'); auth.signOut(); }
         };
         nurseRef.on('value', handler);
         return () => nurseRef.off('value', handler);
