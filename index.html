@@ -127,6 +127,35 @@
       return Number.isFinite(n) ? n : fallback;
     };
 
+    const getNurseTrail = (device) => Array.isArray(device?.nurseTrail) ? device.nurseTrail.filter(Boolean) : [];
+    const trailEntryLabel = (entry) => {
+      const name = String(entry?.name || entry?.email || 'Unknown').trim();
+      return entry?.role === 'admin' ? `${name} (Admin)` : name;
+    };
+    const formatNurseTrail = (device) => {
+      const seen = new Set();
+      return getNurseTrail(device)
+        .map(trailEntryLabel)
+        .filter(name => {
+          const key = normalizeName(name);
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+    };
+    const makeTrailEntry = (user, role = 'nurse') => ({
+      uid: user?.uid || '',
+      name: user?.name || user?.displayName || user?.email?.split('@')[0] || 'Staff',
+      email: user?.email || '',
+      role,
+      at: Date.now()
+    });
+    const mergeTrail = (existing = [], nextEntry) => {
+      const out = Array.isArray(existing) ? existing.filter(Boolean).slice() : [];
+      if (nextEntry?.uid || nextEntry?.email || nextEntry?.name) out.push(nextEntry);
+      return out;
+    };
+
     const getHospitalInfo = (email) => {
       if (!email) return { id: 'unknown', name: 'Unknown', loc: '', domain: '' };
       if (email === 'admin@gmail.com') return { id: 'super_admin', name: 'Super Admin', loc: 'Global', domain: '' };
@@ -242,19 +271,31 @@
       } catch (e) {}
     };
 
-    const claimAndArchiveDevice = async (hospitalId, deviceId, completionType = 'manual', extraFields = {}) => {
+    const claimAndArchiveDevice = async (hospitalId, deviceId, completionType = 'manual', extraFields = {}, actor = null) => {
       const activeRef = db.ref(`hospitals/${hospitalId}/active_devices/${deviceId}`);
       const historyRef = db.ref(`hospitals/${hospitalId}/history`);
       const tx = await activeRef.transaction((current) => {
         if (!current) return;
         if (current.completionLock || current.completedAt) return;
-        return { ...current, completionLock: { type: completionType, claimedAt: Date.now() } };
+        return { ...current, completionLock: { type: completionType, claimedAt: Date.now(), actor: actor || null } };
       });
       if (!tx.committed || !tx.snapshot.exists()) return false;
       const data = tx.snapshot.val();
       if (!data || !data.completionLock) return false;
       const { completionLock, ...payloadBase } = data;
-      const historyPayload = { ...payloadBase, ...extraFields, completedAt: Date.now(), completedVia: completionType, autoDischarged: completionType === 'auto', historyCreatedAt: Date.now() };
+      const completedBy = actor || completionLock.actor || null;
+      const historyPayload = {
+        ...payloadBase,
+        ...extraFields,
+        nurseTrail: Array.isArray(payloadBase.nurseTrail) ? payloadBase.nurseTrail : [],
+        completedAt: Date.now(),
+        completedVia: completionType,
+        autoDischarged: completionType === 'auto',
+        completedByUid: completedBy?.uid || '',
+        completedByName: completedBy?.name || 'System',
+        completedByRole: completedBy?.role || 'system',
+        historyCreatedAt: Date.now()
+      };
       try {
         const newHistoryRef = historyRef.push();
         historyPayload.historyId = newHistoryRef.key;
@@ -386,6 +427,9 @@
       const displayName = data?.patientName || `Room ${data?.room || '-'} - Bed ${data?.bed || '-'}`;
       const timeString = isHistory ? 'Done' : `${formatDuration(getRemainingMs(data))} left`;
       const canManage = !isHistory && (!currentUserUid || data?.nurseId === currentUserUid);
+      const nurseTrail = formatNurseTrail(data);
+      const performedByLabel = data?.completedByName ? trailEntryLabel({ name: data.completedByName, role: data.completedByRole }) : '';
+      const trailHasMultiple = nurseTrail.length > 1;
 
       return (
         <div className={`relative bg-white rounded-2xl p-4 md:p-5 border transition-all duration-300 shadow-sm flex flex-col justify-between ${isCrit || data?.salineRemoved ? 'border-red-400 critical-alert' : (isOnline ? 'border-slate-200' : 'border-amber-400')}`}>
@@ -447,15 +491,43 @@
           <div className="flex justify-between items-center pt-3 border-t border-slate-100 mt-auto gap-3">
             <div className="text-[9px] md:text-[10px] text-slate-500 font-medium min-w-0">
               <div className="mb-1 text-slate-700 font-bold flex items-center truncate max-w-[160px]"><i className="fas fa-user-nurse mr-1.5 text-slate-400"></i><span className="truncate">{data?.nurseName || 'Unknown Staff'}</span></div>
-              {isHistory ? (
-                <span className={`px-2 py-0.5 rounded-md inline-block ${data?.autoDischarged ? 'text-amber-600 bg-amber-50' : 'text-emerald-600 bg-emerald-50'}`}>
-                  <i className={`fas ${data?.autoDischarged ? 'fa-clock' : 'fa-check-circle'} mr-1`}></i>
-                  {data?.autoDischarged ? 'Auto Discharged' : new Date(data?.completedAt || Date.now()).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
-                </span>
-              ) : (
+              {!isHistory ? (
                 <div className="space-y-1">
                   <span className="text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md inline-block">Start: {new Date(data?.startTime || Date.now()).toLocaleString('en-IN', { timeStyle: 'short' })}</span>
                   {data?.handoverRequestedByName && data?.handoverPendingToName && <span className="text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md inline-block">Transfer: {data.handoverRequestedByName} → {data.handoverPendingToName}</span>}
+                  {nurseTrail.length > 1 && (
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {nurseTrail.slice(0, 4).map((name, idx) => (
+                        <span key={`${name}-${idx}`} className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                          {name}
+                        </span>
+                      ))}
+                      {nurseTrail.length > 4 && (
+                        <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200">
+                          +{nurseTrail.length - 4} more
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  <span className={`px-2 py-0.5 rounded-md inline-block ${data?.autoDischarged ? 'text-amber-600 bg-amber-50' : 'text-emerald-600 bg-emerald-50'}`}>
+                    <i className={`fas ${data?.autoDischarged ? 'fa-clock' : 'fa-check-circle'} mr-1`}></i>
+                    {data?.autoDischarged ? 'Auto Discharged' : new Date(data?.completedAt || Date.now()).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {nurseTrail.map((name, idx) => (
+                      <span key={`${name}-${idx}`} className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                        {name}
+                      </span>
+                    ))}
+                    {performedByLabel && (
+                      <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                        Closed by {performedByLabel}
+                      </span>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -467,7 +539,7 @@
                   </button>
                 )}
                 {canManage && onComplete && (
-                  <button onClick={() => { if (onComplete) onComplete(data.deviceId); }} className="bg-slate-900 active:bg-emerald-600 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5">
+                  <button onClick={() => onComplete(data)} className="bg-slate-900 active:bg-emerald-600 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5">
                     <span>Discharge</span> <i className="fas fa-check text-slate-400"></i>
                   </button>
                 )}
@@ -590,6 +662,10 @@
             bed: form.bed,
             nurseId: user.uid,
             nurseName: user.name || 'Staff',
+            nurseTrail: [makeTrailEntry(user, user.role || 'nurse')],
+            createdByUid: user.uid,
+            createdByName: user.name || 'Staff',
+            createdByRole: user.role || 'nurse',
             startTime: Date.now(),
             lastUpdate: Date.now(),
             perc: 100,
@@ -1001,10 +1077,18 @@
               <div className="space-y-4">
                 <input value={name} onChange={e=>setName(e.target.value)} placeholder="Full Name" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium transition-colors" />
                 <div className="text-[11px] font-mono text-slate-500 bg-slate-50 p-3 rounded-xl border-none break-all">ID: {currentNurse.email}</div>
-                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
-                  <div className="text-[10px] uppercase tracking-wider font-bold text-amber-700 mb-1">Change password request</div>
-                  <input type="password" value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="New password" className="w-full p-3 bg-white rounded-xl text-sm font-bold text-slate-700" />
-                  <div className="text-[10px] text-amber-700/80 mt-2">This stores a pending password request in Firebase. A backend Cloud Function must apply it to Firebase Auth.</div>
+                <div className="rounded-3xl p-4 border border-amber-200 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center"><i className="fas fa-lock"></i></div>
+                    <div>
+                      <div className="text-[10px] uppercase tracking-wider font-black text-amber-700">Change password</div>
+                      <div className="text-[11px] text-amber-700/80">Save a new password request for this nurse</div>
+                    </div>
+                  </div>
+                  <input type="password" value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="New password" className="w-full p-3.5 bg-white/90 border border-amber-100 rounded-2xl text-sm font-bold text-slate-700 placeholder-slate-400 shadow-sm" />
+                  <div className="text-[10px] text-amber-800/80 mt-2 leading-5">
+                    The request is stored in Firebase. To update Firebase Auth directly, the app needs a secure backend or Cloud Function.
+                  </div>
                 </div>
                 <button onClick={handleSave} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all border-none outline-none">
                   {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Save Changes</span>}
@@ -1088,11 +1172,31 @@
               </div>
 
               <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto hide-scroll">
-                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm text-slate-700">
-                  <div className="font-bold">Patient</div>
-                  <div className="mt-1">{device?.patientName || `Room ${device?.room} - Bed ${device?.bed}`}</div>
-                  <div className="mt-1 text-slate-500">Device: {device?.deviceId}</div>
-                  <div className="mt-1 text-slate-500">Current nurse: {device?.nurseName || 'Unknown'}</div>
+                <div className="rounded-3xl p-4 md:p-5 border border-blue-100 bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50 shadow-sm">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 border border-blue-100 text-[10px] font-extrabold tracking-widest uppercase text-blue-700">
+                    <i className="fas fa-user-injured"></i> Patient details
+                  </div>
+                  <div className="mt-3 text-lg md:text-xl font-black text-slate-800 truncate">
+                    {device?.patientName || `Room ${device?.room} - Bed ${device?.bed}`}
+                  </div>
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <div className="rounded-2xl bg-white/90 border border-blue-100 px-3 py-2">
+                      <div className="text-[9px] font-black uppercase tracking-widest text-blue-500">Device ID</div>
+                      <div className="font-mono font-bold text-slate-800 mt-0.5 truncate">{device?.deviceId}</div>
+                    </div>
+                    <div className="rounded-2xl bg-white/90 border border-indigo-100 px-3 py-2">
+                      <div className="text-[9px] font-black uppercase tracking-widest text-indigo-500">Room</div>
+                      <div className="font-bold text-slate-800 mt-0.5 truncate">{device?.room || '-'}</div>
+                    </div>
+                    <div className="rounded-2xl bg-white/90 border border-violet-100 px-3 py-2">
+                      <div className="text-[9px] font-black uppercase tracking-widest text-violet-500">Bed</div>
+                      <div className="font-bold text-slate-800 mt-0.5 truncate">{device?.bed || '-'}</div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold">
+                    <span className="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">Current nurse: {device?.nurseName || 'Unknown'}</span>
+                    {Array.isArray(device?.nurseTrail) && device.nurseTrail.length > 1 && <span className="px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100">Shared nurses: {formatNurseTrail(device).join(' • ')}</span>}
+                  </div>
                 </div>
 
                 <div className="relative">
@@ -1168,6 +1272,65 @@
       );
     };
 
+    const DischargeConfirmModal = ({ open, device, onCancel, onConfirm, loading = false, title = 'Discharge patient' }) => {
+      if (!open || !device) return null;
+      const trail = formatNurseTrail(device);
+      const completionLabel = device?.patientName || `Room ${device?.room || '-'} - Bed ${device?.bed || '-'}`;
+      return (
+        <PortalModal open={open}>
+          <div className="fixed inset-0 z-[999999] bg-black/70 backdrop-blur-md flex items-center justify-center p-4 fade-in">
+            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+              <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white p-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-extrabold tracking-widest uppercase text-blue-200">
+                  <i className="fas fa-triangle-exclamation"></i> Confirmation
+                </div>
+                <h3 className="text-2xl font-extrabold mt-4">{title}</h3>
+                <p className="text-sm text-slate-300 mt-2">This will move the patient into history and stop live monitoring.</p>
+              </div>
+              <div className="p-5 md:p-6 space-y-4">
+                <div className="rounded-3xl p-4 border border-blue-100 bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-blue-600">Patient summary</div>
+                  <div className="mt-2 text-xl font-black text-slate-800">{completionLabel}</div>
+                  <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                    <div className="rounded-2xl bg-white border border-blue-100 px-3 py-2">
+                      <div className="text-[9px] font-black uppercase tracking-widest text-blue-500">Device</div>
+                      <div className="font-mono font-bold text-slate-800 mt-0.5 truncate">{device?.deviceId}</div>
+                    </div>
+                    <div className="rounded-2xl bg-white border border-indigo-100 px-3 py-2">
+                      <div className="text-[9px] font-black uppercase tracking-widest text-indigo-500">Room / Bed</div>
+                      <div className="font-bold text-slate-800 mt-0.5 truncate">{device?.room || '-'} / {device?.bed || '-'}</div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <span className="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs font-bold">
+                      Current nurse: {device?.nurseName || 'Unknown'}
+                    </span>
+                    {trail.length > 1 && (
+                      <span className="px-3 py-1.5 rounded-full bg-violet-50 text-violet-700 border border-violet-100 text-xs font-bold">
+                        Team: {trail.join(' • ')}
+                      </span>
+                    )}
+                    {device?.completedByName && (
+                      <span className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 text-xs font-bold">
+                        Closed by {trailEntryLabel({ name: device.completedByName, role: device.completedByRole })}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <p className="text-sm text-slate-500 leading-6">Press confirm to discharge now, or cancel to keep monitoring active.</p>
+              </div>
+              <div className="p-4 border-t border-slate-100 flex gap-3">
+                <button onClick={onCancel} className="flex-1 py-3.5 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
+                <button onClick={onConfirm} disabled={loading} className="flex-1 py-3.5 rounded-xl bg-indigo-600 text-white font-bold disabled:opacity-60">
+                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : 'Confirm'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </PortalModal>
+      );
+    };
+
     const HospitalDashboard = ({ hospitalId, userRole, isSuperView = false }) => {
       const [hospitalMeta, setHospitalMeta] = useState(null);
       const [activeData, setActiveData] = useState({});
@@ -1183,6 +1346,8 @@
       const [searchTerm, setSearchTerm] = useState('');
       const [filterPeriod, setFilterPeriod] = useState('day');
       const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24, nurses: 24, devices: 24 });
+      const [pendingDischarge, setPendingDischarge] = useState(null);
+      const [pendingDischargeLoading, setPendingDischargeLoading] = useState(false);
 
       const userEmail = auth.currentUser ? auth.currentUser.email : '';
       const hospitalInfo = getHospitalInfo(userEmail);
@@ -1242,10 +1407,28 @@
       const totalRegisteredDevices = registeredDevices.length;
       const amcDueDate = new Date((hospitalMeta?.amcStartDate || hospitalMeta?.createdAt || Date.now()) + AMC_CYCLE_MS);
 
-      const handleDischarge = async (did) => {
-        if (!confirm('Discharge patient and end monitoring?')) return;
-        const ok = await claimAndArchiveDevice(hospitalId, did, 'manual', { autoDischarged: false });
-        if (!ok) alert('Discharge could not be completed. Please try again.');
+      const handleDischarge = async (device) => {
+        if (!device?.deviceId) return;
+        setPendingDischarge(device);
+      };
+
+      const confirmPendingDischarge = async () => {
+        const device = pendingDischarge;
+        if (!device?.deviceId) return;
+        setPendingDischargeLoading(true);
+        try {
+          const ok = await claimAndArchiveDevice(
+            hospitalId,
+            device.deviceId,
+            'manual',
+            { autoDischarged: false },
+            { uid: auth.currentUser?.uid || 'admin', name: userEmail || 'Admin', role: 'admin' }
+          );
+          if (!ok) alert('Discharge could not be completed. Please try again.');
+          else setPendingDischarge(null);
+        } finally {
+          setPendingDischargeLoading(false);
+        }
       };
 
       const handleToggleNurseStatus = async (nurse) => {
@@ -1454,6 +1637,14 @@
           <AddNurseModal isOpen={showAddNurse} onClose={()=>setShowAddNurse(false)} hospitalId={hospitalId} hospitalDomain={hospitalInfo.domain} onSuccess={() => { setToast({type: 'success', msg: 'Staff Added'}); setTimeout(()=>setToast(null), 2000); }} />
           <EditNurseModal isOpen={showEditNurse} onClose={()=>setShowEditNurse(false)} hospitalId={hospitalId} currentNurse={selectedNurse} onSuccess={() => { setToast({type: 'success', msg: 'Staff Updated'}); setTimeout(()=>setToast(null), 2000); }} />
           <AddDeviceModal isOpen={showAddDevice} onClose={()=>setShowAddDevice(false)} hospitalId={hospitalId} onSuccess={() => { setToast({type: 'success', msg: 'Device Registered'}); setTimeout(()=>setToast(null), 2000); }} />
+          <DischargeConfirmModal
+            open={!!pendingDischarge}
+            device={pendingDischarge}
+            onCancel={() => setPendingDischarge(null)}
+            onConfirm={confirmPendingDischarge}
+            loading={pendingDischargeLoading}
+            title="Discharge patient"
+          />
         </div>
       );
     };
@@ -1472,6 +1663,8 @@
       const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24 });
       const [shareTarget, setShareTarget] = useState(null);
       const [handoverRequest, setHandoverRequest] = useState(null);
+      const [pendingDischarge, setPendingDischarge] = useState(null);
+      const [pendingDischargeLoading, setPendingDischargeLoading] = useState(false);
       const prevStateRef = useRef({});
       const prevAlertRef = useRef({});
       const listenedRequestIdsRef = useRef(new Set());
@@ -1606,7 +1799,7 @@
           for (const dev of userDevices) {
             if (!dev?.deviceId || dev.completionLock) continue;
             const dueAt = dev.autoDischargeAt || ((dev.startTime || now) + INFUSION_DURATION_MS);
-            if (now >= dueAt) await claimAndArchiveDevice(hid, dev.deviceId, 'auto');
+            if (now >= dueAt) await claimAndArchiveDevice(hid, dev.deviceId, 'auto', {}, { uid: 'system', name: 'System', role: 'system' });
           }
         };
         scanForAutoDischarge();
@@ -1614,11 +1807,28 @@
         return () => clearInterval(id);
       }, [hid, userDevices]);
 
-      const handleComplete = async (did) => {
-        const dev = userDevices.find(x => x.deviceId === did);
-        if (!confirm(`Discharge ${dev?.patientName || `device ${did}`}?`)) return;
-        const ok = await claimAndArchiveDevice(hid, did, 'manual', { autoDischarged: false });
-        if (!ok) alert('Discharge could not be completed. Please try again.');
+      const handleComplete = async (device) => {
+        if (!device?.deviceId) return;
+        setPendingDischarge(device);
+      };
+
+      const confirmPendingDischarge = async () => {
+        const device = pendingDischarge;
+        if (!device?.deviceId) return;
+        setPendingDischargeLoading(true);
+        try {
+          const ok = await claimAndArchiveDevice(
+            hid,
+            device.deviceId,
+            'manual',
+            { autoDischarged: false },
+            { uid: user.uid, name: nurseName || user.email.split('@')[0], role: 'nurse' }
+          );
+          if (!ok) alert('Discharge could not be completed. Please try again.');
+          else setPendingDischarge(null);
+        } finally {
+          setPendingDischargeLoading(false);
+        }
       };
 
       const openShare = (device) => setShareTarget(device);
@@ -1629,9 +1839,13 @@
         try {
           const nurseSnap = await db.ref(`hospitals/${hid}/nurses/${user.uid}`).once('value');
           const nurseVal = nurseSnap.val() || {};
+          const activeSnap = await db.ref(`hospitals/${hid}/active_devices/${req.deviceId}`).once('value');
+          const activeVal = activeSnap.val() || {};
+          const updatedTrail = mergeTrail(activeVal.nurseTrail || [], makeTrailEntry({ uid: user.uid, name: nurseVal.name || nurseName || user.email.split('@')[0], email: user.email }, nurseVal.role || 'nurse'));
           await db.ref(`hospitals/${hid}/active_devices/${req.deviceId}`).update({
             nurseId: user.uid,
             nurseName: nurseVal.name || nurseName || user.email.split('@')[0],
+            nurseTrail: updatedTrail,
             handoverAcceptedBy: user.uid,
             handoverAcceptedByName: nurseVal.name || nurseName || user.email.split('@')[0],
             handoverAcceptedAt: Date.now(),
@@ -1716,6 +1930,14 @@
 
           <ShareDeviceModal isOpen={!!shareTarget} onClose={()=>setShareTarget(null)} hospitalId={hid} device={shareTarget} nurses={nurses} currentUser={{ uid: user.uid, name: nurseName || user.email.split('@')[0], email: user.email }} onSuccess={() => { setToast({type: 'success', msg: 'Handover request sent'}); setTimeout(()=>setToast(null), 2000); }} />
           <HandoverRequestModal request={handoverRequest} nurseName={nurseName || user.email.split('@')[0]} onAccept={acceptHandover} onReject={rejectHandover} />
+          <DischargeConfirmModal
+            open={!!pendingDischarge}
+            device={pendingDischarge}
+            onCancel={() => setPendingDischarge(null)}
+            onConfirm={confirmPendingDischarge}
+            loading={pendingDischargeLoading}
+            title="Discharge patient"
+          />
         </div>
       );
     };
