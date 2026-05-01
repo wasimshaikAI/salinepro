@@ -49,14 +49,14 @@
   </style>
 
   <script>
-    window.onerror = function(message, source, lineno) {
+    window.onerror = function(message, source, lineno, colno) {
       try {
         const old = document.getElementById('__sg_error_banner');
         if (old) old.remove();
         const errDiv = document.createElement('div');
         errDiv.id = '__sg_error_banner';
-        errDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#ef4444;color:white;z-index:999999;padding:14px 18px;font-family:monospace;font-size:13px;word-wrap:break-word;box-shadow:0 6px 18px rgba(0,0,0,0.2)';
-        errDiv.innerHTML = `<strong>WebView Error:</strong> ${message} <span style="opacity:.9;margin-left:10px;font-weight:600">Line: ${lineno}</span> <button onclick="document.getElementById('__sg_error_banner')?.remove()" style="float:right;background:transparent;border:0;color:white;font-weight:700;cursor:pointer">✕</button>`;
+        errDiv.style.cssText = 'position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(92vw,640px);background:linear-gradient(135deg,#0f172a,#1e293b);color:#e2e8f0;z-index:999999;padding:14px 16px;border-radius:22px;border:1px solid rgba(59,130,246,.45);box-shadow:0 20px 50px rgba(15,23,42,.35);font-family:Inter,system-ui,sans-serif;font-size:13px;backdrop-filter:blur(12px)';
+        errDiv.innerHTML = `<div style="display:flex;gap:12px;align-items:flex-start"><div style="width:34px;height:34px;border-radius:12px;background:rgba(59,130,246,.16);display:flex;align-items:center;justify-content:center;flex:0 0 auto">⚠</div><div style="flex:1;min-width:0"><div style="font-weight:800;color:#fff;margin-bottom:4px">WebView Error</div><div style="line-height:1.45;word-break:break-word">${message}</div><div style="opacity:.72;margin-top:4px;font-size:11px">Line ${lineno || '-'}${colno ? ` · Col ${colno}` : ''}</div></div><button onclick="document.getElementById('\__sg_error_banner')?.remove()" style="background:transparent;border:0;color:#cbd5e1;font-size:18px;font-weight:800;cursor:pointer;padding:0 2px">✕</button></div>`;
         document.body.appendChild(errDiv);
       } catch(e) {}
       return false;
@@ -68,8 +68,6 @@
   <div id="root"></div>
 
   <script type="text/babel" data-presets="react">
-    const AMC_PER_DEVICE = 1500;
-    const AMC_CYCLE_MS = 365 * 24 * 60 * 60 * 1000;
     const INFUSION_DURATION_MS = 6 * 60 * 60 * 1000;
     const DEFAULT_TOTAL_ML = 1000;
     const ML_STEP = 100;
@@ -94,6 +92,46 @@
     const { useState, useEffect, useMemo, useRef } = React;
     const { createPortal } = ReactDOM;
     let secondaryAuthInstance = null;
+
+    const removeExistingOverlay = (id) => {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    };
+
+    window.__sg_notify = (message, type = 'error') => {
+      try {
+        removeExistingOverlay('__sg_toast');
+        const toast = document.createElement('div');
+        toast.id = '__sg_toast';
+        toast.style.cssText = `position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:999999;padding:0;min-width:min(92vw,520px);max-width:520px;border-radius:22px;overflow:hidden;box-shadow:0 22px 50px rgba(15,23,42,.34);font-family:Inter,system-ui,sans-serif;backdrop-filter:blur(12px);border:1px solid ${type === 'success' ? 'rgba(52,211,153,.35)' : type === 'info' ? 'rgba(96,165,250,.35)' : 'rgba(251,113,133,.38)'}`;
+        const bg = type === 'success' ? 'linear-gradient(135deg,#065f46,#10b981)' : type === 'info' ? 'linear-gradient(135deg,#1e3a8a,#3b82f6)' : 'linear-gradient(135deg,#7f1d1d,#ef4444)';
+        const icon = type === 'success' ? 'fa-circle-check' : type === 'info' ? 'fa-circle-info' : 'fa-triangle-exclamation';
+        toast.innerHTML = `<div style="background:${bg};color:white;padding:14px 16px;display:flex;gap:12px;align-items:flex-start"><div style="width:38px;height:38px;border-radius:14px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><i class="fas ${icon}"></i></div><div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;opacity:.9;margin-bottom:4px">${type === 'success' ? 'Success' : type === 'info' ? 'Notice' : 'Error'}</div><div style="font-size:14px;line-height:1.45;font-weight:600;word-break:break-word">${String(message || '')}</div></div><button aria-label="Close" style="background:transparent;border:0;color:white;font-size:20px;line-height:1;cursor:pointer;padding:0 2px 0 8px;opacity:.95">×</button></div>`;
+        const btn = toast.querySelector('button');
+        btn.onclick = () => toast.remove();
+        document.body.appendChild(toast);
+        setTimeout(() => { if (toast.isConnected) toast.remove(); }, type === 'success' ? 2400 : 4200);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    window.__sg_confirm = (message, title = 'Please confirm') => new Promise((resolve) => {
+      try {
+        removeExistingOverlay('__sg_confirm_overlay');
+        const overlay = document.createElement('div');
+        overlay.id = '__sg_confirm_overlay';
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(2,6,23,.70);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:16px;font-family:Inter,system-ui,sans-serif';
+        overlay.innerHTML = `<div style="width:min(92vw,420px);background:white;border-radius:28px;overflow:hidden;box-shadow:0 30px 70px rgba(15,23,42,.4);border:1px solid rgba(226,232,240,.9)"><div style="padding:18px 20px;background:linear-gradient(135deg,#0f172a,#1e293b);color:white"><div style="display:flex;gap:12px;align-items:center"><div style="width:42px;height:42px;border-radius:16px;background:rgba(59,130,246,.18);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><i class="fas fa-triangle-exclamation"></i></div><div style="min-width:0"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.24em;font-weight:800;color:#93c5fd;margin-bottom:4px">${title}</div><div style="font-size:20px;font-weight:900;line-height:1.15">Action required</div></div></div></div><div style="padding:20px"><div style="color:#475569;font-size:15px;line-height:1.7;font-weight:600">${String(message || '')}</div><div style="display:flex;gap:12px;margin-top:24px"><button data-cancel style="flex:1;padding:14px 16px;border-radius:18px;border:0;background:#e2e8f0;color:#334155;font-weight:800;font-size:14px">Cancel</button><button data-ok style="flex:1;padding:14px 16px;border-radius:18px;border:0;background:linear-gradient(135deg,#2563eb,#4f46e5);color:white;font-weight:800;font-size:14px;box-shadow:0 14px 30px rgba(37,99,235,.28)">Confirm</button></div></div></div>`;
+        const cleanup = (val) => { if (overlay.isConnected) overlay.remove(); resolve(val); };
+        overlay.querySelector('[data-cancel]').onclick = () => cleanup(false);
+        overlay.querySelector('[data-ok]').onclick = () => cleanup(true);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) cleanup(false); });
+        document.body.appendChild(overlay);
+      } catch (e) {
+        resolve(window.confirm(String(message || '')));
+      }
+    });
 
     const getSecondaryAuth = () => {
       if (secondaryAuthInstance) return secondaryAuthInstance;
@@ -322,9 +360,16 @@
     );
 
     const Toast = ({ msg, type }) => (
-      <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 fade-in w-11/12 max-w-sm justify-center ${type === 'error' ? 'bg-red-600 text-white' : 'bg-slate-900 text-white border-0'}`}>
-        <i className={`fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'} text-emerald-400`}></i>
-        <span className="font-bold text-sm">{msg}</span>
+      <div className={`fixed top-5 left-1/2 -translate-x-1/2 z-[9999] w-[92vw] max-w-md rounded-2xl overflow-hidden shadow-2xl fade-in border ${type === 'error' ? 'border-rose-300 bg-rose-50 text-rose-900' : type === 'success' ? 'border-emerald-300 bg-emerald-50 text-emerald-900' : 'border-blue-300 bg-blue-50 text-blue-900'}`}>
+        <div className={`px-4 py-3 flex items-start gap-3 ${type === 'error' ? 'bg-gradient-to-r from-rose-600 to-rose-500 text-white' : type === 'success' ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white' : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white'}`}>
+          <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0 mt-0.5">
+            <i className={`fas ${type === 'error' ? 'fa-circle-exclamation' : type === 'success' ? 'fa-circle-check' : 'fa-circle-info'} text-sm`}></i>
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-[11px] font-extrabold uppercase tracking-[0.22em] opacity-90 mb-1">{type === 'error' ? 'Error' : type === 'success' ? 'Success' : 'Notice'}</div>
+            <div className="text-sm font-semibold leading-5 break-words">{msg}</div>
+          </div>
+        </div>
       </div>
     );
 
@@ -557,19 +602,19 @@
 
       const handleSubmit = async () => {
         const did = deviceId.trim().toUpperCase();
-        if (!did) { alert('Please enter a valid Device ID.'); return; }
+        if (!did) { window.__sg_notify('Please enter a valid Device ID.'); return; }
         setLoading(true);
         try {
           const snap = await db.ref(`hospitals/${hospitalId}/registered_devices/${did}`).once('value');
           if (snap.exists()) {
-            alert(`Device ID ${did} is already registered to this hospital.`);
+            window.__sg_notify(`Device ID ${did} is already registered to this hospital.`);
           } else {
-            await db.ref(`hospitals/${hospitalId}/registered_devices/${did}`).set({ deviceId: did, addedAt: Date.now() });
+            await db.ref(`hospitals/${hospitalId}/registered_devices/${did}`).set({ deviceId: did, addedAt: Date.now(), startedAt: Date.now() });
             onSuccess();
             setDeviceId('');
             onClose();
           }
-        } catch (e) { alert(e.message); }
+        } catch (e) { window.__sg_notify(e.message); }
         setLoading(false);
       };
 
@@ -645,15 +690,15 @@
 
       const handleSubmit = async () => {
         const did = form.id.trim().toUpperCase();
-        if (!did || !form.room || !form.bed) { alert('Device ID, Room Number, and Bed Number are mandatory.'); return; }
-        if (deviceStatus !== 'valid') { alert('Action blocked. Ensure you are using a valid, registered device ID that is currently idle.'); return; }
+        if (!did || !form.room || !form.bed) { window.__sg_notify('Device ID, Room Number, and Bed Number are mandatory.'); return; }
+        if (deviceStatus !== 'valid') { window.__sg_notify('Action blocked. Ensure you are using a valid, registered device ID that is currently idle.'); return; }
         setLoading(true);
         try {
           const hRef = db.ref(`hospitals/${hospitalId}`);
           const regSnap = await hRef.child(`registered_devices/${did}`).once('value');
-          if (!regSnap.exists() || regSnap.val() === null) { alert(`ACCESS DENIED: The Device ID "${did}" is strictly NOT registered to your hospital's inventory.`); setDeviceStatus('invalid'); setLoading(false); return; }
+          if (!regSnap.exists() || regSnap.val() === null) { window.__sg_notify(`ACCESS DENIED: The Device ID "${did}" is strictly NOT registered to your hospital's inventory.`); setDeviceStatus('invalid'); setLoading(false); return; }
           const activeSnap = await hRef.child(`active_devices/${did}`).once('value');
-          if (activeSnap.exists() && activeSnap.val() !== null) { alert(`ERROR: Device "${did}" is already in use by another patient.`); setDeviceStatus('in_use'); setLoading(false); return; }
+          if (activeSnap.exists() && activeSnap.val() !== null) { window.__sg_notify(`ERROR: Device "${did}" is already in use by another patient.`); setDeviceStatus('in_use'); setLoading(false); return; }
 
           await hRef.child(`active_devices/${did}`).set({
             deviceId: did,
@@ -685,7 +730,7 @@
           onSuccess();
           onClose();
         } catch (e) {
-          alert('Database Error: ' + e.message);
+          window.__sg_notify('Database Error: ' + e.message);
         }
         setLoading(false);
       };
@@ -793,7 +838,7 @@
               <div className="p-7 space-y-4">
                 <div className="bg-slate-50 p-4 rounded-xl border-none"><p className="text-[10px] font-bold tracking-widest text-slate-400 mb-1 uppercase">Email Address</p><p className="font-mono font-bold text-slate-800 break-all">{creds.email}</p></div>
                 <div className="bg-slate-50 p-4 rounded-xl border-none"><p className="text-[10px] font-bold tracking-widest text-slate-400 mb-1 uppercase">Initial Password</p><p className="font-mono font-bold text-slate-800 tracking-wider">{creds.password}</p></div>
-                <button onClick={async () => { try { await copyText(`Email: ${creds.email}\nPassword: ${creds.password}`); alert('Copied!'); } catch (error) { alert('Copy failed. Please copy the credentials manually.'); } }} className="w-full bg-slate-900 active:bg-slate-800 text-white py-4 rounded-xl font-bold transition-colors border-none outline-none">Copy Credentials</button>
+                <button onClick={async () => { try { await copyText(`Email: ${creds.email}\nPassword: ${creds.password}`); window.__sg_notify('Copied!'); } catch (error) { window.__sg_notify('Copy failed. Please copy the credentials manually.'); } }} className="w-full bg-slate-900 active:bg-slate-800 text-white py-4 rounded-xl font-bold transition-colors border-none outline-none">Copy Credentials</button>
                 <button onClick={onClose} className="w-full text-slate-500 active:text-slate-800 py-2 font-bold transition-colors border-none outline-none">Done</button>
               </div>
             </div>
@@ -814,8 +859,8 @@
 
       const handleSubmit = async () => {
         const cleanName = form.name.trim();
-        if (!cleanName || !form.password || form.password.length < 6) { alert('Please fill all required fields. Password must be at least 6 characters.'); return; }
-        if (!generatedEmail) { alert('Enter a valid name to generate staff email.'); return; }
+        if (!cleanName || !form.password || form.password.length < 6) { window.__sg_notify('Please fill all required fields. Password must be at least 6 characters.'); return; }
+        if (!generatedEmail) { window.__sg_notify('Enter a valid name to generate staff email.'); return; }
 
         setLoading(true);
         const secondaryAuth = getSecondaryAuth();
@@ -829,8 +874,8 @@
             if (String(n.email || '').toLowerCase() === String(generatedEmail).toLowerCase()) duplicateEmail = true;
           });
 
-          if (duplicateName) { alert('A staff member with this name already exists. Please use a different name.'); setLoading(false); return; }
-          if (duplicateEmail) { alert('This staff email already exists in the hospital database. Please use a different name.'); setLoading(false); return; }
+          if (duplicateName) { window.__sg_notify('A staff member with this name already exists. Please use a different name.'); setLoading(false); return; }
+          if (duplicateEmail) { window.__sg_notify('This staff email already exists in the hospital database. Please use a different name.'); setLoading(false); return; }
 
           await secondaryAuth.setPersistence(firebase.auth.Auth.Persistence.NONE);
           const userCredential = await secondaryAuth.createUserWithEmailAndPassword(generatedEmail, form.password);
@@ -852,7 +897,7 @@
           setForm({ name: '', password: '' });
           onSuccess();
         } catch (e) {
-          alert(e.message);
+          window.__sg_notify(e.message);
         } finally {
           try { if (secondaryAuth.currentUser) await secondaryAuth.signOut(); } catch (e) {}
         }
@@ -925,22 +970,21 @@
 
       const handleSubmit = async () => {
         if (!form.hospitalName || !form.location || !form.password || form.password.length < 6) {
-          alert('Hospital name, location, and password are required. Password must be at least 6 characters.');
+          window.__sg_notify('Hospital name, location, and password are required. Password must be at least 6 characters.');
           return;
         }
-        if (!generatedHospitalId) { alert('Please enter a valid hospital name and location.'); return; }
+        if (!generatedHospitalId) { window.__sg_notify('Please enter a valid hospital name and location.'); return; }
         setLoading(true);
         const secondaryAuth = getSecondaryAuth();
         try {
           const hospitalRef = db.ref(`hospitals/${generatedHospitalId}`);
           const snap = await hospitalRef.once('value');
-          if (snap.exists()) { alert('That hospital already exists in the network.'); setLoading(false); return; }
+          if (snap.exists()) { window.__sg_notify('That hospital already exists in the network.'); setLoading(false); return; }
 
           await hospitalRef.set({
             name: humanize(form.hospitalName) + ' Hospital',
             location: humanize(form.location),
             createdAt: Date.now(),
-            amcStartDate: Date.now(),
             active_devices: {},
             history: {},
             nurses: {},
@@ -967,7 +1011,7 @@
           onSuccess();
           setForm({ hospitalName: '', location: '', password: '' });
         } catch (e) {
-          alert(e.message);
+          window.__sg_notify(e.message);
         } finally {
           try { if (secondaryAuth.currentUser) await secondaryAuth.signOut(); } catch (e) {}
         }
@@ -1022,6 +1066,7 @@
 
     const EditNurseModal = ({ isOpen, onClose, hospitalId, currentNurse, onSuccess }) => {
       const [name, setName] = useState('');
+      const [email, setEmail] = useState('');
       const [newPassword, setNewPassword] = useState('');
       const [loading, setLoading] = useState(false);
 
@@ -1033,23 +1078,29 @@
       useEffect(() => {
         if (currentNurse) {
           setName(currentNurse.name || '');
+          setEmail(currentNurse.email || '');
           setNewPassword('');
         }
       }, [currentNurse]);
 
       const handleSave = async () => {
-        if (!name.trim()) return alert('Name cannot be empty.');
+        if (!name.trim()) return window.__sg_notify('Name cannot be empty.');
+        if (!email.trim()) return window.__sg_notify('Email cannot be empty.');
         setLoading(true);
         try {
+          const cleanEmail = email.trim().toLowerCase();
           const existingSnap = await db.ref(`hospitals/${hospitalId}/nurses`).once('value');
           let duplicate = false;
+          let duplicateEmail = false;
           existingSnap.forEach(child => {
             const v = child.val() || {};
             if (v.uid !== currentNurse.uid && normalizeName(v.name) === normalizeName(name)) duplicate = true;
+            if (v.uid !== currentNurse.uid && String(v.email || '').toLowerCase() === cleanEmail) duplicateEmail = true;
           });
-          if (duplicate) { alert('Another staff member already has this name. Please use a unique name.'); setLoading(false); return; }
+          if (duplicate) { window.__sg_notify('Another staff member already has this name. Please use a unique name.'); setLoading(false); return; }
+          if (duplicateEmail) { window.__sg_notify('Another staff member already uses this email. Please choose a different email.'); setLoading(false); return; }
 
-          const updates = { name: name.trim() };
+          const updates = { name: name.trim(), email: cleanEmail, emailLower: cleanEmail, updatedAt: Date.now() };
           if (newPassword.trim()) {
             updates.pendingPassword = newPassword.trim();
             updates.passwordChangeRequestedAt = Date.now();
@@ -1059,7 +1110,7 @@
           onSuccess();
           onClose();
         } catch (e) {
-          alert(e.message);
+          window.__sg_notify(e.message);
         }
         setLoading(false);
       };
@@ -1068,29 +1119,35 @@
 
       return (
         <PortalModal open={isOpen}>
-          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
-            <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none mx-auto">
+          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 m-0 fade-in">
+            <div className="bg-white w-[92vw] max-w-md rounded-[28px] p-6 shadow-2xl relative border border-slate-200 outline-none mx-auto">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="font-extrabold text-slate-800 text-xl">Edit Staff Details</h3>
-                <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 active:bg-slate-200 flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
+                <div>
+                  <h3 className="font-extrabold text-slate-800 text-2xl tracking-tight">Edit Staff Details</h3>
+                  <p className="text-xs font-medium text-slate-400 mt-1">Update name, email and password request</p>
+                </div>
+                <button onClick={onClose} className="w-9 h-9 rounded-full bg-slate-100 text-slate-400 active:bg-slate-200 flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
               </div>
               <div className="space-y-4">
-                <input value={name} onChange={e=>setName(e.target.value)} placeholder="Full Name" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium transition-colors" />
-                <div className="text-[11px] font-mono text-slate-500 bg-slate-50 p-3 rounded-xl border-none break-all">ID: {currentNurse.email}</div>
-                <div className="rounded-3xl p-4 border border-amber-200 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 shadow-sm">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center"><i className="fas fa-lock"></i></div>
-                    <div>
-                      <div className="text-[10px] uppercase tracking-wider font-black text-amber-700">Change password</div>
-                      <div className="text-[11px] text-amber-700/80">Save a new password request for this nurse</div>
-                    </div>
-                  </div>
-                  <input type="password" value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="New password" className="w-full p-3.5 bg-white/90 border border-amber-100 rounded-2xl text-sm font-bold text-slate-700 placeholder-slate-400 shadow-sm" />
-                  <div className="text-[10px] text-amber-800/80 mt-2 leading-5">
-                    The request is stored in Firebase. To update Firebase Auth directly, the app needs a secure backend or Cloud Function.
+                <input value={name} onChange={e=>setName(e.target.value)} placeholder="Full Name" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-2xl text-sm font-medium transition-colors" />
+                <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email Address" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-2xl text-sm font-medium transition-colors font-mono" />
+                <div className="text-[11px] font-mono text-slate-500 bg-slate-50 p-3 rounded-2xl border border-slate-100 break-all">ID: {currentNurse.email}</div>
+
+                <div className="bg-amber-50 border border-amber-200 rounded-[24px] p-4">
+                  <div className="text-[10px] uppercase tracking-[0.28em] font-bold text-amber-700 mb-2">Password update request</div>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={e=>setNewPassword(e.target.value)}
+                    placeholder="New password"
+                    className="w-full p-3 bg-white rounded-2xl text-sm font-bold text-slate-700 border border-amber-100"
+                  />
+                  <div className="text-[10px] text-amber-700/80 mt-2 leading-5">
+                    This saves the new password request in Firebase. A secure backend sync is still required to change Firebase Auth credentials for another user.
                   </div>
                 </div>
-                <button onClick={handleSave} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all border-none outline-none">
+
+                <button onClick={handleSave} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all border-none outline-none">
                   {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Save Changes</span>}
                 </button>
               </div>
@@ -1123,9 +1180,9 @@
 
       const sendRequest = async () => {
         if (!device?.deviceId) return;
-        if (!selectedUid) { alert('Please select a nurse.'); return; }
+        if (!selectedUid) { window.__sg_notify('Please select a nurse.'); return; }
         const target = targets.find(t => t.uid === selectedUid);
-        if (!target) { alert('Selected nurse not found.'); return; }
+        if (!target) { window.__sg_notify('Selected nurse not found.'); return; }
         setLoading(true);
         try {
           const requestRef = db.ref(`hospitals/${hospitalId}/handover_requests`).push();
@@ -1152,7 +1209,7 @@
           onSuccess && onSuccess();
           onClose();
         } catch (e) {
-          alert(e.message);
+          window.__sg_notify(e.message);
         }
         setLoading(false);
       };
@@ -1360,19 +1417,16 @@
             name: val.name || hospitalInfo.name,
             location: val.location || hospitalInfo.loc,
             createdAt: val.createdAt || Date.now(),
-            amcStartDate: val.amcStartDate || val.createdAt || Date.now()
           });
         };
         metaRef.on('value', metaHandler);
 
         metaRef.once('value').then(async snap => {
           if (!snap.exists() && userRole === 'admin') {
-            await metaRef.set({ name: hospitalInfo.name, location: hospitalInfo.loc, createdAt: Date.now(), amcStartDate: Date.now(), active_devices: {}, history: {}, nurses: {}, registered_devices: {}, handover_requests: {} });
           } else if (snap.exists()) {
             const val = snap.val() || {};
             const updates = {};
             if (!val.createdAt) updates.createdAt = Date.now();
-            if (!val.amcStartDate) updates.amcStartDate = val.createdAt || Date.now();
             if (!val.handover_requests) updates.handover_requests = {};
             if (Object.keys(updates).length) metaRef.update(updates);
           }
@@ -1405,7 +1459,6 @@
       const nurses = useMemo(() => Object.values(nursesData || {}), [nursesData]);
       const registeredDevices = useMemo(() => Object.values(devicesData || {}), [devicesData]);
       const totalRegisteredDevices = registeredDevices.length;
-      const amcDueDate = new Date((hospitalMeta?.amcStartDate || hospitalMeta?.createdAt || Date.now()) + AMC_CYCLE_MS);
 
       const handleDischarge = async (device) => {
         if (!device?.deviceId) return;
@@ -1424,7 +1477,7 @@
             { autoDischarged: false },
             { uid: auth.currentUser?.uid || 'admin', name: userEmail || 'Admin', role: 'admin' }
           );
-          if (!ok) alert('Discharge could not be completed. Please try again.');
+          if (!ok) window.__sg_notify('Discharge could not be completed. Please try again.');
           else setPendingDischarge(null);
         } finally {
           setPendingDischargeLoading(false);
@@ -1439,29 +1492,29 @@
         if (!currentlyDisabled) {
           const activeCount = Object.values(activeData || {}).filter(dev => dev?.nurseId === uid).length;
           const message = activeCount > 0 ? `This staff member is handling ${activeCount} active patient(s). Disabling will stop login immediately. Continue?` : `Disable this staff member now?`;
-          if (!confirm(message)) return;
+          if (!(await window.__sg_confirm(message, 'Disable Staff Member'))) return;
           try {
             await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({ disabled: true, disabledAt: Date.now(), disabledBy: userEmail || 'admin' });
             setToast({ type: 'success', msg: 'Staff disabled' });
             setTimeout(() => setToast(null), 2000);
-          } catch (e) { alert(e.message); }
+          } catch (e) { window.__sg_notify(e.message); }
         } else {
-          if (!confirm('Re-enable this staff member now?')) return;
+          if (!(await window.__sg_confirm('Re-enable this staff member now?', 'Enable Staff Member'))) return;
           try {
             await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({ disabled: false, disabledAt: null, disabledBy: null });
             setToast({ type: 'success', msg: 'Staff enabled' });
             setTimeout(() => setToast(null), 2000);
-          } catch (e) { alert(e.message); }
+          } catch (e) { window.__sg_notify(e.message); }
         }
       };
 
       const handleDeleteDevice = async (did) => {
-        if (!confirm(`Remove device ${did} from your inventory? Nurses will no longer be able to activate it.`)) return;
+        if (!(await window.__sg_confirm(`Remove device ${did} from your inventory? Nurses will no longer be able to activate it.`, 'Remove Device'))) return;
         try {
           await db.ref(`hospitals/${hospitalId}/registered_devices/${did}`).remove();
           setToast({ type: 'success', msg: 'Device removed' });
           setTimeout(()=>setToast(null), 2000);
-        } catch (e) { alert(e.message); }
+        } catch (e) { window.__sg_notify(e.message); }
       };
 
       if (!hospitalMeta) return <div className="p-12 text-center text-slate-400 font-medium animate-pulse">Syncing Hospital Data...</div>;
@@ -1586,22 +1639,18 @@
 
             {tab === 'devices' && (
               <div>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
                   <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">AMC Due Date</div>
-                    <div className="mt-2 font-bold text-slate-800 text-sm">{amcDueDate.toLocaleDateString('en-IN')}</div>
-                  </div>
-                  <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Devices</div>
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Registered Devices</div>
                     <div className="mt-2 font-black text-slate-800 text-xl">{totalRegisteredDevices}</div>
                   </div>
                   <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Per Amount</div>
-                    <div className="mt-2 font-black text-slate-800 text-xl">{formatMoney(AMC_PER_DEVICE)}</div>
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Active In Use</div>
+                    <div className="mt-2 font-black text-slate-800 text-xl">{Object.keys(activeData || {}).length}</div>
                   </div>
-                  <div className="bg-slate-900 rounded-2xl border border-slate-800 p-4 shadow-sm text-white">
-                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-blue-300">Total Amount</div>
-                    <div className="mt-2 font-black text-2xl">{formatMoney(totalRegisteredDevices * AMC_PER_DEVICE)}</div>
+                  <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Started Today</div>
+                    <div className="mt-2 font-black text-slate-800 text-xl">{Object.values(activeData || {}).filter(d => (d.startTime || 0) >= new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime()).length}</div>
                   </div>
                 </div>
 
@@ -1619,7 +1668,7 @@
                             </div>
                             <div className="min-w-0">
                               <div className="font-mono font-bold text-slate-800 text-sm md:text-base truncate">{dev.deviceId}</div>
-                              <div className="text-[10px] text-slate-400 mt-0.5">Added: {new Date(dev.addedAt || Date.now()).toLocaleDateString('en-IN')}</div>
+                              <div className="text-[10px] text-slate-400 mt-0.5">Started using: {new Date(dev.startedAt || dev.addedAt || Date.now()).toLocaleDateString('en-IN')}</div>
                             </div>
                           </div>
                           <div className={`px-2 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase border shrink-0 ${isActive ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>{isActive ? 'In Use' : 'Idle'}</div>
@@ -1688,13 +1737,13 @@
 
         const nurseHandler = snap => {
           if (!snap.exists()) {
-            alert('Your account has been removed by admin.');
+            window.__sg_notify('Your account has been removed by admin.');
             auth.signOut();
             return;
           }
           const nurseVal = snap.val() || {};
           if (isNurseDisabled(nurseVal)) {
-            alert('Your account has been disabled by admin.');
+            window.__sg_notify('Your account has been disabled by admin.');
             auth.signOut();
             return;
           }
@@ -1824,7 +1873,7 @@
             { autoDischarged: false },
             { uid: user.uid, name: nurseName || user.email.split('@')[0], role: 'nurse' }
           );
-          if (!ok) alert('Discharge could not be completed. Please try again.');
+          if (!ok) window.__sg_notify('Discharge could not be completed. Please try again.');
           else setPendingDischarge(null);
         } finally {
           setPendingDischargeLoading(false);
@@ -1858,7 +1907,7 @@
           setTimeout(()=>setToast(null), 2000);
           setHandoverRequest(null);
         } catch (e) {
-          alert(e.message);
+          window.__sg_notify(e.message);
         }
       };
 
@@ -1965,8 +2014,8 @@
 
       const handleDeleteHospital = async (hid) => {
         const hospitalName = hospitals[hid]?.name || 'this hospital';
-        if (!confirm(`Delete ${hospitalName} completely? This will remove all staff, devices, active records, and history.`)) return;
-        try { await db.ref(`hospitals/${hid}`).remove(); if (viewId === hid) setViewId(null); } catch (e) { alert(e.message); }
+        if (!(await window.__sg_confirm(`Delete ${hospitalName} completely? This will remove all staff, devices, active records, and history.`, 'Delete Hospital'))) return;
+        try { await db.ref(`hospitals/${hid}`).remove(); if (viewId === hid) setViewId(null); } catch (e) { window.__sg_notify(e.message); }
       };
 
       if (viewId) {
@@ -1990,7 +2039,7 @@
               <div className="absolute right-0 top-0 w-48 h-48 md:w-64 md:h-64 bg-blue-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
               <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8">
                 <div><div className="text-[9px] md:text-[10px] font-extrabold text-blue-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-microchip"></i> Reg. Devices</div><div className="text-3xl md:text-5xl font-black text-white">{stats.devices}</div></div>
-                <div><div className="text-[9px] md:text-[10px] font-extrabold text-emerald-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-file-invoice-dollar"></i> AMC Total</div><div className="text-3xl md:text-5xl font-black text-emerald-400">{formatMoney(stats.devices * AMC_PER_DEVICE)}</div></div>
+                <div><div className="text-[9px] md:text-[10px] font-extrabold text-emerald-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-user-nurse"></i> Staff</div><div className="text-3xl md:text-5xl font-black text-emerald-400">{stats.nurses}</div></div>
                 <div><div className="text-[9px] md:text-[10px] font-extrabold text-purple-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-hospital"></i> Facilities</div><div className="text-3xl md:text-5xl font-black text-white">{Object.keys(hospitals).length}</div></div>
                 <div><div className="text-[9px] md:text-[10px] font-extrabold text-rose-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-procedures"></i> Live</div><div className="text-3xl md:text-5xl font-black text-white">{stats.active}</div></div>
               </div>
@@ -2006,7 +2055,7 @@
                 const inventoryCount = h.registered_devices ? Object.keys(h.registered_devices).length : 0;
                 const activeCount = h.active_devices ? Object.keys(h.active_devices).length : 0;
                 const staffCount = h.nurses ? Object.keys(h.nurses).length : 0;
-                const amcDate = h.amcStartDate || h.createdAt || h.addedAt || null;
+                const addedDate = h.createdAt || h.addedAt || null;
                 return (
                   <div key={hid} onClick={()=>setViewId(hid)} className="bg-white p-5 md:p-6 rounded-[1.5rem] shadow-sm border border-slate-200 cursor-pointer active:shadow-md active:bg-slate-50 transition-all group relative overflow-hidden">
                     <button onClick={(e) => { e.stopPropagation(); handleDeleteHospital(hid); }} className="absolute top-4 right-4 z-20 bg-red-600 text-white px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border-none outline-none">Delete</button>
@@ -2015,7 +2064,7 @@
                       <div className="w-12 h-12 md:w-14 md:h-14 bg-white shadow-md border border-slate-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4"><i className="fas fa-hospital"></i></div>
                       <h4 className="font-extrabold text-lg md:text-xl text-slate-800 mb-1 tracking-tight truncate">{h.name}</h4>
                       <div className="text-[10px] md:text-xs font-bold text-slate-400 mb-2 flex items-center gap-1.5"><i className="fas fa-map-marker-alt"></i> {h.location}</div>
-                      <div className="text-[10px] md:text-xs font-bold text-slate-500 mb-4 flex items-center gap-1.5"><i className="fas fa-calendar-alt"></i> AMC From: {amcDate ? new Date(amcDate).toLocaleDateString('en-IN') : 'Not set'}</div>
+                      <div className="text-[10px] md:text-xs font-bold text-slate-500 mb-4 flex items-center gap-1.5"><i className="fas fa-calendar-alt"></i> Started: {addedDate ? new Date(addedDate).toLocaleDateString('en-IN') : 'Not set'}</div>
                       <div className="flex justify-between items-center pt-4 border-t border-slate-100">
                         <div className="text-center"><div className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">Inventory</div><div className="font-black text-sm md:text-base text-slate-700">{inventoryCount}</div></div>
                         <div className="w-px h-5 md:h-6 bg-slate-200"></div>
@@ -2042,7 +2091,7 @@
         e.preventDefault();
         setLoading(true);
         try { await auth.signInWithEmailAndPassword(email, pass); }
-        catch (err) { alert(err.message); setLoading(false); }
+        catch (err) { window.__sg_notify(err.message); setLoading(false); }
       };
       return (
         <div className="min-h-screen flex items-center justify-center p-4 md:p-6 relative overflow-hidden fade-in">
@@ -2083,7 +2132,7 @@
         const handler = snap => {
           if (!snap.exists()) { auth.signOut(); return; }
           const val = snap.val() || {};
-          if (isNurseDisabled(val)) { alert('Your account has been disabled by admin.'); auth.signOut(); }
+          if (isNurseDisabled(val)) { window.__sg_notify('Your account has been disabled by admin.'); auth.signOut(); }
         };
         nurseRef.on('value', handler);
         return () => nurseRef.off('value', handler);
