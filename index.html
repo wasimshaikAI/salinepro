@@ -75,6 +75,9 @@
     const DEFAULT_PERCENT_ALERTS = ALERT_LEVELS.reduce((acc, n) => { acc[n] = true; return acc; }, {});
     const DEVICE_STALE_MS = 15000;
     const ENABLE_ADMIN_NOTIFICATIONS = false;
+    const SUPPORT_EMAIL = 'support@salineguard.pro';
+    const SUPPORT_PHONE = '+91 90000 00000';
+    const TERMS_EMAIL = 'legal@salineguard.pro';
 
     const firebaseConfig = {
       apiKey: "AIzaSyCYkB2xXeZDT7OA8UyCwDt0ipc3oLXDzkw",
@@ -393,7 +396,109 @@
 
     const PortalModal = ({ open, children }) => open ? createPortal(children, document.body) : null;
 
-    const AppHeader = ({ title, subtitle, onLogout }) => {
+    const SettingsModal = ({ isOpen, onClose, profile }) => {
+      const [showTerms, setShowTerms] = useState(false);
+
+      useEffect(() => {
+        document.body.classList.toggle('modal-open', isOpen);
+        return () => document.body.classList.remove('modal-open');
+      }, [isOpen]);
+
+      if (!isOpen) return null;
+      const name = profile?.name || 'User';
+      const email = profile?.email || '-';
+      const role = profile?.role || 'Member';
+      const hospital = profile?.hospital || '-';
+      const initial = String(name || email || '?').trim().charAt(0).toUpperCase();
+
+      const InfoCard = ({ label, value }) => (
+        <div className="rounded-2xl bg-white border border-slate-200 p-3.5 shadow-sm">
+          <div className="text-[9px] uppercase tracking-widest font-bold text-slate-400">{label}</div>
+          <div className="mt-1.5 text-sm font-bold text-slate-800 break-all">{value}</div>
+        </div>
+      );
+
+      return (
+        <PortalModal open={isOpen}>
+          <div className="fixed inset-0 z-[999999] bg-black/70 backdrop-blur-md flex items-center justify-center p-4 fade-in">
+            <div className="w-full max-w-md rounded-[2rem] bg-slate-50 border border-slate-200 shadow-2xl overflow-hidden">
+              <div className="px-5 md:px-6 py-5 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-[10px] uppercase tracking-[0.35em] text-blue-300 font-bold">Settings</div>
+                    <h3 className="mt-2 text-2xl font-black tracking-tight">Account & Support</h3>
+                    <p className="text-sm text-slate-300 mt-1.5 leading-6">Profile details, customer support, and app terms in one clean place.</p>
+                  </div>
+                  <button onClick={onClose} className="w-11 h-11 rounded-2xl bg-white/10 text-white hover:bg-white/15 active:bg-white/20 flex items-center justify-center shrink-0 border-none outline-none">
+                    <i className="fas fa-times text-lg"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-5 md:p-6 space-y-4 max-h-[78vh] overflow-y-auto hide-scroll">
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-14 h-14 rounded-[1.25rem] bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-xl font-black shadow-lg shadow-blue-500/30 shrink-0">{initial}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-lg font-black text-slate-800 truncate">{name}</div>
+                      <div className="text-sm text-slate-500 truncate mt-0.5">{email}</div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-4">
+                    <InfoCard label="Role" value={role} />
+                    <InfoCard label="Hospital" value={hospital} />
+                    <InfoCard label="Email" value={email} />
+                  </div>
+                </div>
+
+                <div className="rounded-[1.5rem] border border-blue-100 bg-blue-50/70 p-4 shadow-sm">
+                  <div className="text-[10px] uppercase tracking-[0.25em] font-black text-blue-700">Customer support</div>
+                  <div className="mt-2 text-sm font-semibold text-slate-700">Need help with login, device setup, or app usage?</div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <a href={`mailto:${SUPPORT_EMAIL}`} className="px-4 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-sm active:scale-[0.98] transition-transform inline-flex items-center gap-2 border-none outline-none">
+                      <i className="fas fa-envelope"></i> Email support
+                    </a>
+                    <a href={`tel:${SUPPORT_PHONE.replace(/\s+/g, '')}`} className="px-4 py-2.5 rounded-xl bg-white text-slate-800 font-bold text-sm shadow-sm border border-slate-200 active:bg-slate-50 inline-flex items-center gap-2">
+                      <i className="fas fa-phone"></i> Call support
+                    </a>
+                  </div>
+                  <div className="mt-3 text-xs text-slate-500 leading-6">Support email: {SUPPORT_EMAIL} • Phone: {SUPPORT_PHONE}</div>
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <div className="text-[10px] uppercase tracking-[0.25em] font-black text-slate-500">Terms & conditions</div>
+                      <div className="text-sm font-semibold text-slate-700 mt-1">Simple usage rules</div>
+                    </div>
+                    <button onClick={() => setShowTerms(v => !v)} className="px-3.5 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs active:bg-slate-200">
+                      {showTerms ? 'Hide' : 'Read'}
+                    </button>
+                  </div>
+                  {showTerms && (
+                    <div className="mt-4 space-y-2 text-sm leading-6 text-slate-600">
+                      <p>• Use the system only for authorized hospital staff and approved patient monitoring.</p>
+                      <p>• Never share staff credentials outside your hospital team.</p>
+                      <p>• Do not edit or delete patient records unless you are authorized to do so.</p>
+                      <p>• Report bugs, incorrect readings, or device issues to support as soon as possible.</p>
+                      <p className="text-xs text-slate-400 pt-1">Terms contact: {TERMS_EMAIL}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-4 md:p-5 bg-white border-t border-slate-200">
+                <button onClick={onClose} className="w-full py-3.5 rounded-2xl bg-slate-900 text-white font-bold text-sm active:bg-slate-800 transition-colors">
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        </PortalModal>
+      );
+    };
+
+    const AppHeader = ({ title, subtitle, onLogout, onSettings }) => {
       const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
       return (
         <>
@@ -407,10 +512,15 @@
                 <p className="text-[9px] md:text-xs text-blue-400 font-bold uppercase tracking-widest mt-0.5 truncate">{subtitle}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 md:gap-6 shrink-0">
+            <div className="flex items-center gap-2 md:gap-3 shrink-0">
               <Clock />
-              <div className="hidden md:block w-px h-8 bg-slate-700/50"></div>
-              <button onClick={() => setShowLogoutConfirm(true)} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 text-slate-400 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0" aria-label="Logout">
+              <div className="hidden md:block w-px h-8 bg-slate-700/50 mx-1"></div>
+              {onSettings && (
+                <button onClick={onSettings} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 text-slate-300 hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center shrink-0" aria-label="Settings">
+                  <i className="fas fa-gear text-sm"></i>
+                </button>
+              )}
+              <button onClick={() => setShowLogoutConfirm(true)} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 text-slate-300 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0" aria-label="Logout">
                 <i className="fas fa-power-off text-sm"></i>
               </button>
             </div>
@@ -1710,6 +1820,7 @@
       const [showAdd, setShowAdd] = useState(false);
       const [toast, setToast] = useState(null);
       const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24 });
+      const [showSettings, setShowSettings] = useState(false);
       const [shareTarget, setShareTarget] = useState(null);
       const [handoverRequest, setHandoverRequest] = useState(null);
       const [pendingDischarge, setPendingDischarge] = useState(null);
@@ -1934,7 +2045,7 @@
       return (
         <div className="min-h-screen pb-24 fade-in">
           {toast && <Toast {...toast} />}
-          <AppHeader title={hName} subtitle={`Staff: ${nurseName || user.email.split('@')[0]}`} onLogout={onLogout} />
+          <AppHeader title={hName} subtitle={`Staff: ${nurseName || user.email.split('@')[0]}`} onLogout={onLogout} onSettings={() => setShowSettings(true)} />
           <div className="p-4 md:p-6 w-full max-w-7xl mx-auto space-y-5 md:space-y-6 mt-2">
             <div className="flex gap-4 md:gap-6 border-b border-slate-200 overflow-x-auto hide-scroll">
               <button onClick={()=>setTab('active')} className={`pb-3 text-xs md:text-sm font-extrabold uppercase tracking-wider transition-all border-b-2 whitespace-nowrap ${tab==='active' ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-400'}`}>My Patients ({userDevices.length})</button>
@@ -1975,6 +2086,8 @@
             <i className="fas fa-plus"></i>
           </button>
 
+          <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} profile={{ name: nurseName || user.email.split('@')[0], email: user.email, role: 'Nurse', hospital: hName }} />
+
           <PatientFormModal isOpen={showAdd} onClose={()=>setShowAdd(false)} hospitalId={hid} user={{ uid: user.uid, role: 'nurse', name: nurseName || user.email.split('@')[0] }} onSuccess={() => { setToast({type: 'success', msg: 'Infusion Started'}); setTimeout(()=>setToast(null), 2000); }} />
 
           <ShareDeviceModal isOpen={!!shareTarget} onClose={()=>setShareTarget(null)} hospitalId={hid} device={shareTarget} nurses={nurses} currentUser={{ uid: user.uid, name: nurseName || user.email.split('@')[0], email: user.email }} onSuccess={() => { setToast({type: 'success', msg: 'Handover request sent'}); setTimeout(()=>setToast(null), 2000); }} />
@@ -1995,6 +2108,7 @@
       const [hospitals, setHospitals] = useState({});
       const [viewId, setViewId] = useState(null);
       const [showAddHospital, setShowAddHospital] = useState(false);
+      const [showSettings, setShowSettings] = useState(false);
 
       useEffect(() => {
         const ref = db.ref('hospitals');
@@ -2024,16 +2138,20 @@
             <header className="bg-slate-900 text-white px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shadow-lg sticky top-0 z-50 backdrop-blur-md bg-slate-900/90 pt-safe gap-3">
               <button onClick={()=>setViewId(null)} className="flex items-center gap-2 md:gap-3 active:text-blue-400 transition-colors bg-slate-800 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none"><i className="fas fa-arrow-left"></i> <span>Network</span></button>
               <div className="font-extrabold tracking-tight text-sm md:text-base truncate pl-2 flex-1">{hospitals[viewId] ? hospitals[viewId].name : ''}</div>
-              <button onClick={() => handleDeleteHospital(viewId)} className="bg-red-600 active:bg-red-700 text-white px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none shrink-0">Delete Hospital</button>
+              <div className="flex items-center gap-2 shrink-0">
+                <button onClick={() => setShowSettings(true)} className="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center border-none outline-none"><i className="fas fa-gear text-sm"></i></button>
+                <button onClick={() => handleDeleteHospital(viewId)} className="bg-red-600 active:bg-red-700 text-white px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none shrink-0">Delete Hospital</button>
+              </div>
             </header>
             <div className="py-4 md:py-8"><HospitalDashboard hospitalId={viewId} userRole="admin" isSuperView={true} /></div>
+            <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} profile={{ name: 'Super Admin', email: auth.currentUser?.email || 'admin@salineguard.pro', role: 'Super Admin', hospital: hospitals[viewId]?.name || 'Global Network' }} />
           </div>
         );
       }
 
       return (
         <div className="min-h-screen pb-10 fade-in">
-          <AppHeader title="Super Admin" subtitle="Global Network Control" onLogout={onLogout} />
+          <AppHeader title="Super Admin" subtitle="Global Network Control" onLogout={onLogout} onSettings={() => setShowSettings(true)} />
           <div className="p-4 md:p-8 w-full mx-auto max-w-7xl space-y-6 md:space-y-8">
             <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-10 text-white shadow-2xl relative overflow-hidden border border-slate-700">
               <div className="absolute right-0 top-0 w-48 h-48 md:w-64 md:h-64 bg-blue-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
@@ -2078,7 +2196,24 @@
               })}
             </div>
           </div>
+          <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} profile={{ name: 'Super Admin', email: auth.currentUser?.email || 'admin@salineguard.pro', role: 'Super Admin', hospital: 'Global Network' }} />
+
           <AddHospitalModal isOpen={showAddHospital} onClose={() => setShowAddHospital(false)} onSuccess={() => { setShowAddHospital(false); }} />
+        </div>
+      );
+    };
+
+    const AdminDashboard = ({ user, onLogout }) => {
+      const [showSettings, setShowSettings] = useState(false);
+      const info = getHospitalInfo(user.email || '');
+
+      return (
+        <div className="min-h-screen pb-10">
+          <AppHeader title={info.name} subtitle="Hospital Administration" onLogout={onLogout} onSettings={() => setShowSettings(true)} />
+          <div className="py-4 md:py-8">
+            <HospitalDashboard hospitalId={info.id} userRole="admin" />
+          </div>
+          <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} profile={{ name: info.name, email: user.email, role: 'Hospital Admin', hospital: info.name }} />
         </div>
       );
     };
@@ -2143,7 +2278,7 @@
       const info = getHospitalInfo(user.email || '');
       if (info.id === 'super_admin') return <SuperDashboard onLogout={()=>auth.signOut()} />;
       if ((user.email || '').startsWith('admin@')) {
-        return <div className="min-h-screen pb-10"><AppHeader title={info.name} subtitle="Hospital Administration" onLogout={()=>auth.signOut()} /><div className="py-4 md:py-8"><HospitalDashboard hospitalId={info.id} userRole="admin" /></div></div>;
+        return <AdminDashboard user={user} onLogout={()=>auth.signOut()} />;
       }
       return <NurseApp user={user} onLogout={()=>auth.signOut()} />;
     };
