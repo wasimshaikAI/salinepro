@@ -104,6 +104,7 @@
 
 <body>
   <div id="root"></div>
+  <div id="in_app_alert_host"></div>
 
   <script type="text/babel" data-presets="react">
     const AMC_PER_DEVICE = 1500;
@@ -1635,7 +1636,7 @@
       }), filterPeriod);
 
       return (
-        <div className="min-h-screen pb-24 fade-in">
+        <>
           {showPopup && popupAlerts.length > 0 && (
             <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[999999] flex items-center justify-center p-4 fade-in">
               <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-red-200">
@@ -1688,8 +1689,10 @@
                 </div>
               </div>
             </div>
-          )
-          {toast && <Toast {...toast} />}
+          )}
+
+          <div className="min-h-screen pb-24 fade-in">
+            {toast && <Toast {...toast} />}
           <AppHeader title={hName} subtitle={`Staff: ${nurseName || user.email.split('@')[0]}`} onLogout={onLogout} />
           <div className="p-4 md:p-6 w-full max-w-7xl mx-auto space-y-5 md:space-y-6 mt-2">
             <div className="flex gap-4 md:gap-6 border-b border-slate-200 overflow-x-auto hide-scroll">
