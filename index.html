@@ -19,13 +19,50 @@
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-    :root, html, body, #root { width: 100% !important; min-height: 100dvh !important; margin: 0 !important; padding: 0 !important; box-sizing: border-box !important; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: 'Inter', sans-serif; }
-    :root, html, body { --bg-color: #f1f5f9; background-color: var(--bg-color) !important; background-image: radial-gradient(#e2e8f0 1px, transparent 1px) !important; background-size: 20px 20px !important; background-attachment: fixed !important; background-position: 0 0 !important; overflow-x: hidden !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch; padding-bottom: env(safe-area-inset-bottom); height: 100%; }
-    html, body, #root { border: none !important; box-shadow: none !important; outline: none !important; background-clip: padding-box !important; -webkit-tap-highlight-color: transparent; }
+    :root, html, body, #root {
+      width: 100% !important;
+      min-height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: 'Inter', sans-serif;
+    }
+    :root, html, body {
+      --bg-color: #f1f5f9;
+      background-color: var(--bg-color) !important;
+      background-image: radial-gradient(#e2e8f0 1px, transparent 1px) !important;
+      background-size: 20px 20px !important;
+      background-attachment: fixed !important;
+      background-position: 0 0 !important;
+      overflow-x: hidden !important;
+      -webkit-overflow-scrolling: touch;
+    }
+    html, body, #root {
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      background-clip: padding-box !important;
+      -webkit-tap-highlight-color: transparent;
+    }
     *, *::before, *::after { box-sizing: border-box; }
-    body { overflow-y: auto !important; user-select: text; -webkit-user-select: text; -webkit-touch-callout: text; }
+    body {
+      overflow-y: auto !important;
+      user-select: text;
+      -webkit-user-select: text;
+      -webkit-touch-callout: text;
+    }
     input, textarea, select, button { font-family: inherit; }
-    input, textarea, select { border: none !important; outline: none !important; box-shadow: none !important; background-clip: padding-box !important; appearance: none !important; -webkit-appearance: none !important; -moz-appearance: none !important; }
+    input, textarea, select {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      background-clip: padding-box !important;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+    }
     input:focus, textarea:focus { outline: none !important; border: none !important; box-shadow: none !important; }
     ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; }
     .glass-panel { background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5); }
@@ -36,27 +73,28 @@
     .fade-in { animation: fadeIn 0.22s cubic-bezier(0.16,1,0.3,1) forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .critical-alert { animation: pulse-border 2s infinite; }
-    @keyframes pulse-border { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); border-color: #ef4444; } 70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); border-color: #ef4444; } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); border-color: #ef4444; } }
+    @keyframes pulse-border {
+      0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); border-color: #ef4444; }
+      70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); border-color: #ef4444; }
+      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); border-color: #ef4444; }
+    }
     .saline-loader { position: relative; width: 60px; height: 100px; margin: 0 auto; }
     .bottle { width: 40px; height: 60px; border: 3px solid #3b82f6; border-radius: 0 0 20px 20px; margin: 0 auto; position: relative; overflow: hidden; background: rgba(255,255,255,0.8); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2); }
     .bottle::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #60a5fa; animation: drain 2s infinite linear; }
     .drip { width: 8px; height: 12px; background: #3b82f6; border-radius: 50%; margin: 5px auto 0; animation: drop 1s infinite cubic-bezier(0.5, 0, 1, 0.5); }
     @keyframes drain { 0% { top: 0; } 100% { top: 100%; } }
     @keyframes drop { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(40px) scaleY(0); opacity: 0; } }
-    .min-h-screen { min-height: 100dvh !important; }
-    .fixed.bottom-6.right-6, .fixed.bottom-8.right-8, .fixed.bottom-6.right-4, .fixed.bottom-8.right-4 { bottom: calc(1.5rem + env(safe-area-inset-bottom)) !important; right: calc(1.5rem + env(safe-area-inset-right, 0px)) !important; }
-    @media (min-width: 768px) { .fixed.bottom-8.right-8 { bottom: calc(2rem + env(safe-area-inset-bottom)) !important; right: calc(2rem + env(safe-area-inset-right, 0px)) !important; } }
   </style>
 
   <script>
-    window.onerror = function(message, source, lineno, colno) {
+    window.onerror = function(message, source, lineno) {
       try {
         const old = document.getElementById('__sg_error_banner');
         if (old) old.remove();
         const errDiv = document.createElement('div');
         errDiv.id = '__sg_error_banner';
-        errDiv.style.cssText = 'position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(92vw,640px);background:linear-gradient(135deg,#0f172a,#1e293b);color:#e2e8f0;z-index:999999;padding:14px 16px;border-radius:22px;border:1px solid rgba(59,130,246,.45);box-shadow:0 20px 50px rgba(15,23,42,.35);font-family:Inter,system-ui,sans-serif;font-size:13px;backdrop-filter:blur(12px)';
-        errDiv.innerHTML = `<div style="display:flex;gap:12px;align-items:flex-start"><div style="width:34px;height:34px;border-radius:12px;background:rgba(59,130,246,.16);display:flex;align-items:center;justify-content:center;flex:0 0 auto">⚠</div><div style="flex:1;min-width:0"><div style="font-weight:800;color:#fff;margin-bottom:4px">WebView Error</div><div style="line-height:1.45;word-break:break-word">${message}</div><div style="opacity:.72;margin-top:4px;font-size:11px">Line ${lineno || '-'}${colno ? ` · Col ${colno}` : ''}</div></div><button onclick="document.getElementById('\__sg_error_banner')?.remove()" style="background:transparent;border:0;color:#cbd5e1;font-size:18px;font-weight:800;cursor:pointer;padding:0 2px">✕</button></div>`;
+        errDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#ef4444;color:white;z-index:999999;padding:14px 18px;font-family:monospace;font-size:13px;word-wrap:break-word;box-shadow:0 6px 18px rgba(0,0,0,0.2)';
+        errDiv.innerHTML = `<strong>WebView Error:</strong> ${message} <span style="opacity:.9;margin-left:10px;font-weight:600">Line: ${lineno}</span> <button onclick="document.getElementById('__sg_error_banner')?.remove()" style="float:right;background:transparent;border:0;color:white;font-weight:700;cursor:pointer">✕</button>`;
         document.body.appendChild(errDiv);
       } catch(e) {}
       return false;
@@ -68,16 +106,14 @@
   <div id="root"></div>
 
   <script type="text/babel" data-presets="react">
+    const AMC_PER_DEVICE = 1500;
+    const AMC_CYCLE_MS = 365 * 24 * 60 * 60 * 1000;
     const INFUSION_DURATION_MS = 6 * 60 * 60 * 1000;
-    const DEFAULT_TOTAL_ML = 1000;
-    const ML_STEP = 100;
     const ALERT_LEVELS = [75, 50, 25, 10, 5, 2];
+    const ML_ALERT_LEVELS = [100, 75, 50, 25, 10, 5, 2];
     const DEFAULT_PERCENT_ALERTS = ALERT_LEVELS.reduce((acc, n) => { acc[n] = true; return acc; }, {});
-    const DEVICE_STALE_MS = 15000;
-    const ENABLE_ADMIN_NOTIFICATIONS = false;
-    const SUPPORT_EMAIL = 'support@salineguard.pro';
-    const SUPPORT_PHONE = '+91 90000 00000';
-    const TERMS_EMAIL = 'legal@salineguard.pro';
+    const DEFAULT_ML_ALERTS = ML_ALERT_LEVELS.reduce((acc, n) => { acc[n] = true; return acc; }, {});
+    const DEVICE_STALE_MS = 8500;
 
     const firebaseConfig = {
       apiKey: "AIzaSyCYkB2xXeZDT7OA8UyCwDt0ipc3oLXDzkw",
@@ -95,46 +131,6 @@
     const { useState, useEffect, useMemo, useRef } = React;
     const { createPortal } = ReactDOM;
     let secondaryAuthInstance = null;
-
-    const removeExistingOverlay = (id) => {
-      const el = document.getElementById(id);
-      if (el) el.remove();
-    };
-
-    window.__sg_notify = (message, type = 'error') => {
-      try {
-        removeExistingOverlay('__sg_toast');
-        const toast = document.createElement('div');
-        toast.id = '__sg_toast';
-        toast.style.cssText = `position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:999999;padding:0;min-width:min(92vw,520px);max-width:520px;border-radius:22px;overflow:hidden;box-shadow:0 22px 50px rgba(15,23,42,.34);font-family:Inter,system-ui,sans-serif;backdrop-filter:blur(12px);border:1px solid ${type === 'success' ? 'rgba(52,211,153,.35)' : type === 'info' ? 'rgba(96,165,250,.35)' : 'rgba(251,113,133,.38)'}`;
-        const bg = type === 'success' ? 'linear-gradient(135deg,#065f46,#10b981)' : type === 'info' ? 'linear-gradient(135deg,#1e3a8a,#3b82f6)' : 'linear-gradient(135deg,#7f1d1d,#ef4444)';
-        const icon = type === 'success' ? 'fa-circle-check' : type === 'info' ? 'fa-circle-info' : 'fa-triangle-exclamation';
-        toast.innerHTML = `<div style="background:${bg};color:white;padding:14px 16px;display:flex;gap:12px;align-items:flex-start"><div style="width:38px;height:38px;border-radius:14px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><i class="fas ${icon}"></i></div><div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;opacity:.9;margin-bottom:4px">${type === 'success' ? 'Success' : type === 'info' ? 'Notice' : 'Error'}</div><div style="font-size:14px;line-height:1.45;font-weight:600;word-break:break-word">${String(message || '')}</div></div><button aria-label="Close" style="background:transparent;border:0;color:white;font-size:20px;line-height:1;cursor:pointer;padding:0 2px 0 8px;opacity:.95">×</button></div>`;
-        const btn = toast.querySelector('button');
-        btn.onclick = () => toast.remove();
-        document.body.appendChild(toast);
-        setTimeout(() => { if (toast.isConnected) toast.remove(); }, type === 'success' ? 2400 : 4200);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    window.__sg_confirm = (message, title = 'Please confirm') => new Promise((resolve) => {
-      try {
-        removeExistingOverlay('__sg_confirm_overlay');
-        const overlay = document.createElement('div');
-        overlay.id = '__sg_confirm_overlay';
-        overlay.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(2,6,23,.70);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:16px;font-family:Inter,system-ui,sans-serif';
-        overlay.innerHTML = `<div style="width:min(92vw,420px);background:white;border-radius:28px;overflow:hidden;box-shadow:0 30px 70px rgba(15,23,42,.4);border:1px solid rgba(226,232,240,.9)"><div style="padding:18px 20px;background:linear-gradient(135deg,#0f172a,#1e293b);color:white"><div style="display:flex;gap:12px;align-items:center"><div style="width:42px;height:42px;border-radius:16px;background:rgba(59,130,246,.18);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><i class="fas fa-triangle-exclamation"></i></div><div style="min-width:0"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.24em;font-weight:800;color:#93c5fd;margin-bottom:4px">${title}</div><div style="font-size:20px;font-weight:900;line-height:1.15">Action required</div></div></div></div><div style="padding:20px"><div style="color:#475569;font-size:15px;line-height:1.7;font-weight:600">${String(message || '')}</div><div style="display:flex;gap:12px;margin-top:24px"><button data-cancel style="flex:1;padding:14px 16px;border-radius:18px;border:0;background:#e2e8f0;color:#334155;font-weight:800;font-size:14px">Cancel</button><button data-ok style="flex:1;padding:14px 16px;border-radius:18px;border:0;background:linear-gradient(135deg,#2563eb,#4f46e5);color:white;font-weight:800;font-size:14px;box-shadow:0 14px 30px rgba(37,99,235,.28)">Confirm</button></div></div></div>`;
-        const cleanup = (val) => { if (overlay.isConnected) overlay.remove(); resolve(val); };
-        overlay.querySelector('[data-cancel]').onclick = () => cleanup(false);
-        overlay.querySelector('[data-ok]').onclick = () => cleanup(true);
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) cleanup(false); });
-        document.body.appendChild(overlay);
-      } catch (e) {
-        resolve(window.confirm(String(message || '')));
-      }
-    });
 
     const getSecondaryAuth = () => {
       if (secondaryAuthInstance) return secondaryAuthInstance;
@@ -159,43 +155,9 @@
     };
 
     const formatMoney = (amt) => "₹" + Number(amt || 0).toLocaleString('en-IN');
-    const formatMl = (ml) => `${Math.max(0, Math.round(Number(ml || 0)))}ml`;
     const slugify = (value = '') => String(value).toLowerCase().trim().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
     const humanize = (value = '') => String(value).toLowerCase().split(/[_\s.-]+/).filter(Boolean).map(v => v.charAt(0).toUpperCase() + v.slice(1)).join(' ');
     const normalizeName = (value = '') => String(value).trim().toLowerCase().replace(/\s+/g, ' ');
-    const safeNum = (v, fallback = 0) => {
-      const n = Number(v);
-      return Number.isFinite(n) ? n : fallback;
-    };
-
-    const getNurseTrail = (device) => Array.isArray(device?.nurseTrail) ? device.nurseTrail.filter(Boolean) : [];
-    const trailEntryLabel = (entry) => {
-      const name = String(entry?.name || entry?.email || 'Unknown').trim();
-      return entry?.role === 'admin' ? `${name} (Admin)` : name;
-    };
-    const formatNurseTrail = (device) => {
-      const seen = new Set();
-      return getNurseTrail(device)
-        .map(trailEntryLabel)
-        .filter(name => {
-          const key = normalizeName(name);
-          if (!key || seen.has(key)) return false;
-          seen.add(key);
-          return true;
-        });
-    };
-    const makeTrailEntry = (user, role = 'nurse') => ({
-      uid: user?.uid || '',
-      name: user?.name || user?.displayName || user?.email?.split('@')[0] || 'Staff',
-      email: user?.email || '',
-      role,
-      at: Date.now()
-    });
-    const mergeTrail = (existing = [], nextEntry) => {
-      const out = Array.isArray(existing) ? existing.filter(Boolean).slice() : [];
-      if (nextEntry?.uid || nextEntry?.email || nextEntry?.name) out.push(nextEntry);
-      return out;
-    };
 
     const getHospitalInfo = (email) => {
       if (!email) return { id: 'unknown', name: 'Unknown', loc: '', domain: '' };
@@ -213,12 +175,6 @@
     };
 
     const sortHistoryDesc = (histList = []) => [...histList].sort((a, b) => (b?.completedAt || b?.startTime || 0) - (a?.completedAt || a?.startTime || 0));
-    const sortActiveDevices = (devices = []) => [...devices].sort((a, b) => {
-      const ap = safeNum(a?.perc, 100), bp = safeNum(b?.perc, 100);
-      const am = getDeviceMlRemaining(a), bm = getDeviceMlRemaining(b);
-      const at = a?.startTime || 0, bt = b?.startTime || 0;
-      return ap - bp || am - bm || bt - at;
-    });
 
     const filterHistoryByTime = (histList, period) => {
       const sorted = sortHistoryDesc(histList);
@@ -249,52 +205,18 @@
       return `${s}s`;
     };
 
-    const getDeviceMlRemaining = (device) => {
-      if (!device) return DEFAULT_TOTAL_ML;
-      if (device.mlLeft !== undefined && device.mlLeft !== null && device.mlLeft !== '') return Math.max(0, safeNum(device.mlLeft, DEFAULT_TOTAL_ML));
-      const totalMl = safeNum(device.totalMl, DEFAULT_TOTAL_ML);
-      const perc = safeNum(device.perc, 100);
-      return Math.max(0, Math.round((perc / 100) * totalMl));
-    };
-
-    const getDevicePercent = (device) => {
-      if (!device) return 100;
-      if (device.perc !== undefined && device.perc !== null && device.perc !== '') return Math.max(0, Math.min(100, safeNum(device.perc, 100)));
-      const totalMl = safeNum(device.totalMl, DEFAULT_TOTAL_ML);
-      const ml = getDeviceMlRemaining(device);
-      return totalMl > 0 ? Math.max(0, Math.min(100, Math.round((ml / totalMl) * 100))) : 0;
-    };
-
-    const generateMlThresholds = (totalMl = DEFAULT_TOTAL_ML) => {
-      const t = Math.max(100, Math.round(safeNum(totalMl, DEFAULT_TOTAL_ML)));
-      const thresholds = [];
-      for (let ml = t - ML_STEP; ml >= ML_STEP; ml -= ML_STEP) thresholds.push(ml);
-      thresholds.push(0);
-      return thresholds;
-    };
-
-    const getDeviceLastSeenAt = (device) => {
-      if (!device) return 0;
-      if (device.clientReceivedAt > 0) return Number(device.clientReceivedAt);
-      return Number(device.lastUpdate || device.updatedAt || device.startTime || 0);
-    };
-
+    const getDeviceLastSeenAt = (device) => Number(device?.clientReceivedAt || device?.lastUpdate || device?.updatedAt || device?.startTime || 0);
     const isDeviceOnlineNow = (device, nowTs = Date.now()) => {
-      if (!device) return false;
-      if (device.deviceOnline === false) return false;
-      const lastSeen = getDeviceLastSeenAt(device);
-      if (lastSeen <= 0) return false;
-      return (nowTs - lastSeen) <= (DEVICE_STALE_MS + 20000);
+      const seenAt = getDeviceLastSeenAt(device);
+      if (device?.deviceOnline === false) return false;
+      if (!seenAt) return false;
+      return (nowTs - seenAt) <= DEVICE_STALE_MS;
     };
-
     const stampReceivedAt = (data = {}) => {
-      if (!data) return {};
       const now = Date.now();
       const stamped = {};
-      Object.keys(data).forEach(key => {
-        const deviceNode = data[key];
-        if (deviceNode && typeof deviceNode === 'object') stamped[key] = { ...deviceNode, clientReceivedAt: now };
-        else stamped[key] = deviceNode;
+      Object.entries(data || {}).forEach(([key, value]) => {
+        stamped[key] = { ...(value || {}), clientReceivedAt: now };
       });
       return stamped;
     };
@@ -302,6 +224,39 @@
     const OFFLINE_ALERT_MS = DEVICE_STALE_MS;
     const NO_FLOW_ALERT_MS = 75 * 1000;
     const RAPID_DROP_PERCENT = 20;
+
+    const getFlowPerHour = (device) => {
+      const flowPerSec = Number(device?.flowRate || 0);
+      return Math.max(0, flowPerSec * 3600);
+    };
+
+    const getMlLeft = (device) => {
+      const directMl = Number(device?.mlLeft);
+      if (Number.isFinite(directMl)) return Math.max(0, directMl);
+
+      const totalMl = Number(device?.totalMl);
+      const perc = Number(device?.perc);
+      if (Number.isFinite(totalMl) && Number.isFinite(perc)) {
+        return Math.max(0, (totalMl * perc) / 100);
+      }
+      return null;
+    };
+
+    const buildUnifiedAlert = ({ title, patientName, room, bed, perc, mlLeft, extra = "" }) => {
+      const label = patientName?.trim()
+        ? patientName.trim()
+        : `Room ${room || "-"}${bed ? ` / Bed ${bed}` : ""}`;
+
+      const parts = [];
+      if (Number.isFinite(perc)) parts.push(`${Math.round(perc)}% infused`);
+      if (Number.isFinite(mlLeft)) parts.push(`${Math.round(mlLeft)} ml left`);
+      if (extra) parts.push(extra);
+
+      return {
+        title: title || `Saline Alert: ${label}`,
+        body: parts.filter(Boolean).join(" • ") || "Infusion status update"
+      };
+    };
 
     const triggerPatientAlert = ({ title, body }) => {
       const icon = "https://cdn-icons-png.flaticon.com/512/3004/3004451.png";
@@ -312,41 +267,18 @@
       } catch (e) {}
     };
 
-    const claimAndArchiveDevice = async (hospitalId, deviceId, completionType = 'manual', extraFields = {}, actor = null) => {
-      const activeRef = db.ref(`hospitals/${hospitalId}/active_devices/${deviceId}`);
-      const historyRef = db.ref(`hospitals/${hospitalId}/history`);
-      const tx = await activeRef.transaction((current) => {
-        if (!current) return;
-        if (current.completionLock || current.completedAt) return;
-        return { ...current, completionLock: { type: completionType, claimedAt: Date.now(), actor: actor || null } };
+    const sortActiveDevices = (devices = []) => {
+      const isEmergency = (d) => !!(d?.emergency || d?.emergencyCase || d?.priority === 'emergency' || d?.priority === 'critical');
+      return [...devices].sort((a, b) => {
+        const pa = { emergencyScore: isEmergency(a) ? 1 : 0, perc: a?.perc !== undefined ? a.perc : 100, remaining: getRemainingMs(a), startTime: a?.startTime || 0, lastUpdate: getDeviceLastSeenAt(a) || 0 };
+        const pb = { emergencyScore: isEmergency(b) ? 1 : 0, perc: b?.perc !== undefined ? b.perc : 100, remaining: getRemainingMs(b), startTime: b?.startTime || 0, lastUpdate: getDeviceLastSeenAt(b) || 0 };
+        if (pa.emergencyScore !== pb.emergencyScore) return pb.emergencyScore - pa.emergencyScore;
+        const aCrit = pa.perc <= 10, bCrit = pb.perc <= 10;
+        if (aCrit !== bCrit) return aCrit ? -1 : 1;
+        if (pa.remaining !== pb.remaining) return pa.remaining - pb.remaining;
+        if (pa.lastUpdate !== pb.lastUpdate) return pb.lastUpdate - pa.lastUpdate;
+        return pb.startTime - pa.startTime;
       });
-      if (!tx.committed || !tx.snapshot.exists()) return false;
-      const data = tx.snapshot.val();
-      if (!data || !data.completionLock) return false;
-      const { completionLock, ...payloadBase } = data;
-      const completedBy = actor || completionLock.actor || null;
-      const historyPayload = {
-        ...payloadBase,
-        ...extraFields,
-        nurseTrail: Array.isArray(payloadBase.nurseTrail) ? payloadBase.nurseTrail : [],
-        completedAt: Date.now(),
-        completedVia: completionType,
-        autoDischarged: completionType === 'auto',
-        completedByUid: completedBy?.uid || '',
-        completedByName: completedBy?.name || 'System',
-        completedByRole: completedBy?.role || 'system',
-        historyCreatedAt: Date.now()
-      };
-      try {
-        const newHistoryRef = historyRef.push();
-        historyPayload.historyId = newHistoryRef.key;
-        await newHistoryRef.set(historyPayload);
-        await activeRef.remove();
-        return true;
-      } catch (e) {
-        console.error('Archive move failed:', e);
-        return false;
-      }
     };
 
     const isNurseDisabled = (nurse) => !!(nurse?.disabled || nurse?.status === 'disabled');
@@ -363,16 +295,9 @@
     );
 
     const Toast = ({ msg, type }) => (
-      <div className={`fixed top-5 left-1/2 -translate-x-1/2 z-[9999] w-[92vw] max-w-md rounded-2xl overflow-hidden shadow-2xl fade-in border ${type === 'error' ? 'border-rose-300 bg-rose-50 text-rose-900' : type === 'success' ? 'border-emerald-300 bg-emerald-50 text-emerald-900' : 'border-blue-300 bg-blue-50 text-blue-900'}`}>
-        <div className={`px-4 py-3 flex items-start gap-3 ${type === 'error' ? 'bg-gradient-to-r from-rose-600 to-rose-500 text-white' : type === 'success' ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white' : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white'}`}>
-          <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0 mt-0.5">
-            <i className={`fas ${type === 'error' ? 'fa-circle-exclamation' : type === 'success' ? 'fa-circle-check' : 'fa-circle-info'} text-sm`}></i>
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-[11px] font-extrabold uppercase tracking-[0.22em] opacity-90 mb-1">{type === 'error' ? 'Error' : type === 'success' ? 'Success' : 'Notice'}</div>
-            <div className="text-sm font-semibold leading-5 break-words">{msg}</div>
-          </div>
-        </div>
+      <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 fade-in w-11/12 max-w-sm justify-center ${type === 'error' ? 'bg-red-600 text-white' : 'bg-slate-900 text-white border-0'}`}>
+        <i className={`fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'} text-emerald-400`}></i>
+        <span className="font-bold text-sm">{msg}</span>
       </div>
     );
 
@@ -396,109 +321,7 @@
 
     const PortalModal = ({ open, children }) => open ? createPortal(children, document.body) : null;
 
-    const SettingsModal = ({ isOpen, onClose, profile }) => {
-      const [showTerms, setShowTerms] = useState(false);
-
-      useEffect(() => {
-        document.body.classList.toggle('modal-open', isOpen);
-        return () => document.body.classList.remove('modal-open');
-      }, [isOpen]);
-
-      if (!isOpen) return null;
-      const name = profile?.name || 'User';
-      const email = profile?.email || '-';
-      const role = profile?.role || 'Member';
-      const hospital = profile?.hospital || '-';
-      const initial = String(name || email || '?').trim().charAt(0).toUpperCase();
-
-      const InfoCard = ({ label, value }) => (
-        <div className="rounded-2xl bg-white border border-slate-200 p-3.5 shadow-sm">
-          <div className="text-[9px] uppercase tracking-widest font-bold text-slate-400">{label}</div>
-          <div className="mt-1.5 text-sm font-bold text-slate-800 break-all">{value}</div>
-        </div>
-      );
-
-      return (
-        <PortalModal open={isOpen}>
-          <div className="fixed inset-0 z-[999999] bg-black/70 backdrop-blur-md flex items-center justify-center p-4 fade-in">
-            <div className="w-full max-w-md rounded-[2rem] bg-slate-50 border border-slate-200 shadow-2xl overflow-hidden">
-              <div className="px-5 md:px-6 py-5 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-[0.35em] text-blue-300 font-bold">Settings</div>
-                    <h3 className="mt-2 text-2xl font-black tracking-tight">Account & Support</h3>
-                    <p className="text-sm text-slate-300 mt-1.5 leading-6">Profile details, customer support, and app terms in one clean place.</p>
-                  </div>
-                  <button onClick={onClose} className="w-11 h-11 rounded-2xl bg-white/10 text-white hover:bg-white/15 active:bg-white/20 flex items-center justify-center shrink-0 border-none outline-none">
-                    <i className="fas fa-times text-lg"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div className="p-5 md:p-6 space-y-4 max-h-[78vh] overflow-y-auto hide-scroll">
-                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="w-14 h-14 rounded-[1.25rem] bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-xl font-black shadow-lg shadow-blue-500/30 shrink-0">{initial}</div>
-                    <div className="min-w-0 flex-1">
-                      <div className="text-lg font-black text-slate-800 truncate">{name}</div>
-                      <div className="text-sm text-slate-500 truncate mt-0.5">{email}</div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-4">
-                    <InfoCard label="Role" value={role} />
-                    <InfoCard label="Hospital" value={hospital} />
-                    <InfoCard label="Email" value={email} />
-                  </div>
-                </div>
-
-                <div className="rounded-[1.5rem] border border-blue-100 bg-blue-50/70 p-4 shadow-sm">
-                  <div className="text-[10px] uppercase tracking-[0.25em] font-black text-blue-700">Customer support</div>
-                  <div className="mt-2 text-sm font-semibold text-slate-700">Need help with login, device setup, or app usage?</div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <a href={`mailto:${SUPPORT_EMAIL}`} className="px-4 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-sm active:scale-[0.98] transition-transform inline-flex items-center gap-2 border-none outline-none">
-                      <i className="fas fa-envelope"></i> Email support
-                    </a>
-                    <a href={`tel:${SUPPORT_PHONE.replace(/\s+/g, '')}`} className="px-4 py-2.5 rounded-xl bg-white text-slate-800 font-bold text-sm shadow-sm border border-slate-200 active:bg-slate-50 inline-flex items-center gap-2">
-                      <i className="fas fa-phone"></i> Call support
-                    </a>
-                  </div>
-                  <div className="mt-3 text-xs text-slate-500 leading-6">Support email: {SUPPORT_EMAIL} • Phone: {SUPPORT_PHONE}</div>
-                </div>
-
-                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="text-[10px] uppercase tracking-[0.25em] font-black text-slate-500">Terms & conditions</div>
-                      <div className="text-sm font-semibold text-slate-700 mt-1">Simple usage rules</div>
-                    </div>
-                    <button onClick={() => setShowTerms(v => !v)} className="px-3.5 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs active:bg-slate-200">
-                      {showTerms ? 'Hide' : 'Read'}
-                    </button>
-                  </div>
-                  {showTerms && (
-                    <div className="mt-4 space-y-2 text-sm leading-6 text-slate-600">
-                      <p>• Use the system only for authorized hospital staff and approved patient monitoring.</p>
-                      <p>• Never share staff credentials outside your hospital team.</p>
-                      <p>• Do not edit or delete patient records unless you are authorized to do so.</p>
-                      <p>• Report bugs, incorrect readings, or device issues to support as soon as possible.</p>
-                      <p className="text-xs text-slate-400 pt-1">Terms contact: {TERMS_EMAIL}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="p-4 md:p-5 bg-white border-t border-slate-200">
-                <button onClick={onClose} className="w-full py-3.5 rounded-2xl bg-slate-900 text-white font-bold text-sm active:bg-slate-800 transition-colors">
-                  Done
-                </button>
-              </div>
-            </div>
-          </div>
-        </PortalModal>
-      );
-    };
-
-    const AppHeader = ({ title, subtitle, onLogout, onSettings }) => {
+    const AppHeader = ({ title, subtitle, onLogout }) => {
       const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
       return (
         <>
@@ -512,26 +335,24 @@
                 <p className="text-[9px] md:text-xs text-blue-400 font-bold uppercase tracking-widest mt-0.5 truncate">{subtitle}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 md:gap-3 shrink-0">
+            <div className="flex items-center gap-3 md:gap-6 shrink-0">
               <Clock />
-              <div className="hidden md:block w-px h-8 bg-slate-700/50 mx-1"></div>
-              {onSettings && (
-                <button onClick={onSettings} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 text-slate-300 hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center shrink-0" aria-label="Settings">
-                  <i className="fas fa-gear text-sm"></i>
-                </button>
-              )}
-              <button onClick={() => setShowLogoutConfirm(true)} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 text-slate-300 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0" aria-label="Logout">
+              <div className="hidden md:block w-px h-8 bg-slate-700/50"></div>
+              <button onClick={() => setShowLogoutConfirm(true)} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 text-slate-400 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0" aria-label="Logout">
                 <i className="fas fa-power-off text-sm"></i>
               </button>
             </div>
           </header>
+
           <PortalModal open={showLogoutConfirm}>
             <div className="fixed inset-0 z-[999999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 fade-in">
               <div className="w-full max-w-sm rounded-3xl bg-white shadow-2xl overflow-hidden">
                 <div className="p-6 md:p-7 border-b border-slate-100">
-                  <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mb-4"><i className="fas fa-right-from-bracket text-2xl"></i></div>
+                  <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mb-4">
+                    <i className="fas fa-right-from-bracket text-2xl"></i>
+                  </div>
                   <h3 className="text-xl md:text-2xl font-extrabold text-slate-800">Do you want to log out?</h3>
-                  <p className="text-sm text-slate-500 mt-2 leading-6">You will be signed out and taken back to the login screen.</p>
+                  <p className="text-sm text-slate-500 mt-2 leading-6">You will be signed out of SalineGuard and taken back to the login screen.</p>
                 </div>
                 <div className="p-4 md:p-5 flex gap-3">
                   <button onClick={() => setShowLogoutConfirm(false)} className="flex-1 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm active:bg-slate-200 transition-colors">Cancel</button>
@@ -557,37 +378,38 @@
       </div>
     );
 
-    const StatusCard = ({ data, onComplete, onShare, isHistory = false, currentUserUid = null }) => {
+    const StatusCard = ({ data, onComplete, isHistory = false }) => {
       const [nowTick, setNowTick] = useState(Date.now());
       useEffect(() => {
         const id = setInterval(() => setNowTick(Date.now()), 1000);
         return () => clearInterval(id);
       }, []);
 
-      const perc = getDevicePercent(data);
-      const totalMl = safeNum(data?.totalMl, DEFAULT_TOTAL_ML);
-      const mlRemaining = getDeviceMlRemaining(data);
-      const mlInfused = Math.max(0, totalMl - mlRemaining);
-      const isOnline = !isHistory && isDeviceOnlineNow(data);
-      const isCrit = perc <= 10 && !isHistory;
-      const finishTime = (() => {
-        const expectedMs = Number(data?.estimatedCompletionAt);
-        if (expectedMs && expectedMs > 0) return new Date(expectedMs);
-        const mins = data?.minsLeft !== undefined ? Number(data.minsLeft) : null;
-        const secs = data?.secsLeft !== undefined ? Number(data.secsLeft) : null;
-        if (mins !== null && mins < 999) return new Date(nowTick + (mins * 60000) + ((secs || 0) * 1000));
-        return null;
-      })();
+      const perc = Number.isFinite(Number(data?.perc)) ? Number(data.perc) : 100;
+      const liveMins = data?.minsLeft !== undefined ? Number(data.minsLeft) : null;
+      const liveSecs = data?.secsLeft !== undefined ? Number(data.secsLeft) : null;
+
+      const expectedMs = Number(data?.estimatedCompletionAt);
+      let finishTime = null;
+      if (expectedMs && expectedMs > 0) {
+        finishTime = new Date(expectedMs);
+      } else if (liveMins !== null && liveMins < 999) {
+        finishTime = new Date(Date.now() + (liveMins * 60000) + (liveSecs * 1000));
+      }
       const finishLabel = finishTime ? finishTime.toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' }) : '--';
+
+      const isCrit = perc <= 10 && !isHistory;
+      const isOnline = !isHistory && isDeviceOnlineNow(data, nowTick);
+      const isOffline = !isHistory && !isOnline;
       const displayName = data?.patientName || `Room ${data?.room || '-'} - Bed ${data?.bed || '-'}`;
-      const timeString = isHistory ? 'Done' : `${formatDuration(getRemainingMs(data))} left`;
-      const canManage = !isHistory && (!currentUserUid || data?.nurseId === currentUserUid);
-      const nurseTrail = formatNurseTrail(data);
-      const performedByLabel = data?.completedByName ? trailEntryLabel({ name: data.completedByName, role: data.completedByRole }) : '';
-      const trailHasMultiple = nurseTrail.length > 1;
+
+      const remainingMs = isHistory ? 0 : getRemainingMs(data);
+      const timeString = isHistory ? 'Done' : (liveMins !== null && liveMins < 999 ? `${liveMins}m ${String(liveSecs ?? 0).padStart(2, '0')}s left` : `${formatDuration(remainingMs)} left`);
+      const flowPerHour = getFlowPerHour(data);
+      const mlLeft = getMlLeft(data);
 
       return (
-        <div className={`relative bg-white rounded-2xl p-4 md:p-5 border transition-all duration-300 shadow-sm flex flex-col justify-between ${isCrit || data?.salineRemoved ? 'border-red-400 critical-alert' : (isOnline ? 'border-slate-200' : 'border-amber-400')}`}>
+        <div className={`relative bg-white rounded-2xl p-4 md:p-5 border transition-all duration-300 shadow-sm flex flex-col justify-between ${isCrit || data?.salineRemoved ? 'border-red-400 critical-alert' : (isOffline ? 'border-amber-400' : 'border-slate-200')}`}>
           <div>
             <div className="flex justify-between items-start mb-4 gap-2">
               <div className="pr-2 min-w-0 flex-1">
@@ -599,11 +421,6 @@
                     <span className={`px-2 py-1 rounded-md border shrink-0 ${isOnline ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
                       <i className={`fas ${isOnline ? 'fa-wifi' : 'fa-wifi-slash'} mr-1 ${isOnline ? 'text-emerald-500' : 'text-amber-500'}`}></i>
                       {isOnline ? 'Online' : 'Offline'}
-                    </span>
-                  )}
-                  {data?.handoverPendingToName && !isHistory && (
-                    <span className="px-2 py-1 rounded-md border shrink-0 bg-purple-50 text-purple-700 border-purple-100">
-                      <i className="fas fa-share mr-1"></i> To {data.handoverPendingToName}
                     </span>
                   )}
                 </div>
@@ -622,83 +439,42 @@
               <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
                 <div className={`h-full rounded-full transition-all duration-1000 ${isHistory ? 'bg-emerald-500' : (perc<=10 || data?.salineRemoved ? 'bg-red-500' : 'bg-gradient-to-r from-blue-500 to-indigo-500')}`} style={{ width: `${Math.max(0, Math.min(100, perc))}%` }}></div>
               </div>
-              <div className="mt-3 space-y-1.5">
-                {!isHistory && data?.salineRemoved && (
-                  <div className="bg-red-100 border border-red-200 text-red-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
-                    <i className="fas fa-exclamation-triangle mr-1.5"></i> Saline Removed!
-                  </div>
-                )}
-                {!isHistory && data?.blockageSuspected && !data?.salineRemoved && (
-                  <div className="bg-amber-100 border border-amber-200 text-amber-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
-                    <i className="fas fa-ban mr-1.5"></i> Flow Blockage Detected!
-                  </div>
-                )}
-                <div className="text-[10px] text-slate-500 font-medium flex flex-wrap gap-2">
-                  <span className="font-bold text-slate-700">{formatMl(mlInfused)} / {formatMl(totalMl)} used</span>
-                  <span>•</span>
-                  <span className="font-bold text-slate-700">{formatMl(mlRemaining)} left</span>
-                  {!isHistory && <><span>•</span><span>Expected completion at <span className="font-bold text-slate-700">{finishLabel}</span></span></>}
+              {!isHistory && (
+                <div className="mt-3 space-y-1.5">
+                  <div className="text-[10px] text-slate-500 font-medium">Flow rate: <span className="font-bold text-slate-700">{Math.round(flowPerHour)} ml/hr</span></div>
+                  {Number.isFinite(mlLeft) && <div className="text-[10px] text-slate-500 font-medium">Remaining volume: <span className="font-bold text-slate-700">{Math.round(mlLeft)} ml</span></div>}
+                  {data?.salineRemoved && (
+                    <div className="bg-red-100 border border-red-200 text-red-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
+                      <i className="fas fa-exclamation-triangle mr-1.5"></i> Saline Removed!
+                    </div>
+                  )}
+                  {data?.blockageSuspected && !data?.salineRemoved && (
+                    <div className="bg-amber-100 border border-amber-200 text-amber-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1.5 rounded-md flex items-center justify-center animate-pulse shadow-sm">
+                      <i className="fas fa-ban mr-1.5"></i> Flow Blockage Detected!
+                    </div>
+                  )}
+                  <div className="text-[10px] text-slate-500 font-medium">Expected completion at <span className="font-bold text-slate-700">{finishLabel}</span></div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
           <div className="flex justify-between items-center pt-3 border-t border-slate-100 mt-auto gap-3">
             <div className="text-[9px] md:text-[10px] text-slate-500 font-medium min-w-0">
-              <div className="mb-1 text-slate-700 font-bold flex items-center truncate max-w-[160px]"><i className="fas fa-user-nurse mr-1.5 text-slate-400"></i><span className="truncate">{data?.nurseName || 'Unknown Staff'}</span></div>
-              {!isHistory ? (
-                <div className="space-y-1">
-                  <span className="text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md inline-block">Start: {new Date(data?.startTime || Date.now()).toLocaleString('en-IN', { timeStyle: 'short' })}</span>
-                  {data?.handoverRequestedByName && data?.handoverPendingToName && <span className="text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md inline-block">Transfer: {data.handoverRequestedByName} → {data.handoverPendingToName}</span>}
-                  {nurseTrail.length > 1 && (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {nurseTrail.slice(0, 4).map((name, idx) => (
-                        <span key={`${name}-${idx}`} className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
-                          {name}
-                        </span>
-                      ))}
-                      {nurseTrail.length > 4 && (
-                        <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200">
-                          +{nurseTrail.length - 4} more
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
+              <div className="mb-1 text-slate-700 font-bold flex items-center truncate max-w-[150px]"><i className="fas fa-user-nurse mr-1.5 text-slate-400"></i><span className="truncate">{data?.nurseName || 'Unknown Staff'}</span></div>
+              {isHistory ? (
+                <span className={`px-2 py-0.5 rounded-md inline-block ${data?.autoDischarged ? 'text-amber-600 bg-amber-50' : 'text-emerald-600 bg-emerald-50'}`}>
+                  <i className={`fas ${data?.autoDischarged ? 'fa-clock' : 'fa-check-circle'} mr-1`}></i>
+                  {data?.autoDischarged ? 'Auto Discharged' : new Date(data?.completedAt || Date.now()).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
+                </span>
               ) : (
-                <div className="space-y-1">
-                  <span className={`px-2 py-0.5 rounded-md inline-block ${data?.autoDischarged ? 'text-amber-600 bg-amber-50' : 'text-emerald-600 bg-emerald-50'}`}>
-                    <i className={`fas ${data?.autoDischarged ? 'fa-clock' : 'fa-check-circle'} mr-1`}></i>
-                    {data?.autoDischarged ? 'Auto Discharged' : new Date(data?.completedAt || Date.now()).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {nurseTrail.map((name, idx) => (
-                      <span key={`${name}-${idx}`} className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
-                        {name}
-                      </span>
-                    ))}
-                    {performedByLabel && (
-                      <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
-                        Closed by {performedByLabel}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <span className="text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md inline-block">Start: {new Date(data?.startTime || Date.now()).toLocaleString('en-IN', { timeStyle: 'short' })}</span>
               )}
             </div>
             {!isHistory && (
-              <div className="flex gap-2 shrink-0">
-                {canManage && onShare && (
-                  <button onClick={() => onShare(data)} className="bg-indigo-600 active:bg-indigo-700 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5">
-                    <i className="fas fa-share"></i> Share
-                  </button>
-                )}
-                {canManage && onComplete && (
-                  <button onClick={() => onComplete(data)} className="bg-slate-900 active:bg-emerald-600 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5">
-                    <span>Discharge</span> <i className="fas fa-check text-slate-400"></i>
-                  </button>
-                )}
-              </div>
+              <button onClick={() => { if (onComplete) onComplete(data.deviceId); }} className="bg-slate-900 active:bg-emerald-600 text-white text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg shadow-md active:scale-95 transition-all flex items-center gap-1.5 shrink-0">
+                <span>Discharge</span> <i className="fas fa-check text-slate-400"></i>
+              </button>
             )}
           </div>
         </div>
@@ -712,19 +488,19 @@
 
       const handleSubmit = async () => {
         const did = deviceId.trim().toUpperCase();
-        if (!did) { window.__sg_notify('Please enter a valid Device ID.'); return; }
+        if (!did) { alert('Please enter a valid Device ID.'); return; }
         setLoading(true);
         try {
           const snap = await db.ref(`hospitals/${hospitalId}/registered_devices/${did}`).once('value');
           if (snap.exists()) {
-            window.__sg_notify(`Device ID ${did} is already registered to this hospital.`);
+            alert(`Device ID ${did} is already registered to this hospital.`);
           } else {
-            await db.ref(`hospitals/${hospitalId}/registered_devices/${did}`).set({ deviceId: did, addedAt: Date.now(), startedAt: Date.now() });
+            await db.ref(`hospitals/${hospitalId}/registered_devices/${did}`).set({ deviceId: did, addedAt: Date.now() });
             onSuccess();
             setDeviceId('');
             onClose();
           }
-        } catch (e) { window.__sg_notify(e.message); }
+        } catch (e) { alert(e.message); }
         setLoading(false);
       };
 
@@ -759,7 +535,7 @@
       const [loading, setLoading] = useState(false);
       const [deviceStatus, setDeviceStatus] = useState('idle');
       const [alertPrefs, setAlertPrefs] = useState(DEFAULT_PERCENT_ALERTS);
-      const [mlAlerts, setMlAlerts] = useState(true);
+      const [mlAlertPrefs, setMlAlertPrefs] = useState(DEFAULT_ML_ALERTS);
 
       useEffect(() => {
         document.body.classList.toggle('modal-open', isOpen);
@@ -768,7 +544,7 @@
           setLoading(false);
           setDeviceStatus('idle');
           setAlertPrefs(DEFAULT_PERCENT_ALERTS);
-          setMlAlerts(true);
+          setMlAlertPrefs(DEFAULT_ML_ALERTS);
         }
         return () => document.body.classList.remove('modal-open');
       }, [isOpen]);
@@ -797,18 +573,19 @@
       }, [form.id, hospitalId]);
 
       const toggleAlert = (level) => setAlertPrefs(prev => ({ ...prev, [level]: !prev[level] }));
+      const toggleMlAlert = (level) => setMlAlertPrefs(prev => ({ ...prev, [level]: !prev[level] }));
 
       const handleSubmit = async () => {
         const did = form.id.trim().toUpperCase();
-        if (!did || !form.room || !form.bed) { window.__sg_notify('Device ID, Room Number, and Bed Number are mandatory.'); return; }
-        if (deviceStatus !== 'valid') { window.__sg_notify('Action blocked. Ensure you are using a valid, registered device ID that is currently idle.'); return; }
+        if (!did || !form.room || !form.bed) { alert('Device ID, Room Number, and Bed Number are mandatory.'); return; }
+        if (deviceStatus !== 'valid') { alert('Action blocked. Ensure you are using a valid, registered device ID that is currently idle.'); return; }
         setLoading(true);
         try {
           const hRef = db.ref(`hospitals/${hospitalId}`);
           const regSnap = await hRef.child(`registered_devices/${did}`).once('value');
-          if (!regSnap.exists() || regSnap.val() === null) { window.__sg_notify(`ACCESS DENIED: The Device ID "${did}" is strictly NOT registered to your hospital's inventory.`); setDeviceStatus('invalid'); setLoading(false); return; }
+          if (!regSnap.exists() || regSnap.val() === null) { alert(`ACCESS DENIED: The Device ID "${did}" is strictly NOT registered to your hospital's inventory.`); setDeviceStatus('invalid'); setLoading(false); return; }
           const activeSnap = await hRef.child(`active_devices/${did}`).once('value');
-          if (activeSnap.exists() && activeSnap.val() !== null) { window.__sg_notify(`ERROR: Device "${did}" is already in use by another patient.`); setDeviceStatus('in_use'); setLoading(false); return; }
+          if (activeSnap.exists() && activeSnap.val() !== null) { alert(`ERROR: Device "${did}" is already in use by another patient.`); setDeviceStatus('in_use'); setLoading(false); return; }
 
           await hRef.child(`active_devices/${did}`).set({
             deviceId: did,
@@ -817,14 +594,9 @@
             bed: form.bed,
             nurseId: user.uid,
             nurseName: user.name || 'Staff',
-            nurseTrail: [makeTrailEntry(user, user.role || 'nurse')],
-            createdByUid: user.uid,
-            createdByName: user.name || 'Staff',
-            createdByRole: user.role || 'nurse',
             startTime: Date.now(),
             lastUpdate: Date.now(),
             perc: 100,
-            mlLeft: DEFAULT_TOTAL_ML,
             minsLeft: 60,
             secsLeft: 0,
             rawWeight: 0,
@@ -832,7 +604,11 @@
             flowRate: 0,
             deviceOnline: true,
             autoDischargeAt: Date.now() + INFUSION_DURATION_MS,
-            notificationSettings: { mode: 'both', percentAlerts: alertPrefs, mlAlerts }
+            notificationSettings: {
+              mode: 'percent',
+              percentAlerts: alertPrefs,
+              mlAlerts: mlAlertPrefs
+            }
           });
 
           setForm({ id: '', name: '', room: '', bed: '' });
@@ -840,7 +616,7 @@
           onSuccess();
           onClose();
         } catch (e) {
-          window.__sg_notify('Database Error: ' + e.message);
+          alert('Database Error: ' + e.message);
         }
         setLoading(false);
       };
@@ -898,12 +674,11 @@
                   <input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} placeholder="Patient Name (Optional)" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 transition-colors" />
                 </div>
 
-
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
                   <div className="flex items-center justify-between mb-3 gap-3">
                     <div>
                       <div className="text-[10px] uppercase tracking-wider font-extrabold text-slate-500">Percentage alerts</div>
-                      <div className="text-xs text-slate-400 mt-1">Turn percentage notifications on or off</div>
+                      <div className="text-xs text-slate-400 mt-1">Turn individual percentage notifications on or off</div>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
@@ -916,16 +691,118 @@
                       );
                     })}
                   </div>
-                  <div className="mt-3 flex items-center gap-2">
-                    <button type="button" onClick={() => setMlAlerts(v => !v)} className={`rounded-xl px-3 py-2 text-xs font-extrabold border transition-all ${mlAlerts ? 'bg-blue-50 border-blue-300 text-blue-700' : 'bg-slate-100 border-slate-200 text-slate-400'}`}>
-                      100ml alerts {mlAlerts ? 'On' : 'Off'}
-                    </button>
-                    <div className="text-[10px] text-slate-400 font-semibold">Notification format: <span className="font-bold text-slate-700">ml + % + ETA</span></div>
+                </div>
+
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                  <div className="flex items-center justify-between mb-3 gap-3">
+                    <div>
+                      <div className="text-[10px] uppercase tracking-wider font-extrabold text-slate-500">ML alerts</div>
+                      <div className="text-xs text-slate-400 mt-1">Turn remaining-volume alerts on or off</div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {ML_ALERT_LEVELS.map(level => {
+                      const on = mlAlertPrefs[level] !== false;
+                      return (
+                        <button key={level} type="button" onClick={() => toggleMlAlert(level)} className={`rounded-xl px-3 py-2 text-xs font-extrabold border transition-all ${on ? 'bg-blue-50 border-blue-300 text-blue-700' : 'bg-slate-100 border-slate-200 text-slate-400'}`}>
+                          {level} ml {on ? 'On' : 'Off'}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
                 <button onClick={handleSubmit} disabled={isButtonDisabled} className={`w-full mt-1 py-4 rounded-xl font-bold shadow-lg transition-all flex justify-center items-center gap-2 border-none outline-none ${buttonClass}`}>
                   {buttonContent}
+                </button>
+              </div>
+            </div>
+          </div>
+        </PortalModal>
+      );
+    };
+
+    const EditNurseModal = ({ isOpen, onClose, hospitalId, currentNurse, onSuccess }) => {
+      const [name, setName] = useState('');
+      const [newPassword, setNewPassword] = useState('');
+      const [loading, setLoading] = useState(false);
+
+      useEffect(() => {
+        document.body.classList.toggle('modal-open', isOpen);
+        return () => document.body.classList.remove('modal-open');
+      }, [isOpen]);
+
+      useEffect(() => {
+        if (currentNurse) {
+          setName(currentNurse.name || '');
+          setNewPassword('');
+        }
+      }, [currentNurse]);
+
+      const handleSave = async () => {
+        if (!name.trim()) return alert('Name cannot be empty.');
+        setLoading(true);
+        try {
+          const existingSnap = await db.ref(`hospitals/${hospitalId}/nurses`).once('value');
+          let duplicate = false;
+          existingSnap.forEach(child => {
+            const v = child.val() || {};
+            if (v.uid !== currentNurse.uid && normalizeName(v.name) === normalizeName(name)) duplicate = true;
+          });
+          if (duplicate) {
+            alert('Another staff member already has this name. Please use a unique name.');
+            setLoading(false);
+            return;
+          }
+
+          const updates = { name: name.trim() };
+
+          if (newPassword.trim()) {
+            updates.pendingPassword = newPassword.trim();
+            updates.passwordChangeRequestedAt = Date.now();
+            updates.passwordChangeStatus = 'pending';
+          }
+
+          await db.ref(`hospitals/${hospitalId}/nurses/${currentNurse.uid}`).update(updates);
+
+          onSuccess();
+          onClose();
+        } catch (e) {
+          alert(e.message);
+        }
+        setLoading(false);
+      };
+
+      if (!isOpen || !currentNurse) return null;
+
+      return (
+        <PortalModal open={isOpen}>
+          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-black/80 backdrop-blur-md flex items-center justify-center p-4 m-0 fade-in">
+            <div className="bg-white w-[92vw] max-w-sm rounded-3xl p-6 shadow-2xl relative border-0 outline-none mx-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-extrabold text-slate-800 text-xl">Edit Staff Details</h3>
+                <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 active:bg-slate-200 flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
+              </div>
+              <div className="space-y-4">
+                <input value={name} onChange={e=>setName(e.target.value)} placeholder="Full Name" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-xl text-sm font-medium transition-colors" />
+                <div className="text-[11px] font-mono text-slate-500 bg-slate-50 p-3 rounded-xl border-none break-all">ID: {currentNurse.email}</div>
+
+                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                  <div className="text-[10px] uppercase tracking-wider font-bold text-amber-700 mb-1">Change password request</div>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={e=>setNewPassword(e.target.value)}
+                    placeholder="New password"
+                    className="w-full p-3 bg-white rounded-xl text-sm font-bold text-slate-700"
+                  />
+                  <div className="text-[10px] text-amber-700/80 mt-2">
+                    This stores a pending password request in Firebase. A backend Cloud Function must apply it to Firebase Auth.
+                  </div>
+                </div>
+
+                <button onClick={handleSave} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all border-none outline-none">
+                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Save Changes</span>}
                 </button>
               </div>
             </div>
@@ -948,7 +825,7 @@
               <div className="p-7 space-y-4">
                 <div className="bg-slate-50 p-4 rounded-xl border-none"><p className="text-[10px] font-bold tracking-widest text-slate-400 mb-1 uppercase">Email Address</p><p className="font-mono font-bold text-slate-800 break-all">{creds.email}</p></div>
                 <div className="bg-slate-50 p-4 rounded-xl border-none"><p className="text-[10px] font-bold tracking-widest text-slate-400 mb-1 uppercase">Initial Password</p><p className="font-mono font-bold text-slate-800 tracking-wider">{creds.password}</p></div>
-                <button onClick={async () => { try { await copyText(`Email: ${creds.email}\nPassword: ${creds.password}`); window.__sg_notify('Copied!'); } catch (error) { window.__sg_notify('Copy failed. Please copy the credentials manually.'); } }} className="w-full bg-slate-900 active:bg-slate-800 text-white py-4 rounded-xl font-bold transition-colors border-none outline-none">Copy Credentials</button>
+                <button onClick={async () => { try { await copyText(`Email: ${creds.email}\nPassword: ${creds.password}`); alert('Copied!'); } catch (error) { alert('Copy failed. Please copy the credentials manually.'); } }} className="w-full bg-slate-900 active:bg-slate-800 text-white py-4 rounded-xl font-bold transition-colors border-none outline-none">Copy Credentials</button>
                 <button onClick={onClose} className="w-full text-slate-500 active:text-slate-800 py-2 font-bold transition-colors border-none outline-none">Done</button>
               </div>
             </div>
@@ -969,8 +846,8 @@
 
       const handleSubmit = async () => {
         const cleanName = form.name.trim();
-        if (!cleanName || !form.password || form.password.length < 6) { window.__sg_notify('Please fill all required fields. Password must be at least 6 characters.'); return; }
-        if (!generatedEmail) { window.__sg_notify('Enter a valid name to generate staff email.'); return; }
+        if (!cleanName || !form.password || form.password.length < 6) { alert('Please fill all required fields. Password must be at least 6 characters.'); return; }
+        if (!generatedEmail) { alert('Enter a valid name to generate staff email.'); return; }
 
         setLoading(true);
         const secondaryAuth = getSecondaryAuth();
@@ -984,8 +861,16 @@
             if (String(n.email || '').toLowerCase() === String(generatedEmail).toLowerCase()) duplicateEmail = true;
           });
 
-          if (duplicateName) { window.__sg_notify('A staff member with this name already exists. Please use a different name.'); setLoading(false); return; }
-          if (duplicateEmail) { window.__sg_notify('This staff email already exists in the hospital database. Please use a different name.'); setLoading(false); return; }
+          if (duplicateName) {
+            alert('A staff member with this name already exists. Please use a different name.');
+            setLoading(false);
+            return;
+          }
+          if (duplicateEmail) {
+            alert('This staff email already exists in the hospital database. Please use a different name.');
+            setLoading(false);
+            return;
+          }
 
           await secondaryAuth.setPersistence(firebase.auth.Auth.Persistence.NONE);
           const userCredential = await secondaryAuth.createUserWithEmailAndPassword(generatedEmail, form.password);
@@ -1007,7 +892,7 @@
           setForm({ name: '', password: '' });
           onSuccess();
         } catch (e) {
-          window.__sg_notify(e.message);
+          alert(e.message);
         } finally {
           try { if (secondaryAuth.currentUser) await secondaryAuth.signOut(); } catch (e) {}
         }
@@ -1080,26 +965,29 @@
 
       const handleSubmit = async () => {
         if (!form.hospitalName || !form.location || !form.password || form.password.length < 6) {
-          window.__sg_notify('Hospital name, location, and password are required. Password must be at least 6 characters.');
+          alert('Hospital name, location, and password are required. Password must be at least 6 characters.');
           return;
         }
-        if (!generatedHospitalId) { window.__sg_notify('Please enter a valid hospital name and location.'); return; }
+        if (!generatedHospitalId) {
+          alert('Please enter a valid hospital name and location.');
+          return;
+        }
         setLoading(true);
         const secondaryAuth = getSecondaryAuth();
         try {
           const hospitalRef = db.ref(`hospitals/${generatedHospitalId}`);
           const snap = await hospitalRef.once('value');
-          if (snap.exists()) { window.__sg_notify('That hospital already exists in the network.'); setLoading(false); return; }
+          if (snap.exists()) { alert('That hospital already exists in the network.'); setLoading(false); return; }
 
           await hospitalRef.set({
             name: humanize(form.hospitalName) + ' Hospital',
             location: humanize(form.location),
             createdAt: Date.now(),
+            amcStartDate: Date.now(),
             active_devices: {},
             history: {},
             nurses: {},
-            registered_devices: {},
-            handover_requests: {}
+            registered_devices: {}
           });
 
           await secondaryAuth.setPersistence(firebase.auth.Auth.Persistence.NONE);
@@ -1121,7 +1009,7 @@
           onSuccess();
           setForm({ hospitalName: '', location: '', password: '' });
         } catch (e) {
-          window.__sg_notify(e.message);
+          alert(e.message);
         } finally {
           try { if (secondaryAuth.currentUser) await secondaryAuth.signOut(); } catch (e) {}
         }
@@ -1174,328 +1062,29 @@
       );
     };
 
-    const EditNurseModal = ({ isOpen, onClose, hospitalId, currentNurse, onSuccess }) => {
-      const [name, setName] = useState('');
-      const [email, setEmail] = useState('');
-      const [newPassword, setNewPassword] = useState('');
-      const [loading, setLoading] = useState(false);
-
-      useEffect(() => {
-        document.body.classList.toggle('modal-open', isOpen);
-        return () => document.body.classList.remove('modal-open');
-      }, [isOpen]);
-
-      useEffect(() => {
-        if (currentNurse) {
-          setName(currentNurse.name || '');
-          setEmail(currentNurse.email || '');
-          setNewPassword('');
-        }
-      }, [currentNurse]);
-
-      const handleSave = async () => {
-        if (!name.trim()) return window.__sg_notify('Name cannot be empty.');
-        if (!email.trim()) return window.__sg_notify('Email cannot be empty.');
-        setLoading(true);
-        try {
-          const cleanEmail = email.trim().toLowerCase();
-          const existingSnap = await db.ref(`hospitals/${hospitalId}/nurses`).once('value');
-          let duplicate = false;
-          let duplicateEmail = false;
-          existingSnap.forEach(child => {
-            const v = child.val() || {};
-            if (v.uid !== currentNurse.uid && normalizeName(v.name) === normalizeName(name)) duplicate = true;
-            if (v.uid !== currentNurse.uid && String(v.email || '').toLowerCase() === cleanEmail) duplicateEmail = true;
-          });
-          if (duplicate) { window.__sg_notify('Another staff member already has this name. Please use a unique name.'); setLoading(false); return; }
-          if (duplicateEmail) { window.__sg_notify('Another staff member already uses this email. Please choose a different email.'); setLoading(false); return; }
-
-          const updates = { name: name.trim(), email: cleanEmail, emailLower: cleanEmail, updatedAt: Date.now() };
-          if (newPassword.trim()) {
-            updates.pendingPassword = newPassword.trim();
-            updates.passwordChangeRequestedAt = Date.now();
-            updates.passwordChangeStatus = 'pending';
-          }
-          await db.ref(`hospitals/${hospitalId}/nurses/${currentNurse.uid}`).update(updates);
-          onSuccess();
-          onClose();
-        } catch (e) {
-          window.__sg_notify(e.message);
-        }
-        setLoading(false);
-      };
-
-      if (!isOpen || !currentNurse) return null;
-
-      return (
-        <PortalModal open={isOpen}>
-          <div className="fixed inset-0 z-[999999] w-screen h-screen bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 m-0 fade-in">
-            <div className="bg-white w-[92vw] max-w-md rounded-[28px] p-6 shadow-2xl relative border border-slate-200 outline-none mx-auto">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h3 className="font-extrabold text-slate-800 text-2xl tracking-tight">Edit Staff Details</h3>
-                  <p className="text-xs font-medium text-slate-400 mt-1">Update name, email and password request</p>
-                </div>
-                <button onClick={onClose} className="w-9 h-9 rounded-full bg-slate-100 text-slate-400 active:bg-slate-200 flex items-center justify-center border-none"><i className="fas fa-times text-sm"></i></button>
-              </div>
-              <div className="space-y-4">
-                <input value={name} onChange={e=>setName(e.target.value)} placeholder="Full Name" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-2xl text-sm font-medium transition-colors" />
-                <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email Address" className="w-full p-3.5 bg-slate-100 focus:bg-slate-200 rounded-2xl text-sm font-medium transition-colors font-mono" />
-                <div className="text-[11px] font-mono text-slate-500 bg-slate-50 p-3 rounded-2xl border border-slate-100 break-all">ID: {currentNurse.email}</div>
-
-                <div className="bg-amber-50 border border-amber-200 rounded-[24px] p-4">
-                  <div className="text-[10px] uppercase tracking-[0.28em] font-bold text-amber-700 mb-2">Password update request</div>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={e=>setNewPassword(e.target.value)}
-                    placeholder="New password"
-                    className="w-full p-3 bg-white rounded-2xl text-sm font-bold text-slate-700 border border-amber-100"
-                  />
-                  <div className="text-[10px] text-amber-700/80 mt-2 leading-5">
-                    This saves the new password request in Firebase. A secure backend sync is still required to change Firebase Auth credentials for another user.
-                  </div>
-                </div>
-
-                <button onClick={handleSave} disabled={loading} className="w-full bg-blue-600 active:bg-blue-700 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-500/30 active:scale-95 transition-all border-none outline-none">
-                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : <span>Save Changes</span>}
-                </button>
-              </div>
-            </div>
-          </div>
-        </PortalModal>
-      );
-    };
-
-    const ShareDeviceModal = ({ isOpen, onClose, hospitalId, device, nurses, currentUser, onSuccess }) => {
-      const [selectedUid, setSelectedUid] = useState('');
-      const [searchTerm, setSearchTerm] = useState('');
-      const [loading, setLoading] = useState(false);
-
-      useEffect(() => {
-        document.body.classList.toggle('modal-open', isOpen);
-        if (isOpen) {
-          setSelectedUid('');
-          setSearchTerm('');
-        }
-        return () => document.body.classList.remove('modal-open');
-      }, [isOpen]);
-
-      const targets = (nurses || []).filter(n => n && n.uid && n.uid !== currentUser?.uid && !isNurseDisabled(n));
-      const filteredTargets = targets.filter(n => {
-        const q = searchTerm.trim().toLowerCase();
-        if (!q) return true;
-        return [n.name, n.email, n.uid].some(v => String(v || '').toLowerCase().includes(q));
+    const claimAndArchiveDevice = async (hospitalId, deviceId, completionType = 'manual', extraFields = {}) => {
+      const activeRef = db.ref(`hospitals/${hospitalId}/active_devices/${deviceId}`);
+      const historyRef = db.ref(`hospitals/${hospitalId}/history`);
+      const tx = await activeRef.transaction((current) => {
+        if (!current) return;
+        if (current.completionLock || current.completedAt) return;
+        return { ...current, completionLock: { type: completionType, claimedAt: Date.now() } };
       });
-
-      const sendRequest = async () => {
-        if (!device?.deviceId) return;
-        if (!selectedUid) { window.__sg_notify('Please select a nurse.'); return; }
-        const target = targets.find(t => t.uid === selectedUid);
-        if (!target) { window.__sg_notify('Selected nurse not found.'); return; }
-        setLoading(true);
-        try {
-          const requestRef = db.ref(`hospitals/${hospitalId}/handover_requests`).push();
-          await requestRef.set({
-            requestId: requestRef.key,
-            deviceId: device.deviceId,
-            fromUid: currentUser.uid,
-            fromName: currentUser.name || 'Staff',
-            fromEmail: currentUser.email || '',
-            toUid: target.uid,
-            toName: target.name || 'Staff',
-            toEmail: target.email || '',
-            status: 'pending',
-            createdAt: Date.now()
-          });
-          await db.ref(`hospitals/${hospitalId}/active_devices/${device.deviceId}`).update({
-            handoverRequestedBy: currentUser.uid,
-            handoverRequestedByName: currentUser.name || 'Staff',
-            handoverPendingTo: target.uid,
-            handoverPendingToName: target.name || 'Staff',
-            handoverRequestedAt: Date.now(),
-            handoverStatus: 'pending'
-          });
-          onSuccess && onSuccess();
-          onClose();
-        } catch (e) {
-          window.__sg_notify(e.message);
-        }
-        setLoading(false);
-      };
-
-      if (!isOpen) return null;
-
-      return (
-        <PortalModal open={isOpen}>
-          <div className="fixed inset-0 z-[999999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 fade-in">
-            <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden">
-              <div className="p-6 border-b border-slate-100 flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-extrabold text-slate-800">Share / Handover</h3>
-                  <p className="text-sm text-slate-500 mt-1">Send patient ownership to another nurse for approval.</p>
-                </div>
-                <button onClick={onClose} className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center"><i className="fas fa-times"></i></button>
-              </div>
-
-              <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto hide-scroll">
-                <div className="rounded-3xl p-4 md:p-5 border border-blue-100 bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50 shadow-sm">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 border border-blue-100 text-[10px] font-extrabold tracking-widest uppercase text-blue-700">
-                    <i className="fas fa-user-injured"></i> Patient details
-                  </div>
-                  <div className="mt-3 text-lg md:text-xl font-black text-slate-800 truncate">
-                    {device?.patientName || `Room ${device?.room} - Bed ${device?.bed}`}
-                  </div>
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <div className="rounded-2xl bg-white/90 border border-blue-100 px-3 py-2">
-                      <div className="text-[9px] font-black uppercase tracking-widest text-blue-500">Device ID</div>
-                      <div className="font-mono font-bold text-slate-800 mt-0.5 truncate">{device?.deviceId}</div>
-                    </div>
-                    <div className="rounded-2xl bg-white/90 border border-indigo-100 px-3 py-2">
-                      <div className="text-[9px] font-black uppercase tracking-widest text-indigo-500">Room</div>
-                      <div className="font-bold text-slate-800 mt-0.5 truncate">{device?.room || '-'}</div>
-                    </div>
-                    <div className="rounded-2xl bg-white/90 border border-violet-100 px-3 py-2">
-                      <div className="text-[9px] font-black uppercase tracking-widest text-violet-500">Bed</div>
-                      <div className="font-bold text-slate-800 mt-0.5 truncate">{device?.bed || '-'}</div>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold">
-                    <span className="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">Current nurse: {device?.nurseName || 'Unknown'}</span>
-                    {Array.isArray(device?.nurseTrail) && device.nurseTrail.length > 1 && <span className="px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100">Shared nurses: {formatNurseTrail(device).join(' • ')}</span>}
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <input
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    placeholder="Search nurse by name, email, or ID..."
-                    className="w-full p-3.5 pl-11 bg-slate-100 focus:bg-slate-200 rounded-2xl text-sm font-medium text-slate-700 transition-colors"
-                  />
-                  <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                </div>
-
-                <div className="flex items-center justify-between gap-3">
-                  <div className="font-bold text-slate-700 text-sm uppercase tracking-wider">Choose nurse</div>
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{filteredTargets.length} found</div>
-                </div>
-
-                <div className="space-y-2">
-                  {filteredTargets.map(n => (
-                    <label key={n.uid} className={`block p-4 rounded-2xl border cursor-pointer transition-all ${selectedUid === n.uid ? 'border-blue-500 bg-blue-50' : 'border-slate-200 bg-white'}`}>
-                      <div className="flex items-center gap-3">
-                        <input type="radio" checked={selectedUid === n.uid} onChange={() => setSelectedUid(n.uid)} className="w-4 h-4" />
-                        <div className="min-w-0">
-                          <div className="font-bold text-slate-800 truncate">{n.name}</div>
-                          <div className="text-xs text-slate-500 truncate">{n.email}</div>
-                        </div>
-                      </div>
-                    </label>
-                  ))}
-                  {filteredTargets.length === 0 && <div className="text-center text-slate-400 py-8 border-2 border-dashed border-slate-200 rounded-2xl">No matching nurse found.</div>}
-                </div>
-              </div>
-
-              <div className="p-4 border-t border-slate-100 flex gap-3">
-                <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
-                <button onClick={sendRequest} disabled={loading || !selectedUid} className="flex-1 py-3 rounded-xl bg-indigo-600 text-white font-bold disabled:opacity-50">
-                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : 'Send Request'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </PortalModal>
-      );
-    };
-
-    const HandoverRequestModal = ({ request, onAccept, onReject, nurseName }) => {
-      if (!request) return null;
-      return (
-        <PortalModal open={!!request}>
-          <div className="fixed inset-0 z-[999999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 fade-in">
-            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
-              <div className="bg-gradient-to-br from-indigo-600 to-blue-600 text-white p-6">
-                <div className="text-sm uppercase tracking-widest font-bold text-blue-100">Incoming handover</div>
-                <h3 className="text-2xl font-extrabold mt-2">Accept this patient?</h3>
-              </div>
-              <div className="p-6 space-y-4">
-                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm">
-                  <div className="font-bold text-slate-800">Patient</div>
-                  <div className="text-slate-600 mt-1">{request.patientName || `Room ${request.room} - Bed ${request.bed}`}</div>
-                  <div className="text-slate-600 mt-1">Device: {request.deviceId}</div>
-                  <div className="text-slate-600 mt-1">From: {request.fromName}</div>
-                  <div className="text-slate-600 mt-1">To: {nurseName}</div>
-                </div>
-                <p className="text-sm text-slate-500">After accepting, this nurse gets full control of the patient monitoring card.</p>
-              </div>
-              <div className="p-4 border-t border-slate-100 flex gap-3">
-                <button onClick={onReject} className="flex-1 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold">Reject</button>
-                <button onClick={onAccept} className="flex-1 py-3 rounded-xl bg-emerald-600 text-white font-bold">Accept</button>
-              </div>
-            </div>
-          </div>
-        </PortalModal>
-      );
-    };
-
-    const DischargeConfirmModal = ({ open, device, onCancel, onConfirm, loading = false, title = 'Discharge patient' }) => {
-      if (!open || !device) return null;
-      const trail = formatNurseTrail(device);
-      const completionLabel = device?.patientName || `Room ${device?.room || '-'} - Bed ${device?.bed || '-'}`;
-      return (
-        <PortalModal open={open}>
-          <div className="fixed inset-0 z-[999999] bg-black/70 backdrop-blur-md flex items-center justify-center p-4 fade-in">
-            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
-              <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white p-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-extrabold tracking-widest uppercase text-blue-200">
-                  <i className="fas fa-triangle-exclamation"></i> Confirmation
-                </div>
-                <h3 className="text-2xl font-extrabold mt-4">{title}</h3>
-                <p className="text-sm text-slate-300 mt-2">This will move the patient into history and stop live monitoring.</p>
-              </div>
-              <div className="p-5 md:p-6 space-y-4">
-                <div className="rounded-3xl p-4 border border-blue-100 bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50">
-                  <div className="text-[10px] font-black uppercase tracking-widest text-blue-600">Patient summary</div>
-                  <div className="mt-2 text-xl font-black text-slate-800">{completionLabel}</div>
-                  <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                    <div className="rounded-2xl bg-white border border-blue-100 px-3 py-2">
-                      <div className="text-[9px] font-black uppercase tracking-widest text-blue-500">Device</div>
-                      <div className="font-mono font-bold text-slate-800 mt-0.5 truncate">{device?.deviceId}</div>
-                    </div>
-                    <div className="rounded-2xl bg-white border border-indigo-100 px-3 py-2">
-                      <div className="text-[9px] font-black uppercase tracking-widest text-indigo-500">Room / Bed</div>
-                      <div className="font-bold text-slate-800 mt-0.5 truncate">{device?.room || '-'} / {device?.bed || '-'}</div>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs font-bold">
-                      Current nurse: {device?.nurseName || 'Unknown'}
-                    </span>
-                    {trail.length > 1 && (
-                      <span className="px-3 py-1.5 rounded-full bg-violet-50 text-violet-700 border border-violet-100 text-xs font-bold">
-                        Team: {trail.join(' • ')}
-                      </span>
-                    )}
-                    {device?.completedByName && (
-                      <span className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 text-xs font-bold">
-                        Closed by {trailEntryLabel({ name: device.completedByName, role: device.completedByRole })}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <p className="text-sm text-slate-500 leading-6">Press confirm to discharge now, or cancel to keep monitoring active.</p>
-              </div>
-              <div className="p-4 border-t border-slate-100 flex gap-3">
-                <button onClick={onCancel} className="flex-1 py-3.5 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
-                <button onClick={onConfirm} disabled={loading} className="flex-1 py-3.5 rounded-xl bg-indigo-600 text-white font-bold disabled:opacity-60">
-                  {loading ? <i className="fas fa-circle-notch fa-spin"></i> : 'Confirm'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </PortalModal>
-      );
+      if (!tx.committed || !tx.snapshot.exists()) return false;
+      const data = tx.snapshot.val();
+      if (!data || !data.completionLock) return false;
+      const { completionLock, ...payloadBase } = data;
+      const historyPayload = { ...payloadBase, ...extraFields, completedAt: Date.now(), completedVia: completionType, autoDischarged: completionType === 'auto', historyCreatedAt: Date.now() };
+      try {
+        const newHistoryRef = historyRef.push();
+        historyPayload.historyId = newHistoryRef.key;
+        await newHistoryRef.set(historyPayload);
+        await activeRef.remove();
+        return true;
+      } catch (e) {
+        console.error('Archive move failed:', e);
+        return false;
+      }
     };
 
     const HospitalDashboard = ({ hospitalId, userRole, isSuperView = false }) => {
@@ -1512,9 +1101,8 @@
       const [toast, setToast] = useState(null);
       const [searchTerm, setSearchTerm] = useState('');
       const [filterPeriod, setFilterPeriod] = useState('day');
+      const [scanning, setScanning] = useState(false);
       const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24, nurses: 24, devices: 24 });
-      const [pendingDischarge, setPendingDischarge] = useState(null);
-      const [pendingDischargeLoading, setPendingDischargeLoading] = useState(false);
 
       const userEmail = auth.currentUser ? auth.currentUser.email : '';
       const hospitalInfo = getHospitalInfo(userEmail);
@@ -1527,17 +1115,19 @@
             name: val.name || hospitalInfo.name,
             location: val.location || hospitalInfo.loc,
             createdAt: val.createdAt || Date.now(),
+            amcStartDate: val.amcStartDate || val.createdAt || Date.now()
           });
         };
         metaRef.on('value', metaHandler);
 
         metaRef.once('value').then(async snap => {
           if (!snap.exists() && userRole === 'admin') {
+            await metaRef.set({ name: hospitalInfo.name, location: hospitalInfo.loc, createdAt: Date.now(), amcStartDate: Date.now(), active_devices: {}, history: {}, nurses: {}, registered_devices: {} });
           } else if (snap.exists()) {
             const val = snap.val() || {};
             const updates = {};
             if (!val.createdAt) updates.createdAt = Date.now();
-            if (!val.handover_requests) updates.handover_requests = {};
+            if (!val.amcStartDate) updates.amcStartDate = val.createdAt || Date.now();
             if (Object.keys(updates).length) metaRef.update(updates);
           }
         });
@@ -1569,29 +1159,33 @@
       const nurses = useMemo(() => Object.values(nursesData || {}), [nursesData]);
       const registeredDevices = useMemo(() => Object.values(devicesData || {}), [devicesData]);
       const totalRegisteredDevices = registeredDevices.length;
+      const amcDueDate = new Date((hospitalMeta?.amcStartDate || hospitalMeta?.createdAt || Date.now()) + AMC_CYCLE_MS);
 
-      const handleDischarge = async (device) => {
-        if (!device?.deviceId) return;
-        setPendingDischarge(device);
+      const scanForAutoDischarge = async () => {
+        if (scanning) return;
+        setScanning(true);
+        try {
+          const now = Date.now();
+          for (const dev of activeDevs) {
+            if (!dev?.deviceId || dev.completionLock) continue;
+            const dueAt = dev.autoDischargeAt || ((dev.startTime || now) + INFUSION_DURATION_MS);
+            if (now >= dueAt) await claimAndArchiveDevice(hospitalId, dev.deviceId, 'auto');
+          }
+        } finally {
+          setScanning(false);
+        }
       };
 
-      const confirmPendingDischarge = async () => {
-        const device = pendingDischarge;
-        if (!device?.deviceId) return;
-        setPendingDischargeLoading(true);
-        try {
-          const ok = await claimAndArchiveDevice(
-            hospitalId,
-            device.deviceId,
-            'manual',
-            { autoDischarged: false },
-            { uid: auth.currentUser?.uid || 'admin', name: userEmail || 'Admin', role: 'admin' }
-          );
-          if (!ok) window.__sg_notify('Discharge could not be completed. Please try again.');
-          else setPendingDischarge(null);
-        } finally {
-          setPendingDischargeLoading(false);
-        }
+      useEffect(() => {
+        scanForAutoDischarge();
+        const id = setInterval(scanForAutoDischarge, 30000);
+        return () => clearInterval(id);
+      }, [hospitalId, activeDevs.length]);
+
+      const handleDischarge = async (did) => {
+        if (!confirm('Discharge patient and end monitoring?')) return;
+        const ok = await claimAndArchiveDevice(hospitalId, did, 'manual', { autoDischarged: false });
+        if (!ok) alert('Discharge could not be completed. Please try again.');
       };
 
       const handleToggleNurseStatus = async (nurse) => {
@@ -1601,30 +1195,45 @@
 
         if (!currentlyDisabled) {
           const activeCount = Object.values(activeData || {}).filter(dev => dev?.nurseId === uid).length;
-          const message = activeCount > 0 ? `This staff member is handling ${activeCount} active patient(s). Disabling will stop login immediately. Continue?` : `Disable this staff member now?`;
-          if (!(await window.__sg_confirm(message, 'Disable Staff Member'))) return;
+          const message = activeCount > 0
+            ? `This staff member is handling ${activeCount} active patient(s). Disabling will stop login immediately. Continue?`
+            : `Disable this staff member now?`;
+          if (!confirm(message)) return;
+
           try {
-            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({ disabled: true, disabledAt: Date.now(), disabledBy: userEmail || 'admin' });
+            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({
+              disabled: true,
+              disabledAt: Date.now(),
+              disabledBy: userEmail || 'admin'
+            });
             setToast({ type: 'success', msg: 'Staff disabled' });
             setTimeout(() => setToast(null), 2000);
-          } catch (e) { window.__sg_notify(e.message); }
+          } catch (e) {
+            alert(e.message);
+          }
         } else {
-          if (!(await window.__sg_confirm('Re-enable this staff member now?', 'Enable Staff Member'))) return;
+          if (!confirm('Re-enable this staff member now?')) return;
           try {
-            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({ disabled: false, disabledAt: null, disabledBy: null });
+            await db.ref(`hospitals/${hospitalId}/nurses/${uid}`).update({
+              disabled: false,
+              disabledAt: null,
+              disabledBy: null
+            });
             setToast({ type: 'success', msg: 'Staff enabled' });
             setTimeout(() => setToast(null), 2000);
-          } catch (e) { window.__sg_notify(e.message); }
+          } catch (e) {
+            alert(e.message);
+          }
         }
       };
 
       const handleDeleteDevice = async (did) => {
-        if (!(await window.__sg_confirm(`Remove device ${did} from your inventory? Nurses will no longer be able to activate it.`, 'Remove Device'))) return;
+        if (!confirm(`Remove device ${did} from your inventory? Nurses will no longer be able to activate it.`)) return;
         try {
           await db.ref(`hospitals/${hospitalId}/registered_devices/${did}`).remove();
           setToast({ type: 'success', msg: 'Device removed' });
           setTimeout(()=>setToast(null), 2000);
-        } catch (e) { window.__sg_notify(e.message); }
+        } catch (e) { alert(e.message); }
       };
 
       if (!hospitalMeta) return <div className="p-12 text-center text-slate-400 font-medium animate-pulse">Syncing Hospital Data...</div>;
@@ -1656,6 +1265,7 @@
       return (
         <div className="space-y-5 md:space-y-6 fade-in w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {toast && <Toast {...toast} />}
+
           <div className="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200 flex items-center mb-5 md:mb-6">
             <i className="fas fa-search text-slate-400 ml-3"></i>
             <input type="text" placeholder="Search Patients, Devices, Staff..." className="w-full p-2 outline-none text-sm text-slate-700 ml-2 font-medium bg-transparent" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
@@ -1728,7 +1338,11 @@
                             <div className="font-extrabold text-slate-800 text-sm md:text-base truncate">{n.name}</div>
                             <div className="text-[10px] md:text-xs font-medium text-slate-500 mt-0.5 truncate">{n.email}</div>
                             <div className="mt-1 flex flex-wrap gap-2 items-center">
-                              {disabled ? <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-amber-100 text-amber-700 border border-amber-200">Disabled</span> : <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 border border-emerald-200">Active</span>}
+                              {disabled ? (
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-amber-100 text-amber-700 border border-amber-200">Disabled</span>
+                              ) : (
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 border border-emerald-200">Active</span>
+                              )}
                               {activeCount > 0 && <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-100">{activeCount} patient(s)</span>}
                             </div>
                           </div>
@@ -1736,7 +1350,9 @@
                         {!isSuperView && (
                           <div className="flex gap-2 mt-4 pt-3 border-t border-slate-100">
                             <button onClick={() => { setSelectedNurse(n); setShowEditNurse(true); }} className="flex-1 bg-slate-50 active:bg-slate-100 text-slate-600 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none">Edit</button>
-                            <button onClick={() => handleToggleNurseStatus(n)} className={`flex-1 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none ${disabled ? 'bg-emerald-50 active:bg-emerald-100 text-emerald-700' : 'bg-red-50 active:bg-red-100 text-red-600'}`}>{disabled ? 'Enable' : 'Disable'}</button>
+                            <button onClick={() => handleToggleNurseStatus(n)} className={`flex-1 text-[11px] md:text-xs font-bold py-2.5 rounded-lg transition-colors border-none outline-none ${disabled ? 'bg-emerald-50 active:bg-emerald-100 text-emerald-700' : 'bg-red-50 active:bg-red-100 text-red-600'}`}>
+                              {disabled ? 'Enable' : 'Disable'}
+                            </button>
                           </div>
                         )}
                       </div>
@@ -1749,26 +1365,31 @@
 
             {tab === 'devices' && (
               <div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
                   <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Registered Devices</div>
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">AMC Due Date</div>
+                    <div className="mt-2 font-bold text-slate-800 text-sm">{amcDueDate.toLocaleDateString('en-IN')}</div>
+                  </div>
+                  <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Devices</div>
                     <div className="mt-2 font-black text-slate-800 text-xl">{totalRegisteredDevices}</div>
                   </div>
                   <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Active In Use</div>
-                    <div className="mt-2 font-black text-slate-800 text-xl">{Object.keys(activeData || {}).length}</div>
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Per Amount</div>
+                    <div className="mt-2 font-black text-slate-800 text-xl">{formatMoney(AMC_PER_DEVICE)}</div>
                   </div>
-                  <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Started Today</div>
-                    <div className="mt-2 font-black text-slate-800 text-xl">{Object.values(activeData || {}).filter(d => (d.startTime || 0) >= new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime()).length}</div>
+                  <div className="bg-slate-900 rounded-2xl border border-slate-800 p-4 shadow-sm text-white">
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-blue-300">Total Amount</div>
+                    <div className="mt-2 font-black text-2xl">{formatMoney(totalRegisteredDevices * AMC_PER_DEVICE)}</div>
                   </div>
                 </div>
 
                 {isSuperView && <button onClick={() => setShowAddDevice(true)} className="mb-5 bg-indigo-600 active:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 w-full md:w-auto border-none outline-none"><i className="fas fa-microchip"></i> Register New Device to Hospital</button>}
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
                   {filteredDevices.map((dev, i) => {
-                    const isActive = !!activeData?.[dev.deviceId];
+                    const isActive = activeData && activeData[dev.deviceId];
                     const isDeviceOn = dev.lastSeen && (Date.now() - dev.lastSeen < 30000);
+
                     return (
                       <div key={dev.deviceId || `${dev.addedAt || 'added'}-${i}`} className="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                         <div className="flex justify-between items-start mb-2 gap-3">
@@ -1778,7 +1399,7 @@
                             </div>
                             <div className="min-w-0">
                               <div className="font-mono font-bold text-slate-800 text-sm md:text-base truncate">{dev.deviceId}</div>
-                              <div className="text-[10px] text-slate-400 mt-0.5">Started using: {new Date(dev.startedAt || dev.addedAt || Date.now()).toLocaleDateString('en-IN')}</div>
+                              <div className="text-[10px] text-slate-400 mt-0.5">Added: {new Date(dev.addedAt || Date.now()).toLocaleDateString('en-IN')}</div>
                             </div>
                           </div>
                           <div className={`px-2 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase border shrink-0 ${isActive ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>{isActive ? 'In Use' : 'Idle'}</div>
@@ -1796,14 +1417,6 @@
           <AddNurseModal isOpen={showAddNurse} onClose={()=>setShowAddNurse(false)} hospitalId={hospitalId} hospitalDomain={hospitalInfo.domain} onSuccess={() => { setToast({type: 'success', msg: 'Staff Added'}); setTimeout(()=>setToast(null), 2000); }} />
           <EditNurseModal isOpen={showEditNurse} onClose={()=>setShowEditNurse(false)} hospitalId={hospitalId} currentNurse={selectedNurse} onSuccess={() => { setToast({type: 'success', msg: 'Staff Updated'}); setTimeout(()=>setToast(null), 2000); }} />
           <AddDeviceModal isOpen={showAddDevice} onClose={()=>setShowAddDevice(false)} hospitalId={hospitalId} onSuccess={() => { setToast({type: 'success', msg: 'Device Registered'}); setTimeout(()=>setToast(null), 2000); }} />
-          <DischargeConfirmModal
-            open={!!pendingDischarge}
-            device={pendingDischarge}
-            onCancel={() => setPendingDischarge(null)}
-            onConfirm={confirmPendingDischarge}
-            loading={pendingDischargeLoading}
-            title="Discharge patient"
-          />
         </div>
       );
     };
@@ -1812,22 +1425,15 @@
       const { id: hid, name: hName } = getHospitalInfo(user.email);
       const [activeData, setActiveData] = useState({});
       const [historyData, setHistoryData] = useState({});
-      const [nursesData, setNursesData] = useState({});
+      const [showAdd, setShowAdd] = useState(false);
+      const [toast, setToast] = useState(null);
       const [tab, setTab] = useState('active');
       const [filterPeriod, setFilterPeriod] = useState('day');
       const [historySearch, setHistorySearch] = useState('');
       const [nurseName, setNurseName] = useState('');
-      const [showAdd, setShowAdd] = useState(false);
-      const [toast, setToast] = useState(null);
-      const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24 });
-      const [showSettings, setShowSettings] = useState(false);
-      const [shareTarget, setShareTarget] = useState(null);
-      const [handoverRequest, setHandoverRequest] = useState(null);
-      const [pendingDischarge, setPendingDischarge] = useState(null);
-      const [pendingDischargeLoading, setPendingDischargeLoading] = useState(false);
       const prevStateRef = useRef({});
       const prevAlertRef = useRef({});
-      const listenedRequestIdsRef = useRef(new Set());
+      const [visibleCounts, setVisibleCounts] = useState({ active: 24, history: 24 });
 
       useEffect(() => {
         try {
@@ -1843,18 +1449,16 @@
         const activeRef = hRef.child('active_devices');
         const historyRef = hRef.child('history');
         const nurseProfileRef = hRef.child(`nurses/${user.uid}`);
-        const nursesRef = hRef.child('nurses');
-        const requestsRef = hRef.child('handover_requests');
 
         const nurseHandler = snap => {
           if (!snap.exists()) {
-            window.__sg_notify('Your account has been removed by admin.');
+            alert('Your account has been removed by admin.');
             auth.signOut();
             return;
           }
           const nurseVal = snap.val() || {};
           if (isNurseDisabled(nurseVal)) {
-            window.__sg_notify('Your account has been disabled by admin.');
+            alert('Your account has been disabled by admin.');
             auth.signOut();
             return;
           }
@@ -1866,90 +1470,132 @@
           snap.forEach(c => { if (c.val().nurseId === user.uid) h.push(c.val()); });
           setHistoryData(sortHistoryDesc(h));
         };
-        const nursesHandler = snap => setNursesData(snap.val() || {});
-        const requestsHandler = snap => {
-          const all = snap.val() || {};
-          const pending = Object.values(all).filter(r => r && r.toUid === user.uid && r.status === 'pending');
-          if (pending.length) {
-            const latest = pending.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0))[0];
-            if (latest && latest.requestId && !listenedRequestIdsRef.current.has(latest.requestId)) {
-              listenedRequestIdsRef.current.add(latest.requestId);
-              setHandoverRequest(latest);
-            }
-          }
-        };
 
         nurseProfileRef.on('value', nurseHandler);
         activeRef.on('value', activeHandler);
         historyRef.on('value', historyHandler);
-        nursesRef.on('value', nursesHandler);
-        requestsRef.on('value', requestsHandler);
 
         return () => {
           nurseProfileRef.off('value', nurseHandler);
           activeRef.off('value', activeHandler);
           historyRef.off('value', historyHandler);
-          nursesRef.off('value', nursesHandler);
-          requestsRef.off('value', requestsHandler);
         };
       }, [hid, user.uid]);
 
       const userDevices = useMemo(() => sortActiveDevices(Object.values(activeData || {}).filter(dev => dev && dev.nurseId === user.uid)), [activeData, user.uid]);
-      const nurses = useMemo(() => Object.values(nursesData || {}), [nursesData]);
 
       useEffect(() => {
-        if (!ENABLE_ADMIN_NOTIFICATIONS) return;
         const now = Date.now();
+
         Object.values(activeData || {}).forEach((dev) => {
           const did = dev?.deviceId;
           if (!did || dev.nurseId !== user.uid) return;
-          const totalMl = Math.max(100, safeNum(dev.totalMl, DEFAULT_TOTAL_ML));
-          const currentPerc = getDevicePercent(dev);
-          const currentMl = getDeviceMlRemaining(dev);
+
+          const currentPerc = dev.perc !== undefined ? Number(dev.perc) : Math.max(0, Math.round((getRemainingMs(dev) / INFUSION_DURATION_MS) * 100));
           const currentRemainingMs = getRemainingMs(dev);
+          const currentMlLeft = getMlLeft(dev);
           const lastSeenAt = getDeviceLastSeenAt(dev) || now;
+
           const prev = prevStateRef.current[did] || {};
-          const prevAlert = prevAlertRef.current[did] || { perc: prev.perc !== undefined ? prev.perc : 100, ml: prev.ml !== undefined ? prev.ml : totalMl, remainingMs: prev.remainingMs !== undefined ? prev.remainingMs : INFUSION_DURATION_MS, lastUpdate: lastSeenAt };
+          const prevAlert = prevAlertRef.current[did] || {
+            perc: prev.perc !== undefined ? prev.perc : 101,
+            mlLeft: prev.mlLeft !== undefined ? prev.mlLeft : 999999,
+            remainingMs: prev.remainingMs !== undefined ? prev.remainingMs : INFUSION_DURATION_MS,
+            lastUpdate: lastSeenAt
+          };
+
           const settings = dev.notificationSettings || {};
-          const notifyByPercent = settings.mode === 'percent' || settings.mode === 'both' || !settings.mode;
-          const notifyByMl = settings.mlAlerts !== false;
+          const notifyByPercent = settings.mode === 'percent' || !settings.mode;
           const percentPrefs = settings.percentAlerts || DEFAULT_PERCENT_ALERTS;
-          const mlThresholds = generateMlThresholds(totalMl);
+          const mlPrefs = settings.mlAlerts || DEFAULT_ML_ALERTS;
+
           const lastChangeAt = prev.lastChangeAt || lastSeenAt;
           const alertState = { ...(prev.alertState || {}) };
 
-          if (currentPerc !== prev.perc || currentMl !== prev.ml) alertState.noFlow = false;
-          if (currentPerc <= 1 && !alertState.empty) { triggerPatientAlert({ title: `Bottle empty: ${dev.patientName || `Room ${dev.room}`}`, body: `Remaining ${formatMl(currentMl)} (${currentPerc}%). Please discharge now.` }); alertState.empty = true; }
-          if (now - lastSeenAt > OFFLINE_ALERT_MS && !alertState.offline) { triggerPatientAlert({ title: `Device Offline: ${dev.patientName || `Room ${dev.room}`}`, body: `No update received for more than ${Math.round(OFFLINE_ALERT_MS / 1000)} seconds.` }); alertState.offline = true; }
-          if (currentPerc === prev.perc && (now - lastChangeAt) > NO_FLOW_ALERT_MS && !alertState.noFlow) { triggerPatientAlert({ title: `No flow detected: ${dev.patientName || `Room ${dev.room}`}`, body: 'Sensor looks stuck or infusion has stopped updating.' }); alertState.noFlow = true; }
-          if (prev.perc !== undefined && (prev.perc - currentPerc) >= RAPID_DROP_PERCENT && (now - (prev.lastUpdate || lastSeenAt)) <= 120000 && !alertState.rapidDrop) { triggerPatientAlert({ title: `Rapid drop detected: ${dev.patientName || `Room ${dev.room}`}`, body: 'Possible leak or disconnection detected.' }); alertState.rapidDrop = true; }
+          if (currentPerc !== prev.perc) alertState.noFlow = false;
 
-          let triggered = null;
-          if (notifyByPercent) {
-            for (let t of ALERT_LEVELS) {
-              const enabled = percentPrefs[t] !== false && percentPrefs[String(t)] !== false;
-              if (enabled && (prevAlert.perc > t) && currentPerc <= t) { triggered = { type: 'percent', value: t }; break; }
-            }
-          }
-          if (!triggered && notifyByMl) {
-            for (let t of mlThresholds) {
-              if ((prevAlert.ml > t) && currentMl <= t) { triggered = { type: 'ml', value: t }; break; }
-            }
-          }
-          if (triggered) {
-            const liveMins = dev.minsLeft !== undefined ? Number(dev.minsLeft) : null;
-            const liveSecs = dev.secsLeft !== undefined ? Number(dev.secsLeft) : 0;
-            let etaText = 'scheduled time';
-            if (liveMins !== null && liveMins < 999) etaText = new Date(Date.now() + (liveMins * 60000) + (liveSecs * 1000)).toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' });
-            const label = triggered.type === 'ml' ? `${triggered.value}ml left` : `${triggered.value}% reached`;
-            triggerPatientAlert({
-              title: `Saline Alert: ${dev.patientName || `Room ${dev.room}`}`,
-              body: `${label}. Remaining ${formatMl(currentMl)} (${currentPerc}%). ETA ${etaText}.`
+          const sendAlert = (extraText = "") => {
+            const unified = buildUnifiedAlert({
+              patientName: dev.patientName,
+              room: dev.room,
+              bed: dev.bed,
+              perc: currentPerc,
+              mlLeft: currentMlLeft,
+              extra: extraText
             });
+            triggerPatientAlert(unified);
+          };
+
+          if (currentPerc <= 1 && !alertState.empty) {
+            sendAlert("Bottle empty");
+            alertState.empty = true;
           }
 
-          prevStateRef.current[did] = { perc: currentPerc, ml: currentMl, remainingMs: currentRemainingMs, lastUpdate: lastSeenAt, lastChangeAt: currentPerc === prev.perc && currentMl === prev.ml ? lastChangeAt : now, alertState };
-          prevAlertRef.current[did] = { perc: currentPerc, ml: currentMl, remainingMs: currentRemainingMs };
+          if (now - lastSeenAt > OFFLINE_ALERT_MS && !alertState.offline) {
+            sendAlert(`No update for more than ${Math.round(OFFLINE_ALERT_MS / 1000)} seconds`);
+            alertState.offline = true;
+          }
+
+          if (currentPerc === prev.perc && (now - lastChangeAt) > NO_FLOW_ALERT_MS && !alertState.noFlow) {
+            sendAlert("Sensor not updating");
+            alertState.noFlow = true;
+          }
+
+          if (prev.perc !== undefined && (prev.perc - currentPerc) >= RAPID_DROP_PERCENT && (now - (prev.lastUpdate || lastSeenAt)) <= 120000 && !alertState.rapidDrop) {
+            sendAlert("Possible leak or disconnection");
+            alertState.rapidDrop = true;
+          }
+
+          if (notifyByPercent) {
+            for (const t of ALERT_LEVELS) {
+              const enabled = percentPrefs[t] !== false && percentPrefs[String(t)] !== false;
+              if (enabled && (prevAlert.perc > t) && currentPerc <= t) {
+                const exTime = Number(dev.estimatedCompletionAt);
+                const eta = exTime > 0
+                  ? new Date(exTime).toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' })
+                  : null;
+
+                triggerPatientAlert({
+                  title: `Saline Alert: ${dev.patientName || `Room ${dev.room}`}`,
+                  body: [
+                    `${t}% threshold reached`,
+                    Number.isFinite(currentMlLeft) ? `${Math.round(currentMlLeft)} ml left` : null,
+                    eta ? `Expected completion at ${eta}` : null
+                  ].filter(Boolean).join(" • ")
+                });
+                break;
+              }
+            }
+          }
+
+          for (const t of ML_ALERT_LEVELS) {
+            const enabled = mlPrefs[t] !== false && mlPrefs[String(t)] !== false;
+            if (enabled && Number.isFinite(prevAlert.mlLeft) && prevAlert.mlLeft > t && Number.isFinite(currentMlLeft) && currentMlLeft <= t) {
+              triggerPatientAlert({
+                title: `Saline Alert: ${dev.patientName || `Room ${dev.room}`}`,
+                body: [
+                  `${t} ml threshold reached`,
+                  `${Math.round(currentMlLeft)} ml left`,
+                  Number.isFinite(currentPerc) ? `${Math.round(currentPerc)}% infused` : null
+                ].filter(Boolean).join(" • ")
+              });
+              break;
+            }
+          }
+
+          prevStateRef.current[did] = {
+            perc: currentPerc,
+            mlLeft: currentMlLeft,
+            remainingMs: currentRemainingMs,
+            lastUpdate: lastSeenAt,
+            lastChangeAt: currentPerc === prev.perc ? lastChangeAt : now,
+            alertState
+          };
+          prevAlertRef.current[did] = {
+            perc: currentPerc,
+            mlLeft: currentMlLeft,
+            remainingMs: currentRemainingMs
+          };
         });
       }, [activeData, user.uid]);
 
@@ -1959,7 +1605,7 @@
           for (const dev of userDevices) {
             if (!dev?.deviceId || dev.completionLock) continue;
             const dueAt = dev.autoDischargeAt || ((dev.startTime || now) + INFUSION_DURATION_MS);
-            if (now >= dueAt) await claimAndArchiveDevice(hid, dev.deviceId, 'auto', {}, { uid: 'system', name: 'System', role: 'system' });
+            if (now >= dueAt) await claimAndArchiveDevice(hid, dev.deviceId, 'auto');
           }
         };
         scanForAutoDischarge();
@@ -1967,73 +1613,9 @@
         return () => clearInterval(id);
       }, [hid, userDevices]);
 
-      const handleComplete = async (device) => {
-        if (!device?.deviceId) return;
-        setPendingDischarge(device);
-      };
-
-      const confirmPendingDischarge = async () => {
-        const device = pendingDischarge;
-        if (!device?.deviceId) return;
-        setPendingDischargeLoading(true);
-        try {
-          const ok = await claimAndArchiveDevice(
-            hid,
-            device.deviceId,
-            'manual',
-            { autoDischarged: false },
-            { uid: user.uid, name: nurseName || user.email.split('@')[0], role: 'nurse' }
-          );
-          if (!ok) window.__sg_notify('Discharge could not be completed. Please try again.');
-          else setPendingDischarge(null);
-        } finally {
-          setPendingDischargeLoading(false);
-        }
-      };
-
-      const openShare = (device) => setShareTarget(device);
-
-      const acceptHandover = async () => {
-        const req = handoverRequest;
-        if (!req) return;
-        try {
-          const nurseSnap = await db.ref(`hospitals/${hid}/nurses/${user.uid}`).once('value');
-          const nurseVal = nurseSnap.val() || {};
-          const activeSnap = await db.ref(`hospitals/${hid}/active_devices/${req.deviceId}`).once('value');
-          const activeVal = activeSnap.val() || {};
-          const updatedTrail = mergeTrail(activeVal.nurseTrail || [], makeTrailEntry({ uid: user.uid, name: nurseVal.name || nurseName || user.email.split('@')[0], email: user.email }, nurseVal.role || 'nurse'));
-          await db.ref(`hospitals/${hid}/active_devices/${req.deviceId}`).update({
-            nurseId: user.uid,
-            nurseName: nurseVal.name || nurseName || user.email.split('@')[0],
-            nurseTrail: updatedTrail,
-            handoverAcceptedBy: user.uid,
-            handoverAcceptedByName: nurseVal.name || nurseName || user.email.split('@')[0],
-            handoverAcceptedAt: Date.now(),
-            handoverPendingTo: null,
-            handoverPendingToName: null,
-            handoverStatus: 'accepted'
-          });
-          await db.ref(`hospitals/${hid}/handover_requests/${req.requestId}`).update({ status: 'accepted', acceptedAt: Date.now(), acceptedBy: user.uid });
-          setToast({ type: 'success', msg: 'Handover accepted' });
-          setTimeout(()=>setToast(null), 2000);
-          setHandoverRequest(null);
-        } catch (e) {
-          window.__sg_notify(e.message);
-        }
-      };
-
-      const rejectHandover = async () => {
-        const req = handoverRequest;
-        if (!req) return;
-        try {
-          await db.ref(`hospitals/${hid}/handover_requests/${req.requestId}`).update({ status: 'rejected', rejectedAt: Date.now(), rejectedBy: user.uid });
-          await db.ref(`hospitals/${hid}/active_devices/${req.deviceId}`).update({
-            handoverPendingTo: null,
-            handoverPendingToName: null,
-            handoverStatus: 'rejected'
-          });
-        } catch (e) {}
-        setHandoverRequest(null);
+      const handleComplete = async (did) => {
+        const ok = await claimAndArchiveDevice(hid, did, 'manual', { autoDischarged: false });
+        if (!ok) alert('Discharge could not be completed. Please try again.');
       };
 
       const filteredHistory = filterHistoryByTime(Object.values(historyData || {}).filter(item => {
@@ -2045,7 +1627,7 @@
       return (
         <div className="min-h-screen pb-24 fade-in">
           {toast && <Toast {...toast} />}
-          <AppHeader title={hName} subtitle={`Staff: ${nurseName || user.email.split('@')[0]}`} onLogout={onLogout} onSettings={() => setShowSettings(true)} />
+          <AppHeader title={hName} subtitle={`Staff: ${nurseName || user.email.split('@')[0]}`} onLogout={onLogout} />
           <div className="p-4 md:p-6 w-full max-w-7xl mx-auto space-y-5 md:space-y-6 mt-2">
             <div className="flex gap-4 md:gap-6 border-b border-slate-200 overflow-x-auto hide-scroll">
               <button onClick={()=>setTab('active')} className={`pb-3 text-xs md:text-sm font-extrabold uppercase tracking-wider transition-all border-b-2 whitespace-nowrap ${tab==='active' ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-400'}`}>My Patients ({userDevices.length})</button>
@@ -2054,7 +1636,7 @@
 
             {tab === 'active' && (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
-                {userDevices.slice(0, visibleCounts.active).map((d, i) => <StatusCard key={d.deviceId || `${d.room || 'room'}-${d.bed || 'bed'}-${d.startTime || 'time'}-${i}`} data={d} onComplete={handleComplete} onShare={openShare} currentUserUid={user.uid} />)}
+                {userDevices.slice(0, visibleCounts.active).map((d, i) => <StatusCard key={d.deviceId || `${d.room || 'room'}-${d.bed || 'bed'}-${d.startTime || 'time'}-${i}`} data={d} onComplete={handleComplete} />)}
                 {userDevices.length === 0 && (
                   <div className="col-span-full py-20 text-center border-2 border-dashed border-slate-300 rounded-[2rem] bg-white/50 text-slate-400">
                     <div className="w-14 h-14 md:w-16 md:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4"><i className="fas fa-bed text-xl md:text-2xl text-slate-300"></i></div>
@@ -2086,20 +1668,7 @@
             <i className="fas fa-plus"></i>
           </button>
 
-          <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} profile={{ name: nurseName || user.email.split('@')[0], email: user.email, role: 'Nurse', hospital: hName }} />
-
           <PatientFormModal isOpen={showAdd} onClose={()=>setShowAdd(false)} hospitalId={hid} user={{ uid: user.uid, role: 'nurse', name: nurseName || user.email.split('@')[0] }} onSuccess={() => { setToast({type: 'success', msg: 'Infusion Started'}); setTimeout(()=>setToast(null), 2000); }} />
-
-          <ShareDeviceModal isOpen={!!shareTarget} onClose={()=>setShareTarget(null)} hospitalId={hid} device={shareTarget} nurses={nurses} currentUser={{ uid: user.uid, name: nurseName || user.email.split('@')[0], email: user.email }} onSuccess={() => { setToast({type: 'success', msg: 'Handover request sent'}); setTimeout(()=>setToast(null), 2000); }} />
-          <HandoverRequestModal request={handoverRequest} nurseName={nurseName || user.email.split('@')[0]} onAccept={acceptHandover} onReject={rejectHandover} />
-          <DischargeConfirmModal
-            open={!!pendingDischarge}
-            device={pendingDischarge}
-            onCancel={() => setPendingDischarge(null)}
-            onConfirm={confirmPendingDischarge}
-            loading={pendingDischargeLoading}
-            title="Discharge patient"
-          />
         </div>
       );
     };
@@ -2108,7 +1677,6 @@
       const [hospitals, setHospitals] = useState({});
       const [viewId, setViewId] = useState(null);
       const [showAddHospital, setShowAddHospital] = useState(false);
-      const [showSettings, setShowSettings] = useState(false);
 
       useEffect(() => {
         const ref = db.ref('hospitals');
@@ -2118,46 +1686,52 @@
       }, []);
 
       const stats = useMemo(() => {
-        let active = 0, totalInventory = 0;
+        let active = 0, nurses = 0, totalInventory = 0;
         Object.values(hospitals).forEach(h => {
           if (h.active_devices) active += Object.keys(h.active_devices).length;
           if (h.registered_devices) totalInventory += Object.keys(h.registered_devices).length;
+          if (h.nurses) nurses += Object.keys(h.nurses).length;
         });
-        return { active, devices: totalInventory };
+        return { active, nurses, devices: totalInventory };
       }, [hospitals]);
 
       const handleDeleteHospital = async (hid) => {
         const hospitalName = hospitals[hid]?.name || 'this hospital';
-        if (!(await window.__sg_confirm(`Delete ${hospitalName} completely? This will remove all staff, devices, active records, and history.`, 'Delete Hospital'))) return;
-        try { await db.ref(`hospitals/${hid}`).remove(); if (viewId === hid) setViewId(null); } catch (e) { window.__sg_notify(e.message); }
+        if (!confirm(`Delete ${hospitalName} completely? This will remove all staff, devices, active records, and history.`)) return;
+        try {
+          await db.ref(`hospitals/${hid}`).remove();
+          if (viewId === hid) setViewId(null);
+        } catch (e) {
+          alert(e.message);
+        }
       };
 
       if (viewId) {
         return (
           <div className="min-h-screen pb-10">
             <header className="bg-slate-900 text-white px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shadow-lg sticky top-0 z-50 backdrop-blur-md bg-slate-900/90 pt-safe gap-3">
-              <button onClick={()=>setViewId(null)} className="flex items-center gap-2 md:gap-3 active:text-blue-400 transition-colors bg-slate-800 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none"><i className="fas fa-arrow-left"></i> <span>Network</span></button>
+              <button onClick={()=>setViewId(null)} className="flex items-center gap-2 md:gap-3 active:text-blue-400 transition-colors bg-slate-800 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none">
+                <i className="fas fa-arrow-left"></i> <span>Network</span>
+              </button>
               <div className="font-extrabold tracking-tight text-sm md:text-base truncate pl-2 flex-1">{hospitals[viewId] ? hospitals[viewId].name : ''}</div>
-              <div className="flex items-center gap-2 shrink-0">
-                <button onClick={() => setShowSettings(true)} className="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center border-none outline-none"><i className="fas fa-gear text-sm"></i></button>
-                <button onClick={() => handleDeleteHospital(viewId)} className="bg-red-600 active:bg-red-700 text-white px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none shrink-0">Delete Hospital</button>
-              </div>
+              <button onClick={() => handleDeleteHospital(viewId)} className="bg-red-600 active:bg-red-700 text-white px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm border-none outline-none shrink-0">
+                Delete Hospital
+              </button>
             </header>
             <div className="py-4 md:py-8"><HospitalDashboard hospitalId={viewId} userRole="admin" isSuperView={true} /></div>
-            <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} profile={{ name: 'Super Admin', email: auth.currentUser?.email || 'admin@salineguard.pro', role: 'Super Admin', hospital: hospitals[viewId]?.name || 'Global Network' }} />
           </div>
         );
       }
 
       return (
         <div className="min-h-screen pb-10 fade-in">
-          <AppHeader title="Super Admin" subtitle="Global Network Control" onLogout={onLogout} onSettings={() => setShowSettings(true)} />
+          <AppHeader title="Super Admin" subtitle="Global Network Control" onLogout={onLogout} />
           <div className="p-4 md:p-8 w-full mx-auto max-w-7xl space-y-6 md:space-y-8">
             <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-10 text-white shadow-2xl relative overflow-hidden border border-slate-700">
               <div className="absolute right-0 top-0 w-48 h-48 md:w-64 md:h-64 bg-blue-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
               <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8">
                 <div><div className="text-[9px] md:text-[10px] font-extrabold text-blue-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-microchip"></i> Reg. Devices</div><div className="text-3xl md:text-5xl font-black text-white">{stats.devices}</div></div>
-                <div><div className="text-[9px] md:text-[10px] font-extrabold text-emerald-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-user-nurse"></i> Staff</div><div className="text-3xl md:text-5xl font-black text-emerald-400">{stats.nurses}</div></div>
+                <div><div className="text-[9px] md:text-[10px] font-extrabold text-emerald-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-file-invoice-dollar"></i> AMC Total</div><div className="text-3xl md:text-5xl font-black text-emerald-400">{formatMoney(stats.devices * AMC_PER_DEVICE)}</div></div>
                 <div><div className="text-[9px] md:text-[10px] font-extrabold text-purple-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-hospital"></i> Facilities</div><div className="text-3xl md:text-5xl font-black text-white">{Object.keys(hospitals).length}</div></div>
                 <div><div className="text-[9px] md:text-[10px] font-extrabold text-rose-300 uppercase tracking-widest mb-1.5 md:mb-2 flex items-center gap-2"><i className="fas fa-procedures"></i> Live</div><div className="text-3xl md:text-5xl font-black text-white">{stats.active}</div></div>
               </div>
@@ -2165,7 +1739,9 @@
 
             <div className="flex justify-between items-center gap-3 flex-wrap">
               <h3 className="font-extrabold text-slate-800 text-lg md:text-xl tracking-tight">Partner Hospitals</h3>
-              <button onClick={() => setShowAddHospital(true)} className="bg-indigo-600 active:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border-none outline-none"><i className="fas fa-hospital-user"></i> Add Hospital</button>
+              <button onClick={() => setShowAddHospital(true)} className="bg-indigo-600 active:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border-none outline-none">
+                <i className="fas fa-hospital-user"></i> Add Hospital
+              </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
@@ -2173,16 +1749,21 @@
                 const inventoryCount = h.registered_devices ? Object.keys(h.registered_devices).length : 0;
                 const activeCount = h.active_devices ? Object.keys(h.active_devices).length : 0;
                 const staffCount = h.nurses ? Object.keys(h.nurses).length : 0;
-                const addedDate = h.createdAt || h.addedAt || null;
+                const amcDate = h.amcStartDate || h.createdAt || h.addedAt || null;
                 return (
                   <div key={hid} onClick={()=>setViewId(hid)} className="bg-white p-5 md:p-6 rounded-[1.5rem] shadow-sm border border-slate-200 cursor-pointer active:shadow-md active:bg-slate-50 transition-all group relative overflow-hidden">
-                    <button onClick={(e) => { e.stopPropagation(); handleDeleteHospital(hid); }} className="absolute top-4 right-4 z-20 bg-red-600 text-white px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border-none outline-none">Delete</button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleDeleteHospital(hid); }}
+                      className="absolute top-4 right-4 z-20 bg-red-600 text-white px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider border-none outline-none"
+                    >
+                      Delete
+                    </button>
                     <div className="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-blue-50 rounded-bl-full -z-0"></div>
                     <div className="relative z-10">
                       <div className="w-12 h-12 md:w-14 md:h-14 bg-white shadow-md border border-slate-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4"><i className="fas fa-hospital"></i></div>
                       <h4 className="font-extrabold text-lg md:text-xl text-slate-800 mb-1 tracking-tight truncate">{h.name}</h4>
                       <div className="text-[10px] md:text-xs font-bold text-slate-400 mb-2 flex items-center gap-1.5"><i className="fas fa-map-marker-alt"></i> {h.location}</div>
-                      <div className="text-[10px] md:text-xs font-bold text-slate-500 mb-4 flex items-center gap-1.5"><i className="fas fa-calendar-alt"></i> Started: {addedDate ? new Date(addedDate).toLocaleDateString('en-IN') : 'Not set'}</div>
+                      <div className="text-[10px] md:text-xs font-bold text-slate-500 mb-4 flex items-center gap-1.5"><i className="fas fa-calendar-alt"></i> AMC From: {amcDate ? new Date(amcDate).toLocaleDateString('en-IN') : 'Not set'}</div>
                       <div className="flex justify-between items-center pt-4 border-t border-slate-100">
                         <div className="text-center"><div className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">Inventory</div><div className="font-black text-sm md:text-base text-slate-700">{inventoryCount}</div></div>
                         <div className="w-px h-5 md:h-6 bg-slate-200"></div>
@@ -2196,24 +1777,7 @@
               })}
             </div>
           </div>
-          <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} profile={{ name: 'Super Admin', email: auth.currentUser?.email || 'admin@salineguard.pro', role: 'Super Admin', hospital: 'Global Network' }} />
-
           <AddHospitalModal isOpen={showAddHospital} onClose={() => setShowAddHospital(false)} onSuccess={() => { setShowAddHospital(false); }} />
-        </div>
-      );
-    };
-
-    const AdminDashboard = ({ user, onLogout }) => {
-      const [showSettings, setShowSettings] = useState(false);
-      const info = getHospitalInfo(user.email || '');
-
-      return (
-        <div className="min-h-screen pb-10">
-          <AppHeader title={info.name} subtitle="Hospital Administration" onLogout={onLogout} onSettings={() => setShowSettings(true)} />
-          <div className="py-4 md:py-8">
-            <HospitalDashboard hospitalId={info.id} userRole="admin" />
-          </div>
-          <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} profile={{ name: info.name, email: user.email, role: 'Hospital Admin', hospital: info.name }} />
         </div>
       );
     };
@@ -2226,7 +1790,7 @@
         e.preventDefault();
         setLoading(true);
         try { await auth.signInWithEmailAndPassword(email, pass); }
-        catch (err) { window.__sg_notify(err.message); setLoading(false); }
+        catch (err) { alert(err.message); setLoading(false); }
       };
       return (
         <div className="min-h-screen flex items-center justify-center p-4 md:p-6 relative overflow-hidden fade-in">
@@ -2265,9 +1829,15 @@
 
         const nurseRef = db.ref(`hospitals/${info.id}/nurses/${user.uid}`);
         const handler = snap => {
-          if (!snap.exists()) { auth.signOut(); return; }
+          if (!snap.exists()) {
+            auth.signOut();
+            return;
+          }
           const val = snap.val() || {};
-          if (isNurseDisabled(val)) { window.__sg_notify('Your account has been disabled by admin.'); auth.signOut(); }
+          if (isNurseDisabled(val)) {
+            alert('Your account has been disabled by admin.');
+            auth.signOut();
+          }
         };
         nurseRef.on('value', handler);
         return () => nurseRef.off('value', handler);
@@ -2278,7 +1848,7 @@
       const info = getHospitalInfo(user.email || '');
       if (info.id === 'super_admin') return <SuperDashboard onLogout={()=>auth.signOut()} />;
       if ((user.email || '').startsWith('admin@')) {
-        return <AdminDashboard user={user} onLogout={()=>auth.signOut()} />;
+        return <div className="min-h-screen pb-10"><AppHeader title={info.name} subtitle="Hospital Administration" onLogout={()=>auth.signOut()} /><div className="py-4 md:py-8"><HospitalDashboard hospitalId={info.id} userRole="admin" /></div></div>;
       }
       return <NurseApp user={user} onLogout={()=>auth.signOut()} />;
     };
